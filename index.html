@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
         body {
             background: #0a0e1a;
@@ -18,202 +18,283 @@
             padding: 6px 8px;
             font-size: 14px;
             line-height: 1.3;
+            transition: background 0.3s ease, color 0.3s ease;
         }
-        /* ===== TV SAFE ZONE ===== */
+        /* ===== THEME 1: SLAF BLUE (DEFAULT) ===== */
+        body.theme-blue {
+            --bg-primary: #111827;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #0f172a;
+            --border-color: #3b82f6;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --card-bg: #1e293b;
+            --shadow: 0 0 20px rgba(59,130,246,0.2);
+            --bg-input: #0f172a;
+            --hover-bg: #2a3a55;
+        }
+        /* ===== THEME 2: NIGHT OPS ===== */
+        body.theme-nightops {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #141b2b;
+            --bg-tertiary: #0d1322;
+            --border-color: #64748b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+            --card-bg: #1e293b;
+            --shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+            --bg-input: #0f172a;
+            --hover-bg: #27364b;
+        }
+        /* ===== THEME 3: ARCTIC CAMO ===== */
+        body.theme-arctic {
+            --bg-primary: #e2e8f0;
+            --bg-secondary: #cbd5e1;
+            --bg-tertiary: #f1f5f9;
+            --border-color: #475569;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --accent-gradient: linear-gradient(135deg, #1e293b, #475569);
+            --card-bg: #f8fafc;
+            --shadow: 0 0 20px rgba(0,0,0,0.1);
+            --bg-input: #f8fafc;
+            --hover-bg: #d1d9e6;
+        }
+        /* ===== THEME 4: TACTICAL GREEN ===== */
+        body.theme-green {
+            --bg-primary: #0f1a12;
+            --bg-secondary: #1a2e1d;
+            --bg-tertiary: #0c1a0f;
+            --border-color: #4ade80;
+            --text-primary: #d1fae5;
+            --text-secondary: #86efac;
+            --accent-gradient: linear-gradient(135deg, #22c55e, #059669);
+            --card-bg: #1a2e1d;
+            --shadow: 0 0 25px rgba(74, 222, 128, 0.15);
+            --bg-input: #0f1a12;
+            --hover-bg: #2a4a2e;
+        }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
         .dashboard {
             max-width: 100%;
-            background: #111827;
+            background: var(--bg-primary);
             border-radius: 16px;
-            border: 1px solid #3b82f6;
+            border: 1px solid var(--border-color);
             box-shadow: 0 8px 32px rgba(0,0,0,0.6);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             padding: 6px 8px;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
-        /* ===== HEADER (large & touch friendly) ===== */
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            border-bottom: 2px solid #3b82f6;
-            padding: 8px 12px;
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border-color);
+            padding: 6px 12px;
             border-radius: 12px 12px 0 0;
-            gap: 8px;
+            gap: 6px;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         .title-section {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
-        .title-logo { font-size: 2rem; }
+        .title-logo { font-size: 1.8rem; }
         .title-text h1 {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .title-text .subtitle {
-            font-size: 0.7rem;
-            color: #94a3b8;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
             letter-spacing: 1px;
         }
-        .title-text .subtitle span { color: #3b82f6; font-weight: 900; }
+        .title-text .subtitle span { 
+            color: var(--border-color); 
+            font-weight: 900; 
+            -webkit-text-fill-color: var(--border-color);
+        }
 
         /* ===== CLOCKS ===== */
         .clock-container {
             display: flex;
-            gap: 8px;
-            background: #0f172a;
-            padding: 4px 16px;
+            gap: 6px;
+            background: var(--bg-tertiary);
+            padding: 4px 14px;
             border-radius: 30px;
-            border: 1px solid #3b82f6;
-            box-shadow: 0 0 20px rgba(59,130,246,0.2);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
         }
-        .clock { text-align: center; padding: 2px 6px; }
-        .clock-label { font-size: 0.55rem; color: #94a3b8; }
+        .clock { text-align: center; padding: 2px 4px; }
+        .clock-label { font-size: 0.5rem; color: var(--text-secondary); letter-spacing: 0.5px; }
         .clock-time {
-            font-size: 1.1rem;
+            font-size: 1.0rem;
             font-weight: 900;
             font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .clock-divider {
             width: 1px;
-            background: #3b82f6;
+            background: var(--border-color);
             opacity: 0.3;
         }
 
-        /* ===== STATS ROW (bigger touch targets) ===== */
+        /* ===== STATS ROW (CONDENSED) ===== */
         .stats-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 6px;
-            margin: 6px 0;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+            margin: 4px 0;
         }
         .stat-card {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 6px 8px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 4px 4px;
             text-align: center;
-            border-left: 4px solid #3b82f6;
+            border-left: 3px solid var(--border-color);
             cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: 0.15s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .stat-card:hover { transform: scale(1.02); background: #2a3a55; }
+        .stat-card:hover { transform: scale(1.02); background: var(--hover-bg); }
         .stat-number {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1.2;
         }
-        .stat-label { font-size: 0.6rem; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px; }
+        .stat-label { 
+            font-size: 0.55rem; 
+            color: var(--text-secondary); 
+            font-weight: 700; 
+            letter-spacing: 0.3px; 
+        }
         .stat-critical .stat-number { background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .stat-urgent .stat-number { background: linear-gradient(135deg, #f97316, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .stat-nomination .stat-number { background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* ===== FILTER BAR (touch friendly) ===== */
+        /* ===== FILTER BAR ===== */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin: 6px 0;
+            gap: 4px;
+            margin: 4px 0;
             align-items: center;
-            background: #1e293b;
-            padding: 8px 10px;
+            background: var(--bg-secondary);
+            padding: 6px 10px;
             border-radius: 12px;
-            border: 1px solid #3b82f6;
+            border: 1px solid var(--border-color);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         .filter-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             align-items: center;
         }
         .filter-group select,
         .filter-group input {
-            background: #0f172a;
-            border: 1px solid #3b82f6;
-            padding: 8px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 6px 10px;
             border-radius: 30px;
-            color: #f1f5f9;
-            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-size: 0.75rem;
             font-weight: 600;
-            min-width: 70px;
-            height: 44px;
+            min-width: 60px;
+            height: 34px;
             cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
         }
         .filter-group select:focus,
         .filter-group input:focus {
-            outline: 2px solid #3b82f6;
+            outline: 2px solid var(--border-color);
         }
         .filter-presets {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             flex-wrap: wrap;
         }
         .filter-preset-btn {
-            background: #1e293b;
-            border: 1px solid #3b82f6;
-            padding: 8px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
             border-radius: 30px;
-            color: #f1f5f9;
-            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
-            height: 44px;
-            min-width: 48px;
+            height: 34px;
+            min-width: 36px;
+            transition: all 0.2s;
         }
         .filter-preset-btn:hover,
         .filter-preset-btn.active {
-            background: #3b82f6;
-            color: white;
+            background: var(--border-color);
+            color: var(--bg-primary);
         }
         .btn-outline {
-            background: #1e293b;
-            border: 1px solid #3b82f6;
-            padding: 8px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
             border-radius: 30px;
-            color: #f1f5f9;
-            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
-            height: 44px;
+            height: 34px;
+            transition: all 0.2s;
+        }
+        .btn-outline:hover {
+            background: var(--border-color);
+            color: var(--bg-primary);
         }
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: var(--accent-gradient);
             border: none;
-            padding: 8px 18px;
+            padding: 4px 14px;
             border-radius: 30px;
             color: white;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            height: 44px;
-            box-shadow: 0 2px 12px rgba(59,130,246,0.4);
+            height: 34px;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.3);
+            transition: opacity 0.2s;
         }
+        .btn-primary:hover { opacity: 0.9; }
         .btn-nomination {
             background: linear-gradient(135deg, #dc2626, #7f1d1d);
             border: none;
-            padding: 8px 18px;
+            padding: 4px 14px;
             border-radius: 30px;
             color: white;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            height: 44px;
-            animation: pulseNom 1s infinite;
+            height: 34px;
+            animation: pulseNom 1.5s infinite;
         }
         @keyframes pulseNom {
             0%, 100% { background: linear-gradient(135deg, #dc2626, #7f1d1d); }
@@ -222,100 +303,105 @@
         .btn-danger {
             background: #dc2626;
             border: none;
-            padding: 8px 14px;
+            padding: 4px 12px;
             border-radius: 30px;
             color: white;
             font-weight: 700;
             cursor: pointer;
-            height: 44px;
+            height: 34px;
         }
-        .sound-btn {
-            padding: 8px 14px;
+        .sound-btn, .theme-btn {
+            padding: 4px 10px;
             border-radius: 30px;
             font-weight: 700;
             cursor: pointer;
-            height: 44px;
-            font-size: 1.2rem;
-            border: 1px solid #3b82f6;
-            background: #1e293b;
-            color: #f1f5f9;
+            height: 34px;
+            font-size: 1.0rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        .sound-btn:hover, .theme-btn:hover {
+            background: var(--border-color);
+            color: var(--bg-primary);
         }
 
         /* ===== TABLE ===== */
         .table-wrapper {
-            margin: 6px 0;
+            margin: 4px 0;
             overflow-x: auto;
             overflow-y: auto;
             max-height: 60vh;
             border-radius: 12px;
-            border: 1px solid #3b82f6;
-            background: #111827;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            transition: border-color 0.3s, background 0.3s;
         }
         .editable-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             min-width: 1000px;
         }
         .editable-table th {
-            background: #0f172a;
-            padding: 10px 6px;
+            background: var(--bg-secondary);
+            padding: 8px 4px;
             text-align: center;
             font-weight: 800;
             text-transform: uppercase;
-            font-size: 0.7rem;
-            border-bottom: 2px solid #3b82f6;
+            font-size: 0.6rem;
+            border-bottom: 2px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 10;
-            color: #94a3b8;
+            color: var(--text-secondary);
             white-space: nowrap;
         }
         .editable-table td {
-            padding: 8px 4px;
+            padding: 6px 3px;
             text-align: center;
             border-bottom: 1px solid rgba(59,130,246,0.1);
             vertical-align: middle;
         }
         .editable-table tr:hover { background: rgba(59,130,246,0.08); }
 
-        /* column sizing */
-        .col-checkbox { width: 40px; min-width: 40px; }
-        .col-type { width: 70px; min-width: 60px; }
+        .col-checkbox { width: 30px; min-width: 30px; }
+        .col-type { width: 60px; min-width: 50px; }
         .col-course { width: 160px; min-width: 120px; }
-        .col-officers { width: 70px; min-width: 60px; }
-        .col-country { width: 70px; min-width: 60px; }
-        .col-departure { width: 90px; min-width: 80px; }
-        .col-return { width: 90px; min-width: 80px; }
-        .col-days { width: 50px; min-width: 40px; }
-        .col-deadline { width: 90px; min-width: 80px; }
-        .col-urgency { width: 80px; min-width: 70px; }
-        .col-cmdr { width: 70px; min-width: 60px; }
-        .col-mod { width: 70px; min-width: 60px; }
-        .col-visa { width: 90px; min-width: 80px; }
-        .col-ticket { width: 110px; min-width: 90px; }
-        .col-wo { width: 100px; min-width: 80px; }
-        .col-actions { width: 70px; min-width: 60px; }
+        .col-officers { width: 60px; min-width: 50px; }
+        .col-country { width: 60px; min-width: 50px; }
+        .col-departure { width: 80px; min-width: 70px; }
+        .col-return { width: 80px; min-width: 70px; }
+        .col-days { width: 40px; min-width: 30px; }
+        .col-deadline { width: 80px; min-width: 70px; }
+        .col-urgency { width: 70px; min-width: 60px; }
+        .col-cmdr { width: 60px; min-width: 50px; }
+        .col-mod { width: 60px; min-width: 50px; }
+        .col-visa { width: 80px; min-width: 70px; }
+        .col-ticket { width: 100px; min-width: 80px; }
+        .col-wo { width: 90px; min-width: 70px; }
+        .col-actions { width: 60px; min-width: 50px; }
 
         /* badges */
         .type-badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 30px;
             font-weight: 800;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             white-space: nowrap;
         }
         .type-course { background: #3b82f6; color: white; }
         .type-visit { background: #8b5cf6; color: white; }
-        .type-nomination { background: #dc2626; color: white; animation: pulseNom 1s infinite; }
+        .type-nomination { background: #dc2626; color: white; animation: pulseNom 1.5s infinite; }
 
         .status-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             white-space: nowrap;
         }
         .status-notsent { background: #475569; color: white; }
@@ -330,13 +416,14 @@
         }
 
         .urgency-chip {
-            background: #1e293b;
-            padding: 4px 12px;
+            background: var(--bg-secondary);
+            padding: 3px 10px;
             border-radius: 30px;
             font-weight: 800;
-            font-size: 0.7rem;
-            border: 1px solid #3b82f6;
+            font-size: 0.65rem;
+            border: 1px solid var(--border-color);
             white-space: nowrap;
+            color: var(--text-primary);
         }
         .row-nomination td { background: rgba(220,38,38,0.15); border-left: 3px solid #dc2626; }
         .row-critical td { background: rgba(239,68,68,0.15); }
@@ -344,32 +431,32 @@
         .row-past td { opacity: 0.6; }
 
         .edit-input, .edit-select {
-            background: #0f172a;
-            border: 1px solid #3b82f6;
-            color: #f1f5f9;
-            padding: 6px 8px;
-            border-radius: 8px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 4px 6px;
+            border-radius: 6px;
             width: 100%;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            min-width: 50px;
+            min-width: 40px;
         }
         .action-icon {
-            background: #1e293b;
-            border: 1px solid #3b82f6;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
             border-radius: 30px;
-            padding: 4px 12px;
-            margin: 2px;
-            color: #f1f5f9;
+            padding: 2px 10px;
+            margin: 1px;
+            color: var(--text-primary);
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
         .inline-edit-btn {
             background: #10b981;
             border: none;
             border-radius: 30px;
-            padding: 4px 14px;
+            padding: 2px 12px;
             color: white;
             font-weight: 700;
             cursor: pointer;
@@ -378,46 +465,48 @@
         /* ===== BULK ACTIONS ===== */
         #bulkActions {
             display: none;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
-            padding: 8px 12px;
-            background: #1e293b;
+            padding: 4px 10px;
+            background: var(--bg-secondary);
             border-radius: 12px;
-            margin: 4px 0;
-            border: 1px solid #3b82f6;
+            margin: 2px 0;
+            border: 1px solid var(--border-color);
             flex-wrap: wrap;
         }
         #bulkActions.visible { display: flex; }
 
         /* ===== ALERT ===== */
         #alertContainer {
-            padding: 8px 12px;
-            margin: 4px 0;
+            padding: 4px 10px;
+            margin: 2px 0;
             border-radius: 12px;
-            background: #1e293b;
-            border: 1px solid #3b82f6;
-            min-height: 44px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            min-height: 34px;
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             align-items: center;
         }
         .alert-item-extreme {
             background: linear-gradient(135deg, #dc2626, #7f1d1d);
             color: white;
-            padding: 6px 16px;
+            padding: 4px 14px;
             border-radius: 30px;
             font-weight: 800;
             animation: blinkCritical 0.8s infinite;
             border: 1px solid #ef4444;
+            font-size: 0.8rem;
         }
         .alert-item-high {
             background: #f97316;
             color: white;
-            padding: 6px 14px;
+            padding: 4px 12px;
             border-radius: 30px;
             font-weight: 700;
             border: 1px solid #fb923c;
+            font-size: 0.75rem;
         }
         @keyframes blinkCritical {
             0%, 100% { background: linear-gradient(135deg, #dc2626, #7f1d1d); }
@@ -430,17 +519,17 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1e293b;
-            color: #f1f5f9;
-            padding: 12px 28px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 10px 24px;
             border-radius: 40px;
             z-index: 999;
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid var(--border-color);
             box-shadow: 0 4px 20px rgba(0,0,0,0.6);
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.9rem;
             animation: slideUp 0.3s ease, fadeOut 3s 2.7s forwards;
-            border: 1px solid #3b82f6;
+            border: 1px solid var(--border-color);
             max-width: 90%;
         }
         @keyframes slideUp {
@@ -454,14 +543,14 @@
         /* ===== FOOTER ===== */
         .footer-info {
             text-align: center;
-            font-size: 0.7rem;
-            padding: 8px;
-            color: #94a3b8;
-            border-top: 1px solid #3b82f6;
-            margin-top: 4px;
+            font-size: 0.65rem;
+            padding: 6px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            margin-top: 2px;
             display: flex;
             justify-content: center;
-            gap: 16px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
@@ -469,24 +558,24 @@
         button, select, input, .stat-card, .filter-preset-btn, .btn-outline, .btn-primary, .btn-danger {
             touch-action: manipulation;
         }
-        /* larger checkboxes for TV remote */
         input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
-            transform: scale(1.2);
+            width: 20px;
+            height: 20px;
+            transform: scale(1.1);
             cursor: pointer;
         }
         .col-checkbox { text-align: center; }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            body { font-size: 12px; padding: 4px; }
-            .title-text h1 { font-size: 1.2rem; }
-            .stat-number { font-size: 1.4rem; }
-            .filter-group select, .filter-group input { height: 40px; font-size: 0.75rem; padding: 4px 10px; }
-            .btn-primary, .btn-nomination, .btn-outline, .btn-danger { height: 40px; font-size: 0.75rem; padding: 4px 12px; }
-            .editable-table { font-size: 0.7rem; min-width: 700px; }
-            .clock-time { font-size: 0.9rem; }
+            body { font-size: 11px; padding: 4px; }
+            .title-text h1 { font-size: 1.0rem; }
+            .stat-number { font-size: 1.2rem; }
+            .filter-group select, .filter-group input { height: 30px; font-size: 0.65rem; padding: 2px 8px; }
+            .btn-primary, .btn-nomination, .btn-outline, .btn-danger { height: 30px; font-size: 0.65rem; padding: 2px 8px; }
+            .editable-table { font-size: 0.6rem; min-width: 600px; }
+            .clock-time { font-size: 0.8rem; }
+            .stats-row { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 480px) {
             .header { flex-direction: column; align-items: stretch; }
@@ -500,7 +589,7 @@
         }
     </style>
 </head>
-<body>
+<body class="theme-blue">
 <div class="dashboard">
     <!-- HEADER -->
     <div class="header">
@@ -516,9 +605,10 @@
             <div class="clock-divider"></div>
             <div class="clock"><div class="clock-label">🌍 UTC</div><div class="clock-time" id="utcClock">--:--:--</div></div>
         </div>
-        <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+        <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
             <button class="btn-primary" id="addNewRowBtn">➕ NEW</button>
             <button class="btn-nomination" id="addNominationBtn">📨 NOM</button>
+            <button class="theme-btn" id="themeToggleBtn" title="Switch Theme">🎨</button>
             <button class="sound-btn" id="soundToggleBtn">🔊</button>
             <button class="btn-outline" id="resetDemoBtn">⟳</button>
             <button class="btn-outline" id="fullscreenBtn">⛶</button>
@@ -526,26 +616,26 @@
     </div>
 
     <!-- ALERTS -->
-    <div id="alertContainer"><div style="padding:6px;color:#94a3b8;font-weight:700;">✅ All courses on track</div></div>
+    <div id="alertContainer"><div style="padding:4px;color:var(--text-secondary);font-weight:700;">✅ All courses on track</div></div>
 
-    <!-- STATS -->
+    <!-- STATS (CONDENSED) -->
     <div class="stats-row">
         <div class="stat-card" data-filter="all"><div class="stat-number" id="totalCoursesCount">0</div><div class="stat-label">TOTAL</div></div>
-        <div class="stat-card stat-nomination" data-filter="nomination"><div class="stat-number" id="nominationCount">0</div><div class="stat-label">NOMINATIONS</div></div>
-        <div class="stat-card stat-urgent" data-filter="48hr"><div class="stat-number" id="urgent48Count">0</div><div class="stat-label">NEXT 48H</div></div>
-        <div class="stat-card stat-critical" data-filter="critical"><div class="stat-number" id="urgentDepartureCount">0</div><div class="stat-label">CRITICAL (≤7d)</div></div>
-        <div class="stat-card" data-filter="cmdr"><div class="stat-number" id="awaitingCmdrCount">0</div><div class="stat-label">AWAITING CMDR</div></div>
-        <div class="stat-card" data-filter="mod"><div class="stat-number" id="awaitingModCount">0</div><div class="stat-label">AWAITING MOD</div></div>
+        <div class="stat-card stat-nomination" data-filter="nomination"><div class="stat-number" id="nominationCount">0</div><div class="stat-label">NOM</div></div>
+        <div class="stat-card stat-urgent" data-filter="48hr"><div class="stat-number" id="urgent48Count">0</div><div class="stat-label">48H</div></div>
+        <div class="stat-card stat-critical" data-filter="critical"><div class="stat-number" id="urgentDepartureCount">0</div><div class="stat-label">CRIT</div></div>
+        <div class="stat-card" data-filter="cmdr"><div class="stat-number" id="awaitingCmdrCount">0</div><div class="stat-label">CMDR</div></div>
+        <div class="stat-card" data-filter="mod"><div class="stat-number" id="awaitingModCount">0</div><div class="stat-label">MOD</div></div>
     </div>
 
     <!-- BULK ACTIONS -->
     <div id="bulkActions">
-        <span style="font-weight:700;color:#3b82f6;">📋 Bulk:</span>
+        <span style="font-weight:700;color:var(--border-color);font-size:0.8rem;">📋 Bulk:</span>
         <button class="btn-outline" onclick="bulkUpdateStatus('cmdrStatus','Received')">✅ CMDR</button>
         <button class="btn-outline" onclick="bulkUpdateStatus('modStatus','Received')">✅ MOD</button>
         <button class="btn-danger" onclick="bulkDeleteSelected()">🗑️</button>
         <button class="btn-outline" onclick="clearSelection()">✖️</button>
-        <span id="selectionCount" style="font-weight:bold;color:#3b82f6;">0</span>
+        <span id="selectionCount" style="font-weight:bold;color:var(--border-color);font-size:0.8rem;">0</span>
     </div>
 
     <!-- FILTERS -->
@@ -556,7 +646,7 @@
             <select id="typeFilter"><option value="all">📋 ALL</option><option value="Course">📘</option><option value="Visit">📌</option><option value="Nomination">📨</option></select>
             <select id="approvalFilter"><option value="all">📌</option><option value="sent">⏳</option><option value="received">✅</option></select>
             <select id="modApprovalFilter"><option value="all">🛡️</option><option value="sent">⏳</option><option value="received">✅</option><option value="pending">⏳</option></select>
-            <input type="text" id="searchInput" placeholder="🔍 SEARCH..." list="courseSuggestList" style="min-width:80px;">
+            <input type="text" id="searchInput" placeholder="🔍 SEARCH..." list="courseSuggestList" style="min-width:70px;">
             <datalist id="courseSuggestList"></datalist>
         </div>
         <div class="filter-presets">
@@ -566,10 +656,10 @@
             <button class="filter-preset-btn" data-preset="mod">🛡️</button>
             <button class="filter-preset-btn" data-preset="week">📅</button>
         </div>
-        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+        <div style="display:flex; gap:3px; flex-wrap:wrap;">
             <button class="btn-outline" id="clearFiltersBtn">✖️</button>
-            <button class="btn-outline" id="undoBtn">↩️</button>
-            <button class="btn-outline" id="redoBtn">↪️</button>
+            <button class="btn-outline" id="undoBtn" style="opacity:0.4;">↩️</button>
+            <button class="btn-outline" id="redoBtn" style="opacity:0.4;">↪️</button>
             <button class="btn-outline" id="refreshBtn">🔄</button>
             <button class="btn-outline" id="autoRefreshBtn">⏱️</button>
         </div>
@@ -689,6 +779,28 @@ function getWOStatusHtml(s, expDate, actDate) {
     return `<span class="status-badge ${cls}">${display}</span>${extra}`;
 }
 
+// ==================== THEME SYSTEM ====================
+const themes = ['theme-blue', 'theme-nightops', 'theme-arctic', 'theme-green'];
+let currentThemeIndex = 0;
+
+function cycleTheme() {
+    const body = document.body;
+    body.classList.remove(...themes);
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+    body.classList.add(themes[currentThemeIndex]);
+    localStorage.setItem('slaf_ftc_theme', themes[currentThemeIndex]);
+    showToast(`🎨 Theme: ${themes[currentThemeIndex].replace('theme-', '').toUpperCase()}`);
+}
+function loadTheme() {
+    const saved = localStorage.getItem('slaf_ftc_theme');
+    if (saved && themes.includes(saved)) {
+        document.body.classList.add(saved);
+        currentThemeIndex = themes.indexOf(saved);
+    } else {
+        document.body.classList.add('theme-blue');
+    }
+}
+
 // ==================== TOAST & SOUND ====================
 function showToast(msg, isErr=false) {
     const t = document.createElement("div");
@@ -752,7 +864,7 @@ function checkAlerts() {
         if(d>=0 && d<=7 && c.cmdrStatus!=='Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} - CMDR pending (${d}d)`});
         if(d>=0 && d<=7 && c.modStatus!=='Received' && c.modStatus!=='Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} - MOD pending (${d}d)`});
     });
-    if(alerts.length===0) { container.innerHTML='<div style="padding:6px;color:#94a3b8;font-weight:700;">✅ All courses on track</div>'; return; }
+    if(alerts.length===0) { container.innerHTML='<div style="padding:4px;color:var(--text-secondary);font-weight:700;">✅ All courses on track</div>'; return; }
     const unique = [];
     const seen = new Set();
     alerts.forEach(a => { if(!seen.has(a.msg)) { seen.add(a.msg); unique.push(a); } });
@@ -839,7 +951,7 @@ function renderTable() {
     const tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
     if(filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="16" style="text-align:center;padding:20px;font-size:1rem;color:#94a3b8;">📭 No data</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="16" style="text-align:center;padding:16px;font-size:0.9rem;color:var(--text-secondary);">📭 No data</td></tr>';
         return;
     }
 
@@ -890,12 +1002,16 @@ function renderTable() {
             inp.value = course.courseName;
             inp.setAttribute("list", "courseSuggestList");
             inp.style.fontWeight="700";
+            inp.addEventListener('focus', function() {
+                // Auto-select the text to allow easy overwrite
+                this.select();
+            });
             courseCell.appendChild(inp);
         } else {
             const isUrgent = urgency.daysLeft !== null && urgency.daysLeft >= 0 && urgency.daysLeft <= 7;
             let extra = '';
-            if(course.isNomination) extra = `<span class="type-badge type-nomination" style="font-size:0.6rem;padding:2px 8px;margin-left:4px;">NOM</span>`;
-            else if(isUrgent) extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:2px 10px;border-radius:30px;font-size:0.6rem;font-weight:800;margin-left:4px;">URGENT</span>`;
+            if(course.isNomination) extra = `<span class="type-badge type-nomination" style="font-size:0.55rem;padding:2px 8px;margin-left:4px;">NOM</span>`;
+            else if(isUrgent) extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:2px 10px;border-radius:30px;font-size:0.55rem;font-weight:800;margin-left:4px;">URGENT</span>`;
             courseCell.innerHTML = `<span style="font-weight:900;">${escapeHtml(course.courseName)}</span>${extra}`;
         }
         tr.appendChild(courseCell);
@@ -914,7 +1030,7 @@ function renderTable() {
         }
         tr.appendChild(oaCell);
 
-        // country
+        // country with datalist for suggestions
         const countryCell = document.createElement("td");
         countryCell.className = "col-country";
         if(isEditing) {
@@ -923,6 +1039,7 @@ function renderTable() {
             inp.id = `edit-country-${course.id}`;
             inp.value = course.country;
             inp.setAttribute("list", `countryList-${course.id}`);
+            inp.style.minWidth = "60px";
             const dl = document.createElement("datalist");
             dl.id = `countryList-${course.id}`;
             countryOptions.forEach(c => { const o=document.createElement("option"); o.value=c; dl.appendChild(o); });
@@ -965,7 +1082,7 @@ function renderTable() {
         else {
             if(course.isNomination && course.deadlineDate) {
                 const d = getDaysRemaining(course.deadlineDate);
-                if(d>=0 && d<=7) deadlineCell.innerHTML = `<span style="background:#dc2626;color:white;padding:2px 12px;border-radius:30px;font-weight:900;">${course.deadlineDate}</span>`;
+                if(d>=0 && d<=7) deadlineCell.innerHTML = `<span style="background:#dc2626;color:white;padding:2px 10px;border-radius:30px;font-weight:900;font-size:0.65rem;">${course.deadlineDate}</span>`;
                 else deadlineCell.innerText = course.deadlineDate;
             } else { deadlineCell.innerText = "—"; }
         }
@@ -1024,8 +1141,8 @@ function renderTable() {
                     <option value="TICKET CONFIRMED" ${course.ticketStatus==="TICKET CONFIRMED"?"selected":""}>🛫 CONFIRMED</option>
                     <option value="TICKET OK" ${course.ticketStatus==="TICKET OK"?"selected":""}>✅ OK</option>
                 </select>
-                <input type="date" class="edit-input" id="edit-demanddate-${course.id}" value="${course.ticketDemandDate||''}" style="font-size:0.65rem;margin-top:2px;">
-                <input type="date" class="edit-input" id="edit-opendate-${course.id}" value="${course.ticketOpenDate||''}" style="font-size:0.65rem;margin-top:2px;">
+                <input type="date" class="edit-input" id="edit-demanddate-${course.id}" value="${course.ticketDemandDate||''}" style="font-size:0.6rem;margin-top:2px;">
+                <input type="date" class="edit-input" id="edit-opendate-${course.id}" value="${course.ticketOpenDate||''}" style="font-size:0.6rem;margin-top:2px;">
             `;
         } else {
             ticketTd.innerHTML = getTicketStatusHtml(course.ticketStatus, course.ticketDemandDate, course.ticketOpenDate);
@@ -1042,8 +1159,8 @@ function renderTable() {
                     <option value="SENT" ${course.woStatus==="SENT"?"selected":""}>⏳ SENT</option>
                     <option value="RECEIVED" ${course.woStatus==="RECEIVED"?"selected":""}>✅ REC</option>
                 </select>
-                <input type="date" class="edit-input" id="edit-woexpected-${course.id}" value="${course.woExpectedDate||''}" style="font-size:0.65rem;margin-top:2px;">
-                <input type="date" class="edit-input" id="edit-woactual-${course.id}" value="${course.woActualDate||''}" style="font-size:0.65rem;margin-top:2px;">
+                <input type="date" class="edit-input" id="edit-woexpected-${course.id}" value="${course.woExpectedDate||''}" style="font-size:0.6rem;margin-top:2px;">
+                <input type="date" class="edit-input" id="edit-woactual-${course.id}" value="${course.woActualDate||''}" style="font-size:0.6rem;margin-top:2px;">
             `;
         } else {
             woCell.innerHTML = getWOStatusHtml(course.woStatus, course.woExpectedDate, course.woActualDate);
@@ -1125,6 +1242,14 @@ function addNewCourse() {
         woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"", isCancelled:false, isNomination:false
     });
     saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast("➕ New course");
+    // Auto-focus and select the course name field after render
+    setTimeout(() => {
+        const nameInput = document.getElementById(`edit-name-${newId}`);
+        if(nameInput) {
+            nameInput.focus();
+            nameInput.select();
+        }
+    }, 100);
 }
 function addNomination() {
     const newId = Date.now();
@@ -1140,6 +1265,13 @@ function addNomination() {
         isCancelled:false, isNomination:true
     });
     saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast(`📨 Nomination: ${nomName}`);
+    setTimeout(() => {
+        const nameInput = document.getElementById(`edit-name-${newId}`);
+        if(nameInput) {
+            nameInput.focus();
+            nameInput.select();
+        }
+    }, 100);
 }
 
 function resetDemo() {
@@ -1227,7 +1359,9 @@ function applyPreset(preset) {
 // ==================== CLOCKS ====================
 function updateClocks() {
     const now = new Date();
-    document.getElementById("lstClock").innerText = now.toLocaleTimeString();
+    // LST: UTC+5:30
+    const lst = new Date(now.getTime() + (5.5 * 3600 * 1000));
+    document.getElementById("lstClock").innerText = lst.toISOString().slice(11,19);
     document.getElementById("utcClock").innerText = now.toUTCString().slice(17,25);
 }
 
@@ -1263,6 +1397,7 @@ function toggleFullscreen() {
 
 // ==================== INIT ====================
 document.addEventListener("DOMContentLoaded", function() {
+    loadTheme();
     loadFromLocal();
     updateClocks();
     setInterval(updateClocks, 1000);
@@ -1274,6 +1409,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("resetDemoBtn").addEventListener("click", resetDemo);
     document.getElementById("soundToggleBtn").addEventListener("click", toggleSound);
     document.getElementById("fullscreenBtn").addEventListener("click", toggleFullscreen);
+    document.getElementById("themeToggleBtn").addEventListener("click", cycleTheme);
     document.getElementById("undoBtn").addEventListener("click", undo);
     document.getElementById("redoBtn").addEventListener("click", redo);
     document.getElementById("refreshBtn").addEventListener("click", () => { renderTable(); checkAlerts(); showToast("🔄 Refreshed"); });
@@ -1343,6 +1479,7 @@ document.addEventListener("DOMContentLoaded", function() {
     window.toggleSound = toggleSound;
     window.toggleFullscreen = toggleFullscreen;
     window.toggleAutoRefresh = toggleAutoRefresh;
+    window.cycleTheme = cycleTheme;
     window.playBeep = playBeep;
     window.showToast = showToast;
 
