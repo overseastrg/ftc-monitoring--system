@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>SLAF FTC | TV Dashboard</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, system-ui, sans-serif;
+        }
+        body {
+            background: #0a0e1a;
+            color: #f1f5f9;
+            padding: 6px 8px;
+            font-size: 14px;
+            line-height: 1.3;
+        }
+        /* ===== TV SAFE ZONE ===== */
+        .dashboard {
+            max-width: 100%;
+            background: #111827;
+            border-radius: 16px;
+            border: 1px solid #3b82f6;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 6px 8px;
+        }
+        /* ===== HEADER (large & touch friendly) ===== */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-bottom: 2px solid #3b82f6;
+            padding: 8px 12px;
+            border-radius: 12px 12px 0 0;
+            gap: 8px;
+        }
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .title-logo { font-size: 2rem; }
+        .title-text h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .title-text .subtitle {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            letter-spacing: 1px;
+        }
+        .title-text .subtitle span { color: #3b82f6; font-weight: 900; }
+
+        /* ===== CLOCKS ===== */
+        .clock-container {
+            display: flex;
+            gap: 8px;
+            background: #0f172a;
+            padding: 4px 16px;
+            border-radius: 30px;
+            border: 1px solid #3b82f6;
+            box-shadow: 0 0 20px rgba(59,130,246,0.2);
+        }
+        .clock { text-align: center; padding: 2px 6px; }
+        .clock-label { font-size: 0.55rem; color: #94a3b8; }
+        .clock-time {
+            font-size: 1.1rem;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .clock-divider {
+            width: 1px;
+            background: #3b82f6;
+            opacity: 0.3;
+        }
+
+        /* ===== STATS ROW (bigger touch targets) ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 6px;
+            margin: 6px 0;
+        }
+        .stat-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 6px 8px;
+            text-align: center;
+            border-left: 4px solid #3b82f6;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .stat-card:hover { transform: scale(1.02); background: #2a3a55; }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .stat-label { font-size: 0.6rem; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px; }
+        .stat-critical .stat-number { background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-urgent .stat-number { background: linear-gradient(135deg, #f97316, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-nomination .stat-number { background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ===== FILTER BAR (touch friendly) ===== */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 6px 0;
+            align-items: center;
+            background: #1e293b;
+            padding: 8px 10px;
+            border-radius: 12px;
+            border: 1px solid #3b82f6;
+        }
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .filter-group select,
+        .filter-group input {
+            background: #0f172a;
+            border: 1px solid #3b82f6;
+            padding: 8px 14px;
+            border-radius: 30px;
+            color: #f1f5f9;
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 70px;
+            height: 44px;
+            cursor: pointer;
+        }
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: 2px solid #3b82f6;
+        }
+        .filter-presets {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .filter-preset-btn {
+            background: #1e293b;
+            border: 1px solid #3b82f6;
+            padding: 8px 14px;
+            border-radius: 30px;
+            color: #f1f5f9;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            height: 44px;
+            min-width: 48px;
+        }
+        .filter-preset-btn:hover,
+        .filter-preset-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-outline {
+            background: #1e293b;
+            border: 1px solid #3b82f6;
+            padding: 8px 14px;
+            border-radius: 30px;
+            color: #f1f5f9;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            height: 44px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            height: 44px;
+            box-shadow: 0 2px 12px rgba(59,130,246,0.4);
+        }
+        .btn-nomination {
+            background: linear-gradient(135deg, #dc2626, #7f1d1d);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            height: 44px;
+            animation: pulseNom 1s infinite;
+        }
+        @keyframes pulseNom {
+            0%, 100% { background: linear-gradient(135deg, #dc2626, #7f1d1d); }
+            50% { background: linear-gradient(135deg, #ef4444, #991b1b); }
+        }
+        .btn-danger {
+            background: #dc2626;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            height: 44px;
+        }
+        .sound-btn {
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            height: 44px;
+            font-size: 1.2rem;
+            border: 1px solid #3b82f6;
+            background: #1e293b;
+            color: #f1f5f9;
+        }
+
+        /* ===== TABLE ===== */
+        .table-wrapper {
+            margin: 6px 0;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 60vh;
+            border-radius: 12px;
+            border: 1px solid #3b82f6;
+            background: #111827;
+        }
+        .editable-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 1000px;
+        }
+        .editable-table th {
+            background: #0f172a;
+            padding: 10px 6px;
+            text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            border-bottom: 2px solid #3b82f6;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+        .editable-table td {
+            padding: 8px 4px;
+            text-align: center;
+            border-bottom: 1px solid rgba(59,130,246,0.1);
+            vertical-align: middle;
+        }
+        .editable-table tr:hover { background: rgba(59,130,246,0.08); }
+
+        /* column sizing */
+        .col-checkbox { width: 40px; min-width: 40px; }
+        .col-type { width: 70px; min-width: 60px; }
+        .col-course { width: 160px; min-width: 120px; }
+        .col-officers { width: 70px; min-width: 60px; }
+        .col-country { width: 70px; min-width: 60px; }
+        .col-departure { width: 90px; min-width: 80px; }
+        .col-return { width: 90px; min-width: 80px; }
+        .col-days { width: 50px; min-width: 40px; }
+        .col-deadline { width: 90px; min-width: 80px; }
+        .col-urgency { width: 80px; min-width: 70px; }
+        .col-cmdr { width: 70px; min-width: 60px; }
+        .col-mod { width: 70px; min-width: 60px; }
+        .col-visa { width: 90px; min-width: 80px; }
+        .col-ticket { width: 110px; min-width: 90px; }
+        .col-wo { width: 100px; min-width: 80px; }
+        .col-actions { width: 70px; min-width: 60px; }
+
+        /* badges */
+        .type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+        .type-course { background: #3b82f6; color: white; }
+        .type-visit { background: #8b5cf6; color: white; }
+        .type-nomination { background: #dc2626; color: white; animation: pulseNom 1s infinite; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.65rem;
+            white-space: nowrap;
+        }
+        .status-notsent { background: #475569; color: white; }
+        .status-sent { background: #dc2626; color: white; animation: pulseRed 0.8s infinite; }
+        .status-received { background: #10b981; color: white; }
+        .status-pending { background: #f97316; color: white; }
+        .status-host { background: #6366f1; color: white; }
+
+        @keyframes pulseRed {
+            0%, 100% { background: #dc2626; }
+            50% { background: #7f1d1d; }
+        }
+
+        .urgency-chip {
+            background: #1e293b;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            border: 1px solid #3b82f6;
+            white-space: nowrap;
+        }
+        .row-nomination td { background: rgba(220,38,38,0.15); border-left: 3px solid #dc2626; }
+        .row-critical td { background: rgba(239,68,68,0.15); }
+        .row-high td { background: rgba(251,146,60,0.12); }
+        .row-past td { opacity: 0.6; }
+
+        .edit-input, .edit-select {
+            background: #0f172a;
+            border: 1px solid #3b82f6;
+            color: #f1f5f9;
+            padding: 6px 8px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 0.8rem;
+            font-weight: 600;
+            min-width: 50px;
+        }
+        .action-icon {
+            background: #1e293b;
+            border: 1px solid #3b82f6;
+            border-radius: 30px;
+            padding: 4px 12px;
+            margin: 2px;
+            color: #f1f5f9;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .inline-edit-btn {
+            background: #10b981;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 14px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* ===== BULK ACTIONS ===== */
+        #bulkActions {
+            display: none;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 12px;
+            background: #1e293b;
+            border-radius: 12px;
+            margin: 4px 0;
+            border: 1px solid #3b82f6;
+            flex-wrap: wrap;
+        }
+        #bulkActions.visible { display: flex; }
+
+        /* ===== ALERT ===== */
+        #alertContainer {
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 12px;
+            background: #1e293b;
+            border: 1px solid #3b82f6;
+            min-height: 44px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .alert-item-extreme {
+            background: linear-gradient(135deg, #dc2626, #7f1d1d);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 800;
+            animation: blinkCritical 0.8s infinite;
+            border: 1px solid #ef4444;
+        }
+        .alert-item-high {
+            background: #f97316;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            border: 1px solid #fb923c;
+        }
+        @keyframes blinkCritical {
+            0%, 100% { background: linear-gradient(135deg, #dc2626, #7f1d1d); }
+            50% { background: linear-gradient(135deg, #ef4444, #991b1b); }
+        }
+
+        /* ===== TOAST ===== */
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #f1f5f9;
+            padding: 12px 28px;
+            border-radius: 40px;
+            z-index: 999;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            font-weight: 700;
+            font-size: 1rem;
+            animation: slideUp 0.3s ease, fadeOut 3s 2.7s forwards;
+            border: 1px solid #3b82f6;
+            max-width: 90%;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer-info {
+            text-align: center;
+            font-size: 0.7rem;
+            padding: 8px;
+            color: #94a3b8;
+            border-top: 1px solid #3b82f6;
+            margin-top: 4px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== TV FRIENDLY TOUCH ===== */
+        button, select, input, .stat-card, .filter-preset-btn, .btn-outline, .btn-primary, .btn-danger {
+            touch-action: manipulation;
+        }
+        /* larger checkboxes for TV remote */
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .col-checkbox { text-align: center; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            body { font-size: 12px; padding: 4px; }
+            .title-text h1 { font-size: 1.2rem; }
+            .stat-number { font-size: 1.4rem; }
+            .filter-group select, .filter-group input { height: 40px; font-size: 0.75rem; padding: 4px 10px; }
+            .btn-primary, .btn-nomination, .btn-outline, .btn-danger { height: 40px; font-size: 0.75rem; padding: 4px 12px; }
+            .editable-table { font-size: 0.7rem; min-width: 700px; }
+            .clock-time { font-size: 0.9rem; }
+        }
+        @media (max-width: 480px) {
+            .header { flex-direction: column; align-items: stretch; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
+        /* print */
+        @media print {
+            .filter-bar, .stats-row, .header-controls, .col-actions, .col-checkbox { display: none !important; }
+            body { background: white; color: black; }
+            .dashboard { border: 1px solid #333; }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- HEADER -->
+    <div class="header">
+        <div class="title-section">
+            <span class="title-logo">✈️</span>
+            <div class="title-text">
+                <h1>FOREIGN TRAINING CELL</h1>
+                <div class="subtitle">SLAF · <span>FTC v8.0 TV</span></div>
+            </div>
+        </div>
+        <div class="clock-container">
+            <div class="clock"><div class="clock-label">🇱🇰 LST</div><div class="clock-time" id="lstClock">--:--:--</div></div>
+            <div class="clock-divider"></div>
+            <div class="clock"><div class="clock-label">🌍 UTC</div><div class="clock-time" id="utcClock">--:--:--</div></div>
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+            <button class="btn-primary" id="addNewRowBtn">➕ NEW</button>
+            <button class="btn-nomination" id="addNominationBtn">📨 NOM</button>
+            <button class="sound-btn" id="soundToggleBtn">🔊</button>
+            <button class="btn-outline" id="resetDemoBtn">⟳</button>
+            <button class="btn-outline" id="fullscreenBtn">⛶</button>
+        </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div id="alertContainer"><div style="padding:6px;color:#94a3b8;font-weight:700;">✅ All courses on track</div></div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-card" data-filter="all"><div class="stat-number" id="totalCoursesCount">0</div><div class="stat-label">TOTAL</div></div>
+        <div class="stat-card stat-nomination" data-filter="nomination"><div class="stat-number" id="nominationCount">0</div><div class="stat-label">NOMINATIONS</div></div>
+        <div class="stat-card stat-urgent" data-filter="48hr"><div class="stat-number" id="urgent48Count">0</div><div class="stat-label">NEXT 48H</div></div>
+        <div class="stat-card stat-critical" data-filter="critical"><div class="stat-number" id="urgentDepartureCount">0</div><div class="stat-label">CRITICAL (≤7d)</div></div>
+        <div class="stat-card" data-filter="cmdr"><div class="stat-number" id="awaitingCmdrCount">0</div><div class="stat-label">AWAITING CMDR</div></div>
+        <div class="stat-card" data-filter="mod"><div class="stat-number" id="awaitingModCount">0</div><div class="stat-label">AWAITING MOD</div></div>
+    </div>
+
+    <!-- BULK ACTIONS -->
+    <div id="bulkActions">
+        <span style="font-weight:700;color:#3b82f6;">📋 Bulk:</span>
+        <button class="btn-outline" onclick="bulkUpdateStatus('cmdrStatus','Received')">✅ CMDR</button>
+        <button class="btn-outline" onclick="bulkUpdateStatus('modStatus','Received')">✅ MOD</button>
+        <button class="btn-danger" onclick="bulkDeleteSelected()">🗑️</button>
+        <button class="btn-outline" onclick="clearSelection()">✖️</button>
+        <span id="selectionCount" style="font-weight:bold;color:#3b82f6;">0</span>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filter-bar">
+        <div class="filter-group">
+            <select id="countryFilter"><option value="all">🌍 ALL</option></select>
+            <select id="urgencyFilter"><option value="all">⏱️</option><option value="critical">🔥</option><option value="high">🟠</option><option value="normal">🟢</option><option value="past">⏰</option></select>
+            <select id="typeFilter"><option value="all">📋 ALL</option><option value="Course">📘</option><option value="Visit">📌</option><option value="Nomination">📨</option></select>
+            <select id="approvalFilter"><option value="all">📌</option><option value="sent">⏳</option><option value="received">✅</option></select>
+            <select id="modApprovalFilter"><option value="all">🛡️</option><option value="sent">⏳</option><option value="received">✅</option><option value="pending">⏳</option></select>
+            <input type="text" id="searchInput" placeholder="🔍 SEARCH..." list="courseSuggestList" style="min-width:80px;">
+            <datalist id="courseSuggestList"></datalist>
+        </div>
+        <div class="filter-presets">
+            <button class="filter-preset-btn" data-preset="nomination">📨</button>
+            <button class="filter-preset-btn" data-preset="urgent">🔥</button>
+            <button class="filter-preset-btn" data-preset="cmdr">⚠️</button>
+            <button class="filter-preset-btn" data-preset="mod">🛡️</button>
+            <button class="filter-preset-btn" data-preset="week">📅</button>
+        </div>
+        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            <button class="btn-outline" id="clearFiltersBtn">✖️</button>
+            <button class="btn-outline" id="undoBtn">↩️</button>
+            <button class="btn-outline" id="redoBtn">↪️</button>
+            <button class="btn-outline" id="refreshBtn">🔄</button>
+            <button class="btn-outline" id="autoRefreshBtn">⏱️</button>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+        <table class="editable-table" id="mainTable">
+            <thead><tr>
+                <th class="col-checkbox"><input type="checkbox" id="selectAllCheckbox"></th>
+                <th class="col-type">TYPE</th>
+                <th class="col-course">COURSE / VISIT / NOM</th>
+                <th class="col-officers">PERS</th>
+                <th class="col-country">CTRY</th>
+                <th class="col-departure">DEP</th>
+                <th class="col-return">RET</th>
+                <th class="col-days">DAYS</th>
+                <th class="col-deadline">DEADLINE</th>
+                <th class="col-urgency">URGENCY</th>
+                <th class="col-cmdr">CMDR</th>
+                <th class="col-mod">MOD</th>
+                <th class="col-visa">VISA</th>
+                <th class="col-ticket">TICKET</th>
+                <th class="col-wo">WARNING ORDER</th>
+                <th class="col-actions">⚡</th>
+            </tr></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-info">
+        <span>🕒 Updated: <span id="lastUpdated">--</span></span>
+        <span>💡 Click stats to filter</span>
+        <span>⌨️ Ctrl+N | Ctrl+Z | Ctrl+Y</span>
+        <span>🔄 Auto: <span id="autoRefreshStatus">ON</span></span>
+    </div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const countryOptions = ["India","Bangladesh","Pakistan","USA","UK","Australia","UAE","Poland","Slovakia","France","MONACO","UN Mission","Myanmar","Thailand","Indonesia","Italy","Maldives","Vietnam","Singapore","Africa","Europe","Czech","Germany","Japan","China","Other"];
+let coursesData = [];
+let courseNameHistory = [];
+let historyStack = [], historyIndex = -1;
+let editingRowId = null;
+let selectedCourses = new Set();
+let soundEnabled = true;
+let autoRefreshInterval = null;
+let nominationCounter = 1;
+
+const defaultData = [
+    { id:1, type:"Course", courseName:"Instructor Pilot Program", officersAirmen:"1 Officer", country:"China", depDate:"2026-01-01", returnDate:"2026-12-31", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-01", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-15", isCancelled:false, isNomination:false },
+    { id:2, type:"Course", courseName:"Pre Flying Training", officersAirmen:"1 Officer", country:"India", depDate:"2026-01-01", returnDate:"2026-06-23", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-10", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-20", isCancelled:false, isNomination:false },
+    { id:3, type:"Course", courseName:"Flight Safety Officers", officersAirmen:"1 Officer", country:"Bangladesh", depDate:"2026-01-18", returnDate:"2026-04-09", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"VISA DOC PREP", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-01-02", ticketOpenDate:"", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-01-05", isCancelled:false, isNomination:false },
+    { id:4, type:"Visit", courseName:"Singapore Air Show", officersAirmen:"3 Officers", country:"Singapore", depDate:"2026-02-02", returnDate:"2026-02-08", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2026-01-15", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-01-20", isCancelled:false, isNomination:false },
+    { id:5, type:"Nomination", courseName:"NOM-001 - UK Defence Attaché", officersAirmen:"2 Officers", country:"UK", depDate:"2026-02-10", returnDate:"2026-02-14", deadlineDate:"2026-01-25", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"HOST COUNTRY HANDLING", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-01-20", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"2026-01-25", woActualDate:"", isCancelled:false, isNomination:true },
+    { id:6, type:"Nomination", courseName:"NOM-002 - India High Commission", officersAirmen:"1 Officer", country:"India", depDate:"2026-02-20", returnDate:"2026-02-22", deadlineDate:"2026-02-01", cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING", ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"2026-02-05", woActualDate:"", isCancelled:false, isNomination:true },
+    { id:7, type:"Course", courseName:"Comm System Course", officersAirmen:"1 Officer", country:"Bangladesh", depDate:"2026-02-22", returnDate:"2026-03-12", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"VISA DOC PREP", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-02-01", ticketOpenDate:"", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-02-10", isCancelled:false, isNomination:false },
+    { id:8, type:"Course", courseName:"Insarag Course", officersAirmen:"1 Officer", country:"India", depDate:"2026-03-23", returnDate:"2026-03-27", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Sent", visaStatus:"VISA H/O TO EMBASSY", ticketStatus:"TICKET CONFIRMED", ticketDemandDate:"2026-03-01", ticketOpenDate:"2026-03-05", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-03-10", isCancelled:false, isNomination:false }
+];
+
+// ==================== HELPERS ====================
+function getDaysRemaining(dateStr) {
+    if(!dateStr) return 999;
+    const today = new Date(); today.setHours(0,0,0,0);
+    return Math.ceil((new Date(dateStr) - today) / 86400000);
+}
+function getUrgencyInfo(depDate, isCancelled, isNomination) {
+    if(isCancelled) return { className:"", label:"❌ CANCELLED", daysLeft:null };
+    const days = getDaysRemaining(depDate);
+    if(isNomination) {
+        if(days < 0) return { className:"row-nomination", label:"📨 OVERDUE", daysLeft:days };
+        if(days <= 2) return { className:"row-nomination", label:"📨 URGENT", daysLeft:days };
+        if(days <= 7) return { className:"row-nomination", label:"📨 PENDING", daysLeft:days };
+        return { className:"row-nomination", label:"📨 NOMINATION", daysLeft:days };
+    }
+    if(days < 0) return { className:"row-past", label:"⏰ OVERDUE", daysLeft:days };
+    if(days <= 2) return { className:"row-critical", label:"🚨 48H", daysLeft:days };
+    if(days <= 7) return { className:"row-critical", label:"🔥 CRITICAL", daysLeft:days };
+    if(days <= 14) return { className:"row-high", label:"🟠 HIGH", daysLeft:days };
+    if(days <= 30) return { className:"row-medium", label:"🟡 MEDIUM", daysLeft:days };
+    return { className:"", label:"🟢 NORMAL", daysLeft:days };
+}
+function escapeHtml(s) { if(!s) return ""; return s.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+
+function getStatusHtml(status) {
+    let cls="status-notsent", display="NOT";
+    if(status==="Not Sent"){ cls="status-notsent"; display="📤 NOT"; }
+    else if(status==="Sent"){ cls="status-sent"; display="⏳ AWAIT"; }
+    else if(status==="Received"){ cls="status-received"; display="✅ REC"; }
+    else if(status==="Pending"){ cls="status-pending"; display="⏳ PEND"; }
+    return `<span class="status-badge ${cls}">${display}</span>`;
+}
+function getVisaStatusHtml(s) {
+    let cls="status-notsent", display="PENDING";
+    if(s==="VISA DOC PREP"){ cls="status-pending"; display="📄 DOC PREP"; }
+    else if(s==="VISA H/O TO EMBASSY"){ cls="status-sent"; display="✋ H/O"; }
+    else if(s==="VISA COLLECTED"){ cls="status-received"; display="✅ COLLECTED"; }
+    else if(s==="HOST COUNTRY HANDLING"){ cls="status-host"; display="🏛️ HOST"; }
+    return `<span class="status-badge ${cls}">${display}</span>`;
+}
+function getTicketStatusHtml(s, dDate, oDate) {
+    let cls="status-notsent", display="PENDING";
+    let extra='';
+    if(s==="TICKET DEMAND RAISED"){ cls="status-pending"; display="📑 DEMAND"; if(dDate) extra=`<br><small>${dDate}</small>`; }
+    else if(s==="TICKET CONFIRMED"){ cls="status-sent"; display="🛫 CONFIRMED"; if(oDate) extra=`<br><small>${oDate}</small>`; }
+    else if(s==="TICKET OK"){ cls="status-received"; display="✅ OK"; if(oDate) extra=`<br><small>${oDate}</small>`; }
+    return `<span class="status-badge ${cls}">${display}</span>${extra}`;
+}
+function getWOStatusHtml(s, expDate, actDate) {
+    let cls="status-notsent", display="NOT SENT";
+    let extra='';
+    if(s==="SENT"){ cls="status-sent"; display="⏳ SENT"; if(actDate) extra=`<br><small>${actDate}</small>`; }
+    else if(s==="RECEIVED"){ cls="status-received"; display="✅ REC"; if(actDate) extra=`<br><small>${actDate}</small>`; }
+    else { if(expDate) extra=`<br><small>EXP: ${expDate}</small>`; }
+    return `<span class="status-badge ${cls}">${display}</span>${extra}`;
+}
+
+// ==================== TOAST & SOUND ====================
+function showToast(msg, isErr=false) {
+    const t = document.createElement("div");
+    t.className = "toast-msg";
+    t.innerText = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+    if(isErr) playBeep(300, 0.2, "square");
+    else playBeep(600, 0.08);
+}
+function playBeep(freq=800, dur=0.12, type="sine") {
+    if(!soundEnabled) return;
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = type;
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+dur);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime+dur);
+    } catch(e) {}
+}
+
+// ==================== HISTORY ====================
+function saveToHistory() {
+    const copy = JSON.parse(JSON.stringify(coursesData));
+    historyStack = historyStack.slice(0, historyIndex+1);
+    historyStack.push(copy);
+    historyIndex++;
+    if(historyStack.length > 50) historyStack.shift();
+    updateUndoButtons();
+}
+function undo() {
+    if(historyIndex > 0) { historyIndex--; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↩️ Undo"); }
+}
+function redo() {
+    if(historyIndex < historyStack.length-1) { historyIndex++; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↪️ Redo"); }
+}
+function updateUndoButtons() {
+    document.getElementById("undoBtn").style.opacity = historyIndex>0 ? 1 : 0.4;
+    document.getElementById("redoBtn").style.opacity = historyIndex<historyStack.length-1 ? 1 : 0.4;
+}
+
+// ==================== ALERTS ====================
+function checkAlerts() {
+    const container = document.getElementById('alertContainer');
+    let alerts = [];
+    coursesData.forEach(c => {
+        if(c.isCancelled) return;
+        if(c.isNomination && c.deadlineDate) {
+            const d = getDaysRemaining(c.deadlineDate);
+            if(d>=0 && d<=2) alerts.push({type:'EXTREME', msg:`📨 NOM DEADLINE: ${c.courseName} - ${d}d left!`});
+            else if(d>=0 && d<=7) alerts.push({type:'HIGH', msg:`📨 ${c.courseName} deadline in ${d}d`});
+        }
+        const d = getDaysRemaining(c.depDate);
+        if(d>=0 && d<=2 && !c.isNomination) alerts.push({type:'EXTREME', msg:`🚨 ${c.courseName} departs in ${d}d!`});
+        if(d>=0 && d<=7 && c.cmdrStatus!=='Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} - CMDR pending (${d}d)`});
+        if(d>=0 && d<=7 && c.modStatus!=='Received' && c.modStatus!=='Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} - MOD pending (${d}d)`});
+    });
+    if(alerts.length===0) { container.innerHTML='<div style="padding:6px;color:#94a3b8;font-weight:700;">✅ All courses on track</div>'; return; }
+    const unique = [];
+    const seen = new Set();
+    alerts.forEach(a => { if(!seen.has(a.msg)) { seen.add(a.msg); unique.push(a); } });
+    container.innerHTML = unique.slice(0,4).map(a => `<div class="alert-item-${a.type.toLowerCase()}">${a.msg}</div>`).join('');
+    if(alerts.some(a => a.type==='EXTREME')) playBeep(1000,0.15);
+}
+
+// ==================== BULK ====================
+function toggleSelection(id) {
+    if(selectedCourses.has(id)) selectedCourses.delete(id);
+    else selectedCourses.add(id);
+    updateSelectionUI();
+    renderTable();
+}
+function toggleAllSelection() {
+    const checked = document.getElementById('selectAllCheckbox').checked;
+    if(checked) coursesData.forEach(c => selectedCourses.add(c.id));
+    else selectedCourses.clear();
+    updateSelectionUI();
+    renderTable();
+}
+function updateSelectionUI() {
+    const count = selectedCourses.size;
+    const actions = document.getElementById('bulkActions');
+    document.getElementById('selectionCount').textContent = count;
+    if(count>0) actions.classList.add('visible');
+    else actions.classList.remove('visible');
+    const all = coursesData.length>0 && coursesData.every(c => selectedCourses.has(c.id));
+    document.getElementById('selectAllCheckbox').checked = all;
+}
+function clearSelection() { selectedCourses.clear(); updateSelectionUI(); renderTable(); }
+function bulkUpdateStatus(field, status) {
+    if(selectedCourses.size===0) { showToast('⚠️ Select courses', true); return; }
+    if(!confirm(`Update ${selectedCourses.size} courses?`)) return;
+    let updated=0;
+    selectedCourses.forEach(id => {
+        const c = coursesData.find(x => x.id===id);
+        if(c) { c[field]=status; updated++; }
+    });
+    saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`✅ Updated ${updated}`); clearSelection();
+}
+function bulkDeleteSelected() {
+    if(selectedCourses.size===0) { showToast('⚠️ Select courses', true); return; }
+    if(!confirm(`Delete ${selectedCourses.size} courses?`)) return;
+    const ids = Array.from(selectedCourses);
+    coursesData = coursesData.filter(c => !ids.includes(c.id));
+    selectedCourses.clear();
+    saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`🗑️ Deleted ${ids.length}`);
+}
+
+// ==================== RENDER ====================
+function renderTable() {
+    const countryVal = document.getElementById("countryFilter").value;
+    const urgencyVal = document.getElementById("urgencyFilter").value;
+    const typeVal = document.getElementById("typeFilter").value;
+    const cmdrFilter = document.getElementById("approvalFilter").value;
+    const modFilter = document.getElementById("modApprovalFilter").value;
+    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+    let filtered = coursesData.filter(c => {
+        if(countryVal !== "all" && c.country !== countryVal) return false;
+        if(typeVal !== "all" && c.type !== typeVal) return false;
+        if(searchTerm && !c.courseName.toLowerCase().includes(searchTerm)) return false;
+        if(cmdrFilter !== "all") {
+            if(cmdrFilter === "sent" && c.cmdrStatus !== "Sent") return false;
+            if(cmdrFilter === "received" && c.cmdrStatus !== "Received") return false;
+        }
+        if(modFilter !== "all") {
+            if(modFilter === "sent" && c.modStatus !== "Sent") return false;
+            if(modFilter === "received" && c.modStatus !== "Received") return false;
+            if(modFilter === "pending" && c.modStatus !== "Pending") return false;
+        }
+        if(urgencyVal !== "all" && !c.isCancelled) {
+            const d = getDaysRemaining(c.depDate);
+            if(urgencyVal === "critical" && (d > 7 || d < 0)) return false;
+            if(urgencyVal === "high" && (d <= 7 || d > 14 || d < 0)) return false;
+            if(urgencyVal === "normal" && (d <= 14 || d < 0)) return false;
+            if(urgencyVal === "past" && !(d < 0)) return false;
+        }
+        return true;
+    });
+
+    updateStats();
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+    if(filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="16" style="text-align:center;padding:20px;font-size:1rem;color:#94a3b8;">📭 No data</td></tr>';
+        return;
+    }
+
+    filtered.forEach(course => {
+        const urgency = getUrgencyInfo(course.depDate, course.isCancelled, course.isNomination);
+        const daysLeft = urgency.daysLeft !== null ? urgency.daysLeft : "—";
+        const isEditing = (editingRowId === course.id);
+        const isSelected = selectedCourses.has(course.id);
+        const rowClass = course.isCancelled ? "" : urgency.className;
+
+        const tr = document.createElement("tr");
+        tr.className = `${rowClass} ${isSelected ? 'row-selected' : ''}`;
+        tr.dataset.id = course.id;
+
+        // checkbox
+        const cbTd = document.createElement("td");
+        cbTd.className = "col-checkbox";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = isSelected;
+        cb.onchange = () => toggleSelection(course.id);
+        cbTd.appendChild(cb);
+        tr.appendChild(cbTd);
+
+        // type
+        const typeCell = document.createElement("td");
+        typeCell.className = "col-type";
+        if(isEditing) {
+            const sel = document.createElement("select");
+            sel.className = "edit-select";
+            sel.id = `edit-type-${course.id}`;
+            sel.innerHTML = `<option value="Course" ${course.type==="Course"?"selected":""}>📘 COURSE</option><option value="Visit" ${course.type==="Visit"?"selected":""}>📌 VISIT</option><option value="Nomination" ${course.type==="Nomination"?"selected":""}>📨 NOM</option>`;
+            typeCell.appendChild(sel);
+        } else {
+            let badgeClass = course.type === "Course" ? "type-course" : course.type === "Visit" ? "type-visit" : "type-nomination";
+            let icon = course.type === "Course" ? "📘" : course.type === "Visit" ? "📌" : "📨";
+            typeCell.innerHTML = `<span class="type-badge ${badgeClass}">${icon} ${course.type==="Nomination"?"NOM":course.type}</span>`;
+        }
+        tr.appendChild(typeCell);
+
+        // course name
+        const courseCell = document.createElement("td");
+        courseCell.className = "col-course course-name-cell";
+        if(isEditing) {
+            const inp = document.createElement("input");
+            inp.className = "edit-input";
+            inp.id = `edit-name-${course.id}`;
+            inp.value = course.courseName;
+            inp.setAttribute("list", "courseSuggestList");
+            inp.style.fontWeight="700";
+            courseCell.appendChild(inp);
+        } else {
+            const isUrgent = urgency.daysLeft !== null && urgency.daysLeft >= 0 && urgency.daysLeft <= 7;
+            let extra = '';
+            if(course.isNomination) extra = `<span class="type-badge type-nomination" style="font-size:0.6rem;padding:2px 8px;margin-left:4px;">NOM</span>`;
+            else if(isUrgent) extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:2px 10px;border-radius:30px;font-size:0.6rem;font-weight:800;margin-left:4px;">URGENT</span>`;
+            courseCell.innerHTML = `<span style="font-weight:900;">${escapeHtml(course.courseName)}</span>${extra}`;
+        }
+        tr.appendChild(courseCell);
+
+        // officers
+        const oaCell = document.createElement("td");
+        oaCell.className = "col-officers";
+        if(isEditing) {
+            const sel = document.createElement("select");
+            sel.className = "edit-select";
+            sel.id = `edit-officers-${course.id}`;
+            sel.innerHTML = `<option value="1 Officer" ${course.officersAirmen==="1 Officer"?"selected":""}>1 Off</option><option value="2 Officers" ${course.officersAirmen==="2 Officers"?"selected":""}>2 Off</option><option value="3 Officers" ${course.officersAirmen==="3 Officers"?"selected":""}>3 Off</option><option value="4 Airmen" ${course.officersAirmen==="4 Airmen"?"selected":""}>4 Air</option><option value="Officer" ${course.officersAirmen==="Officer"?"selected":""}>Off</option><option value="Airmen" ${course.officersAirmen==="Airmen"?"selected":""}>Air</option><option value="Both" ${course.officersAirmen==="Both"?"selected":""}>Both</option>`;
+            oaCell.appendChild(sel);
+        } else {
+            oaCell.innerText = course.officersAirmen;
+        }
+        tr.appendChild(oaCell);
+
+        // country
+        const countryCell = document.createElement("td");
+        countryCell.className = "col-country";
+        if(isEditing) {
+            const inp = document.createElement("input");
+            inp.className = "edit-input";
+            inp.id = `edit-country-${course.id}`;
+            inp.value = course.country;
+            inp.setAttribute("list", `countryList-${course.id}`);
+            const dl = document.createElement("datalist");
+            dl.id = `countryList-${course.id}`;
+            countryOptions.forEach(c => { const o=document.createElement("option"); o.value=c; dl.appendChild(o); });
+            countryCell.appendChild(inp); countryCell.appendChild(dl);
+        } else {
+            countryCell.innerText = course.country;
+        }
+        tr.appendChild(countryCell);
+
+        // dep
+        const depCell = document.createElement("td");
+        depCell.className = "col-departure";
+        if(isEditing) depCell.innerHTML = `<input type="date" class="edit-input" id="edit-dep-${course.id}" value="${course.depDate}">`;
+        else depCell.innerText = course.depDate;
+        tr.appendChild(depCell);
+
+        // return
+        const retCell = document.createElement("td");
+        retCell.className = "col-return";
+        if(isEditing) retCell.innerHTML = `<input type="date" class="edit-input" id="edit-ret-${course.id}" value="${course.returnDate}">`;
+        else retCell.innerText = course.returnDate;
+        tr.appendChild(retCell);
+
+        // days
+        const daysCell = document.createElement("td");
+        daysCell.className = "col-days";
+        let color = '';
+        if(urgency.daysLeft !== null && urgency.daysLeft >= 0) {
+            if(urgency.daysLeft <= 2) color = 'color:#dc2626;font-weight:900;';
+            else if(urgency.daysLeft <= 7) color = 'color:#f97316;font-weight:800;';
+            else if(urgency.daysLeft <= 14) color = 'color:#eab308;font-weight:700;';
+        }
+        daysCell.innerHTML = `<span style="${color}">${daysLeft}</span>`;
+        tr.appendChild(daysCell);
+
+        // deadline
+        const deadlineCell = document.createElement("td");
+        deadlineCell.className = "col-deadline";
+        if(isEditing) deadlineCell.innerHTML = `<input type="date" class="edit-input" id="edit-deadline-${course.id}" value="${course.deadlineDate||''}">`;
+        else {
+            if(course.isNomination && course.deadlineDate) {
+                const d = getDaysRemaining(course.deadlineDate);
+                if(d>=0 && d<=7) deadlineCell.innerHTML = `<span style="background:#dc2626;color:white;padding:2px 12px;border-radius:30px;font-weight:900;">${course.deadlineDate}</span>`;
+                else deadlineCell.innerText = course.deadlineDate;
+            } else { deadlineCell.innerText = "—"; }
+        }
+        tr.appendChild(deadlineCell);
+
+        // urgency
+        const urgencyCell = document.createElement("td");
+        urgencyCell.className = "col-urgency";
+        urgencyCell.innerHTML = `<span class="urgency-chip">${urgency.label}</span>`;
+        tr.appendChild(urgencyCell);
+
+        // cmdr
+        const cmdrTd = document.createElement("td");
+        cmdrTd.className = "col-cmdr";
+        if(isEditing) {
+            const sel = document.createElement("select");
+            sel.className = "edit-select";
+            sel.id = `edit-cmdr-${course.id}`;
+            sel.innerHTML = `<option value="Not Sent" ${course.cmdrStatus==="Not Sent"?"selected":""}>NOT</option><option value="Sent" ${course.cmdrStatus==="Sent"?"selected":""}>SENT</option><option value="Received" ${course.cmdrStatus==="Received"?"selected":""}>REC</option>`;
+            cmdrTd.appendChild(sel);
+        } else { cmdrTd.innerHTML = getStatusHtml(course.cmdrStatus); }
+        tr.appendChild(cmdrTd);
+
+        // mod
+        const modTd = document.createElement("td");
+        modTd.className = "col-mod";
+        if(isEditing) {
+            const sel = document.createElement("select");
+            sel.className = "edit-select";
+            sel.id = `edit-mod-${course.id}`;
+            sel.innerHTML = `<option value="Not Sent" ${course.modStatus==="Not Sent"?"selected":""}>NOT</option><option value="Sent" ${course.modStatus==="Sent"?"selected":""}>SENT</option><option value="Received" ${course.modStatus==="Received"?"selected":""}>REC</option><option value="Pending" ${course.modStatus==="Pending"?"selected":""}>PEND</option>`;
+            modTd.appendChild(sel);
+        } else { modTd.innerHTML = getStatusHtml(course.modStatus); }
+        tr.appendChild(modTd);
+
+        // visa
+        const visaTd = document.createElement("td");
+        visaTd.className = "col-visa";
+        if(isEditing) {
+            const sel = document.createElement("select");
+            sel.className = "edit-select";
+            sel.id = `edit-visa-${course.id}`;
+            sel.innerHTML = `<option value="PENDING" ${course.visaStatus==="PENDING"?"selected":""}>⏳ PENDING</option><option value="VISA DOC PREP" ${course.visaStatus==="VISA DOC PREP"?"selected":""}>📄 DOC PREP</option><option value="VISA H/O TO EMBASSY" ${course.visaStatus==="VISA H/O TO EMBASSY"?"selected":""}>✋ H/O</option><option value="VISA COLLECTED" ${course.visaStatus==="VISA COLLECTED"?"selected":""}>✅ COLLECTED</option><option value="HOST COUNTRY HANDLING" ${course.visaStatus==="HOST COUNTRY HANDLING"?"selected":""}>🏛️ HOST</option>`;
+            visaTd.appendChild(sel);
+        } else { visaTd.innerHTML = getVisaStatusHtml(course.visaStatus); }
+        tr.appendChild(visaTd);
+
+        // ticket
+        const ticketTd = document.createElement("td");
+        ticketTd.className = "col-ticket";
+        if(isEditing) {
+            ticketTd.innerHTML = `
+                <select class="edit-select" id="edit-ticket-${course.id}" style="margin-bottom:2px;">
+                    <option value="PENDING" ${course.ticketStatus==="PENDING"?"selected":""}>⏳ PENDING</option>
+                    <option value="TICKET DEMAND RAISED" ${course.ticketStatus==="TICKET DEMAND RAISED"?"selected":""}>📑 DEMAND</option>
+                    <option value="TICKET CONFIRMED" ${course.ticketStatus==="TICKET CONFIRMED"?"selected":""}>🛫 CONFIRMED</option>
+                    <option value="TICKET OK" ${course.ticketStatus==="TICKET OK"?"selected":""}>✅ OK</option>
+                </select>
+                <input type="date" class="edit-input" id="edit-demanddate-${course.id}" value="${course.ticketDemandDate||''}" style="font-size:0.65rem;margin-top:2px;">
+                <input type="date" class="edit-input" id="edit-opendate-${course.id}" value="${course.ticketOpenDate||''}" style="font-size:0.65rem;margin-top:2px;">
+            `;
+        } else {
+            ticketTd.innerHTML = getTicketStatusHtml(course.ticketStatus, course.ticketDemandDate, course.ticketOpenDate);
+        }
+        tr.appendChild(ticketTd);
+
+        // wo
+        const woCell = document.createElement("td");
+        woCell.className = "col-wo";
+        if(isEditing) {
+            woCell.innerHTML = `
+                <select class="edit-select" id="edit-wo-${course.id}" style="margin-bottom:2px;">
+                    <option value="NOT SENT" ${course.woStatus==="NOT SENT"?"selected":""}>📤 NOT SENT</option>
+                    <option value="SENT" ${course.woStatus==="SENT"?"selected":""}>⏳ SENT</option>
+                    <option value="RECEIVED" ${course.woStatus==="RECEIVED"?"selected":""}>✅ REC</option>
+                </select>
+                <input type="date" class="edit-input" id="edit-woexpected-${course.id}" value="${course.woExpectedDate||''}" style="font-size:0.65rem;margin-top:2px;">
+                <input type="date" class="edit-input" id="edit-woactual-${course.id}" value="${course.woActualDate||''}" style="font-size:0.65rem;margin-top:2px;">
+            `;
+        } else {
+            woCell.innerHTML = getWOStatusHtml(course.woStatus, course.woExpectedDate, course.woActualDate);
+        }
+        tr.appendChild(woCell);
+
+        // actions
+        const actionTd = document.createElement("td");
+        actionTd.className = "col-actions";
+        if(isEditing) {
+            const saveBtn = document.createElement("button");
+            saveBtn.innerText = "💾";
+            saveBtn.className = "inline-edit-btn";
+            saveBtn.onclick = () => saveEdit(course.id);
+            const cancelBtn = document.createElement("button");
+            cancelBtn.innerText = "✖️";
+            cancelBtn.className = "action-icon";
+            cancelBtn.onclick = () => { editingRowId = null; renderTable(); };
+            actionTd.append(saveBtn, cancelBtn);
+        } else {
+            const editBtn = document.createElement("button");
+            editBtn.innerText = "✏️";
+            editBtn.className = "action-icon";
+            editBtn.onclick = () => { editingRowId = course.id; renderTable(); };
+            const delBtn = document.createElement("button");
+            delBtn.innerText = "🗑️";
+            delBtn.className = "action-icon";
+            delBtn.onclick = () => {
+                if(confirm(`Delete "${course.courseName}"?`)) {
+                    coursesData = coursesData.filter(c => c.id !== course.id);
+                    saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`🗑️ Deleted`); playBeep(300,0.2,"square");
+                }
+            };
+            actionTd.append(editBtn, delBtn);
+        }
+        tr.appendChild(actionTd);
+        tbody.appendChild(tr);
+    });
+}
+
+// ==================== SAVE EDIT ====================
+function saveEdit(id) {
+    const c = coursesData.find(x => x.id === id);
+    if(!c) return;
+    const dep = document.getElementById(`edit-dep-${id}`)?.value;
+    const ret = document.getElementById(`edit-ret-${id}`)?.value;
+    if(dep && ret && new Date(dep) > new Date(ret)) { showToast('❌ Invalid dates', true); return; }
+
+    const typeVal = document.getElementById(`edit-type-${id}`)?.value;
+    if(typeVal) { c.type = typeVal; c.isNomination = (typeVal === 'Nomination'); }
+    const name = document.getElementById(`edit-name-${id}`)?.value;
+    if(name) { c.courseName = name; if(!courseNameHistory.includes(name)) courseNameHistory.push(name); updateCourseDatalist(); }
+    if(document.getElementById(`edit-officers-${id}`)) c.officersAirmen = document.getElementById(`edit-officers-${id}`).value;
+    if(document.getElementById(`edit-country-${id}`)) c.country = document.getElementById(`edit-country-${id}`).value;
+    if(dep) c.depDate = dep;
+    if(ret) c.returnDate = ret;
+    if(document.getElementById(`edit-deadline-${id}`)) c.deadlineDate = document.getElementById(`edit-deadline-${id}`).value;
+    if(document.getElementById(`edit-cmdr-${id}`)) c.cmdrStatus = document.getElementById(`edit-cmdr-${id}`).value;
+    if(document.getElementById(`edit-mod-${id}`)) c.modStatus = document.getElementById(`edit-mod-${id}`).value;
+    if(document.getElementById(`edit-visa-${id}`)) c.visaStatus = document.getElementById(`edit-visa-${id}`).value;
+    if(document.getElementById(`edit-ticket-${id}`)) c.ticketStatus = document.getElementById(`edit-ticket-${id}`).value;
+    if(document.getElementById(`edit-demanddate-${id}`)) c.ticketDemandDate = document.getElementById(`edit-demanddate-${id}`).value;
+    if(document.getElementById(`edit-opendate-${id}`)) c.ticketOpenDate = document.getElementById(`edit-opendate-${id}`).value;
+    if(document.getElementById(`edit-wo-${id}`)) c.woStatus = document.getElementById(`edit-wo-${id}`).value;
+    if(document.getElementById(`edit-woexpected-${id}`)) c.woExpectedDate = document.getElementById(`edit-woexpected-${id}`).value;
+    if(document.getElementById(`edit-woactual-${id}`)) c.woActualDate = document.getElementById(`edit-woactual-${id}`).value;
+
+    saveToHistory(); saveToLocal(); editingRowId = null; renderTable(); checkAlerts(); showToast(`✅ Updated`);
+}
+
+// ==================== ADD FUNCTIONS ====================
+function addNewCourse() {
+    const newId = Date.now();
+    const today = new Date().toISOString().slice(0,10);
+    coursesData.push({
+        id: newId, type:"Course", courseName:"NEW COURSE", officersAirmen:"1 Officer", country:"Country",
+        depDate:today, returnDate:today, deadlineDate:"", cmdrStatus:"Not Sent", modStatus:"Not Sent",
+        visaStatus:"PENDING", ticketStatus:"PENDING", ticketDemandDate:"", ticketOpenDate:"",
+        woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"", isCancelled:false, isNomination:false
+    });
+    saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast("➕ New course");
+}
+function addNomination() {
+    const newId = Date.now();
+    const today = new Date().toISOString().slice(0,10);
+    const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate()+7);
+    nominationCounter++;
+    const nomName = `NOM-${String(nominationCounter).padStart(3,'0')}`;
+    coursesData.push({
+        id: newId, type:"Nomination", courseName:nomName, officersAirmen:"1 Officer", country:"Country",
+        depDate:today, returnDate:today, deadlineDate:nextWeek.toISOString().slice(0,10),
+        cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING",
+        ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"",
+        isCancelled:false, isNomination:true
+    });
+    saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast(`📨 Nomination: ${nomName}`);
+}
+
+function resetDemo() {
+    if(confirm("Reset to demo data?")) {
+        coursesData = JSON.parse(JSON.stringify(defaultData));
+        courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
+        selectedCourses.clear();
+        nominationCounter = 1;
+        saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast("🔄 Reset");
+    }
+}
+
+// ==================== STATS ====================
+function updateStats() {
+    const total = coursesData.length;
+    const nominations = coursesData.filter(c => c.isNomination).length;
+    const urgent48 = coursesData.filter(c => !c.isCancelled && getDaysRemaining(c.depDate) >= 0 && getDaysRemaining(c.depDate) <= 2).length;
+    const critical = coursesData.filter(c => !c.isCancelled && getDaysRemaining(c.depDate) >= 0 && getDaysRemaining(c.depDate) <= 7).length;
+    const awaitingCmdr = coursesData.filter(c => c.cmdrStatus === "Sent").length;
+    const awaitingMod = coursesData.filter(c => c.modStatus === "Sent" || c.modStatus === "Pending").length;
+    document.getElementById("totalCoursesCount").innerText = total;
+    document.getElementById("nominationCount").innerText = nominations;
+    document.getElementById("urgent48Count").innerText = urgent48;
+    document.getElementById("urgentDepartureCount").innerText = critical;
+    document.getElementById("awaitingCmdrCount").innerText = awaitingCmdr;
+    document.getElementById("awaitingModCount").innerText = awaitingMod;
+    document.getElementById("lastUpdated").innerText = new Date().toLocaleTimeString();
+}
+
+// ==================== PERSISTENCE ====================
+function saveToLocal() {
+    try {
+        localStorage.setItem("slaf_ftc_tv", JSON.stringify(coursesData));
+        localStorage.setItem("courseHistory_tv", JSON.stringify(courseNameHistory));
+        localStorage.setItem("nominationCounter", nominationCounter);
+    } catch(e) {}
+}
+function loadFromLocal() {
+    try {
+        const stored = localStorage.getItem("slaf_ftc_tv");
+        if(stored) coursesData = JSON.parse(stored);
+        else coursesData = JSON.parse(JSON.stringify(defaultData));
+        const hist = localStorage.getItem("courseHistory_tv");
+        if(hist) courseNameHistory = JSON.parse(hist);
+        else courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
+        const savedCounter = localStorage.getItem("nominationCounter");
+        if(savedCounter) nominationCounter = parseInt(savedCounter);
+    } catch(e) { coursesData = JSON.parse(JSON.stringify(defaultData)); }
+    updateCourseDatalist();
+    populateCountryFilter();
+    renderTable();
+    saveToHistory();
+    checkAlerts();
+}
+function populateCountryFilter() {
+    const countries = [...new Set(coursesData.map(c => c.country))].sort();
+    const sel = document.getElementById("countryFilter");
+    sel.innerHTML = '<option value="all">🌍 ALL</option>';
+    countries.forEach(c => { const o=document.createElement("option"); o.value=c; o.innerText=c; sel.appendChild(o); });
+}
+function updateCourseDatalist() {
+    const dl = document.getElementById("courseSuggestList");
+    dl.innerHTML = "";
+    courseNameHistory.forEach(n => { const o=document.createElement("option"); o.value=n; dl.appendChild(o); });
+}
+
+// ==================== PRESETS ====================
+function applyPreset(preset) {
+    document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.filter-preset-btn[data-preset="${preset}"]`)?.classList.add('active');
+    document.getElementById("urgencyFilter").value = "all";
+    document.getElementById("approvalFilter").value = "all";
+    document.getElementById("modApprovalFilter").value = "all";
+    document.getElementById("typeFilter").value = "all";
+    document.getElementById("searchInput").value = "";
+    document.getElementById("countryFilter").value = "all";
+    if(preset==='nomination') document.getElementById("typeFilter").value = "Nomination";
+    else if(preset==='urgent') document.getElementById("urgencyFilter").value = "critical";
+    else if(preset==='cmdr') document.getElementById("approvalFilter").value = "sent";
+    else if(preset==='mod') document.getElementById("modApprovalFilter").value = "pending";
+    else if(preset==='week') document.getElementById("searchInput").value = "departing:week";
+    renderTable();
+}
+
+// ==================== CLOCKS ====================
+function updateClocks() {
+    const now = new Date();
+    document.getElementById("lstClock").innerText = now.toLocaleTimeString();
+    document.getElementById("utcClock").innerText = now.toUTCString().slice(17,25);
+}
+
+// ==================== TOGGLE SOUND & AUTO ====================
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById("soundToggleBtn").innerText = soundEnabled ? "🔊" : "🔇";
+    showToast(soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF");
+}
+function toggleAutoRefresh() {
+    if(autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+        autoRefreshInterval = null;
+        document.getElementById('autoRefreshStatus').textContent = 'OFF';
+        document.getElementById('autoRefreshBtn').textContent = '⏱️';
+        showToast('🔄 Auto OFF');
+    } else {
+        autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000);
+        document.getElementById('autoRefreshStatus').textContent = 'ON';
+        document.getElementById('autoRefreshBtn').textContent = '⏱️';
+        showToast('🔄 Auto ON (5 min)');
+    }
+}
+
+// ==================== FULLSCREEN ====================
+function toggleFullscreen() {
+    if(!document.fullscreenElement) {
+        document.documentElement.requestFullscreen?.().catch(() => {});
+    } else {
+        document.exitFullscreen?.().catch(() => {});
+    }
+}
+
+// ==================== INIT ====================
+document.addEventListener("DOMContentLoaded", function() {
+    loadFromLocal();
+    updateClocks();
+    setInterval(updateClocks, 1000);
+    autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000);
+
+    // event listeners
+    document.getElementById("addNewRowBtn").addEventListener("click", addNewCourse);
+    document.getElementById("addNominationBtn").addEventListener("click", addNomination);
+    document.getElementById("resetDemoBtn").addEventListener("click", resetDemo);
+    document.getElementById("soundToggleBtn").addEventListener("click", toggleSound);
+    document.getElementById("fullscreenBtn").addEventListener("click", toggleFullscreen);
+    document.getElementById("undoBtn").addEventListener("click", undo);
+    document.getElementById("redoBtn").addEventListener("click", redo);
+    document.getElementById("refreshBtn").addEventListener("click", () => { renderTable(); checkAlerts(); showToast("🔄 Refreshed"); });
+    document.getElementById("autoRefreshBtn").addEventListener("click", toggleAutoRefresh);
+
+    document.getElementById("clearFiltersBtn").addEventListener("click", () => {
+        document.getElementById("countryFilter").value = "all";
+        document.getElementById("urgencyFilter").value = "all";
+        document.getElementById("typeFilter").value = "all";
+        document.getElementById("approvalFilter").value = "all";
+        document.getElementById("modApprovalFilter").value = "all";
+        document.getElementById("searchInput").value = "";
+        document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
+        renderTable();
+        showToast("✖️ Filters cleared");
+    });
+
+    document.getElementById("countryFilter").addEventListener("change", renderTable);
+    document.getElementById("urgencyFilter").addEventListener("change", renderTable);
+    document.getElementById("typeFilter").addEventListener("change", renderTable);
+    document.getElementById("approvalFilter").addEventListener("change", renderTable);
+    document.getElementById("modApprovalFilter").addEventListener("change", renderTable);
+    document.getElementById("searchInput").addEventListener("input", renderTable);
+
+    document.querySelectorAll('.filter-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+    });
+
+    document.querySelectorAll('.stat-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById("searchInput").value = "";
+            if(filter==="nomination") document.getElementById("typeFilter").value = "Nomination";
+            else if(filter==="critical") document.getElementById("urgencyFilter").value = "critical";
+            else if(filter==="cmdr") document.getElementById("approvalFilter").value = "sent";
+            else if(filter==="mod") document.getElementById("modApprovalFilter").value = "pending";
+            else if(filter==="48hr") { document.getElementById("urgencyFilter").value = "critical"; document.getElementById("searchInput").value = "48hr"; }
+            else { document.getElementById("urgencyFilter").value = "all"; document.getElementById("approvalFilter").value = "all"; document.getElementById("modApprovalFilter").value = "all"; document.getElementById("typeFilter").value = "all"; document.getElementById("countryFilter").value = "all"; }
+            renderTable();
+            playBeep(500,0.08);
+        });
+    });
+
+    document.getElementById("selectAllCheckbox").addEventListener("change", toggleAllSelection);
+
+    document.addEventListener("keydown", (e) => {
+        if(e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
+        if(e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+        if(e.ctrlKey && e.key === 'n') { e.preventDefault(); addNewCourse(); }
+        if(e.key === 'Escape') { if(editingRowId) { editingRowId=null; renderTable(); } if(document.fullscreenElement) document.exitFullscreen?.(); }
+    });
+
+    // expose for inline onclick
+    window.toggleSelection = toggleSelection;
+    window.clearSelection = clearSelection;
+    window.bulkUpdateStatus = bulkUpdateStatus;
+    window.bulkDeleteSelected = bulkDeleteSelected;
+    window.saveEdit = saveEdit;
+    window.renderTable = renderTable;
+    window.checkAlerts = checkAlerts;
+    window.addNewCourse = addNewCourse;
+    window.addNomination = addNomination;
+    window.undo = undo;
+    window.redo = redo;
+    window.resetDemo = resetDemo;
+    window.toggleSound = toggleSound;
+    window.toggleFullscreen = toggleFullscreen;
+    window.toggleAutoRefresh = toggleAutoRefresh;
+    window.playBeep = playBeep;
+    window.showToast = showToast;
+
+    setTimeout(checkAlerts, 1000);
+    setTimeout(checkAlerts, 3000);
+});
+</script>
+</body>
+</html>
