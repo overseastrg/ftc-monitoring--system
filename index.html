@@ -159,6 +159,13 @@
       font-size: 0.7rem;
       padding: 2px 10px;
     }
+    /* Smooth transition for fullscreen */
+    body.fullscreen-mode .table-wrapper,
+    body.fullscreen-mode .editable-table,
+    body.fullscreen-mode .editable-table th,
+    body.fullscreen-mode .editable-table td {
+      transition: all 0.25s ease;
+    }
 
     /* HEADER */
     .header {
@@ -392,7 +399,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 1.1rem;
-      min-width: 1200px;
+      min-width: 1300px;
     }
     .editable-table th {
       background: var(--bg-secondary);
@@ -444,6 +451,7 @@
     .status-received { background: #10b981; color: white; }
     .status-pending { background: #f97316; color: white; animation: blinkOrange 1.2s infinite; }
     .status-host { background: #6366f1; color: white; }
+    .status-offer { background: #a855f7; color: white; animation: blinkPurple 1.0s infinite; }
 
     .status-blink-green {
       background: #22c55e;
@@ -471,6 +479,10 @@
     @keyframes blinkOrange {
       0%, 100% { background: #f97316; color: white; }
       50% { background: #c2410c; color: #f1f5f9; }
+    }
+    @keyframes blinkPurple {
+      0%, 100% { background: #a855f7; color: white; }
+      50% { background: #7e22ce; color: #f1f5f9; }
     }
 
     .row-nomination td { background: rgba(236,72,153,0.2); border-left: 6px solid #ec4899; }
@@ -609,7 +621,7 @@
       <span class="title-logo">✈️</span>
       <div class="title-text">
         <h1>FOREIGN TRAINING CELL</h1>
-        <div class="subtitle">SLAF · <span>FTC v9.0 TV</span></div>
+        <div class="subtitle">SLAF · <span>FTC v9.1 TV</span></div>
       </div>
     </div>
     <div class="clock-container">
@@ -691,7 +703,7 @@
         <th class="col-departure">DEP</th>
         <th class="col-return">RET</th>
         <th class="col-days">DAYS</th>
-        <th class="col-deadline">DEADLINE</th>
+        <th class="col-payment">PAYMENT</th>
         <th class="col-cmdr">CMDR</th>
         <th class="col-mod">MOD</th>
         <th class="col-visa">VISA</th>
@@ -726,14 +738,14 @@
   let isFullscreen = false;
 
   const defaultData = [
-    { id:1, type:"Course", courseName:"Instructor Pilot Program", officersAirmen:"1 Officer", country:"China", depDate:"2026-01-01", returnDate:"2026-12-31", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-01", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-15", isCancelled:false, isNomination:false },
-    { id:2, type:"Course", courseName:"Pre Flying Training", officersAirmen:"1 Officer", country:"India", depDate:"2026-01-01", returnDate:"2026-06-23", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-10", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-20", isCancelled:false, isNomination:false },
-    { id:3, type:"Course", courseName:"Flight Safety Officers", officersAirmen:"1 Officer", country:"Bangladesh", depDate:"2026-01-18", returnDate:"2026-04-09", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"VISA DOC PREP", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-01-02", ticketOpenDate:"", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-01-05", isCancelled:false, isNomination:false },
-    { id:4, type:"Visit", courseName:"Singapore Air Show", officersAirmen:"3 Officers", country:"Singapore", depDate:"2026-02-02", returnDate:"2026-02-08", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2026-01-15", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-01-20", isCancelled:false, isNomination:false },
-    { id:5, type:"Nomination", courseName:"NOM-001 - UK Defence Attaché", officersAirmen:"2 Officers", country:"UK", depDate:"2026-02-10", returnDate:"2026-02-14", deadlineDate:"2026-01-25", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"HOST COUNTRY HANDLING", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-01-20", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"2026-01-25", woActualDate:"", isCancelled:false, isNomination:true },
-    { id:6, type:"Nomination", courseName:"NOM-002 - India High Commission", officersAirmen:"1 Officer", country:"India", depDate:"2026-02-20", returnDate:"2026-02-22", deadlineDate:"2026-02-01", cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING", ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"2026-02-05", woActualDate:"", isCancelled:false, isNomination:true },
-    { id:7, type:"Course", courseName:"Comm System Course", officersAirmen:"1 Officer", country:"Bangladesh", depDate:"2026-02-22", returnDate:"2026-03-12", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"VISA DOC PREP", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-02-01", ticketOpenDate:"", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-02-10", isCancelled:false, isNomination:false },
-    { id:8, type:"Course", courseName:"Insarag Course", officersAirmen:"1 Officer", country:"India", depDate:"2026-03-23", returnDate:"2026-03-27", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Sent", visaStatus:"VISA H/O TO EMBASSY", ticketStatus:"TICKET CONFIRMED", ticketDemandDate:"2026-03-01", ticketOpenDate:"2026-03-05", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-03-10", isCancelled:false, isNomination:false }
+    { id:1, type:"Course", courseName:"Instructor Pilot Program", officersAirmen:"1 Officer", country:"China", depDate:"2026-01-01", returnDate:"2026-12-31", paymentDate:"2025-12-20", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-01", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-15", isCancelled:false, isNomination:false },
+    { id:2, type:"Course", courseName:"Pre Flying Training", officersAirmen:"1 Officer", country:"India", depDate:"2026-01-01", returnDate:"2026-06-23", paymentDate:"2025-12-18", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-10", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-20", isCancelled:false, isNomination:false },
+    { id:3, type:"Course", courseName:"Flight Safety Officers", officersAirmen:"1 Officer", country:"Bangladesh", depDate:"2026-01-18", returnDate:"2026-04-09", paymentDate:"2026-01-02", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"VISA DOC PREP", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-01-02", ticketOpenDate:"", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-01-05", isCancelled:false, isNomination:false },
+    { id:4, type:"Visit", courseName:"Singapore Air Show", officersAirmen:"3 Officers", country:"Singapore", depDate:"2026-02-02", returnDate:"2026-02-08", paymentDate:"2026-01-25", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2026-01-15", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-01-20", isCancelled:false, isNomination:false },
+    { id:5, type:"Nomination", courseName:"NOM-001 - UK Defence Attaché", officersAirmen:"2 Officers", country:"UK", depDate:"2026-02-10", returnDate:"2026-02-14", paymentDate:"", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"HOST COUNTRY HANDLING", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-01-20", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"2026-01-25", woActualDate:"", isCancelled:false, isNomination:true },
+    { id:6, type:"Nomination", courseName:"NOM-002 - India High Commission", officersAirmen:"1 Officer", country:"India", depDate:"2026-02-20", returnDate:"2026-02-22", paymentDate:"", cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING", ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"2026-02-05", woActualDate:"", isCancelled:false, isNomination:true },
+    { id:7, type:"Course", courseName:"Comm System Course", officersAirmen:"1 Officer", country:"Bangladesh", depDate:"2026-02-22", returnDate:"2026-03-12", paymentDate:"2026-02-05", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"VISA DOC PREP", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-02-01", ticketOpenDate:"", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-02-10", isCancelled:false, isNomination:false },
+    { id:8, type:"Course", courseName:"Insarag Course", officersAirmen:"1 Officer", country:"India", depDate:"2026-03-23", returnDate:"2026-03-27", paymentDate:"2026-03-10", cmdrStatus:"Sent", modStatus:"Sent", visaStatus:"VISA H/O TO EMBASSY", ticketStatus:"TICKET CONFIRMED", ticketDemandDate:"2026-03-01", ticketOpenDate:"2026-03-05", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-03-10", isCancelled:false, isNomination:false }
   ];
 
   function getDaysRemaining(dateStr) {
@@ -741,10 +753,14 @@
     const today = new Date(); today.setHours(0,0,0,0);
     return Math.ceil((new Date(dateStr) - today) / 86400000);
   }
-  function getUrgencyInfo(depDate, isCancelled, isNomination) {
-    if(isCancelled) return { className:"", label:"❌ CANCELLED", daysLeft:null };
-    const days = getDaysRemaining(depDate);
-    if(isNomination) {
+  function getUrgencyInfo(course) {
+    if(course.isCancelled) return { className:"", label:"❌ CANCELLED", daysLeft:null };
+    // For nominations, use deadline, for courses/visits use payment date
+    let targetDate = course.paymentDate;
+    if(course.isNomination) targetDate = course.deadlineDate || course.depDate;
+    if(!targetDate) targetDate = course.depDate;
+    const days = getDaysRemaining(targetDate);
+    if(course.isNomination) {
       if(days < 0) return { className:"row-nomination", label:"📨 OVERDUE", daysLeft:days };
       if(days <= 2) return { className:"row-nomination", label:"📨 URGENT", daysLeft:days };
       if(days <= 7) return { className:"row-nomination", label:"📨 PENDING", daysLeft:days };
@@ -784,6 +800,7 @@
     else if(s==="TICKET CONFIRMED"){ cls="status-sent"; display="🛫 CONFIRMED"; if(oDate) extra=`<br><small>${oDate}</small>`; }
     else if(s==="TICKET OK"){ cls="status-received"; display="✅ OK"; if(oDate) extra=`<br><small>${oDate}</small>`; }
     else if(s==="TICKET DEMAND BLINK"){ cls="status-blink-red"; display="🚨 DEMAND"; if(dDate) extra=`<br><small>${dDate}</small>`; }
+    else if(s==="OFFER"){ cls="status-offer"; display="💜 OFFER"; if(oDate) extra=`<br><small>${oDate}</small>`; }
     return `<span class="status-badge ${cls}">${display}</span>${extra}`;
   }
   function getWOStatusHtml(s, expDate, actDate) {
@@ -829,7 +846,6 @@
       gain.gain.setValueAtTime(0.2, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+dur);
       osc.start(ctx.currentTime); osc.stop(ctx.currentTime+dur);
-      // haptic for mobile
       if(navigator.vibrate) navigator.vibrate(20);
     } catch(e) {}
   }
@@ -860,10 +876,13 @@
         if(d>=0 && d<=2) alerts.push({type:'EXTREME', msg:`📨 NOM DEADLINE: ${c.courseName} - ${d}d left!`});
         else if(d>=0 && d<=7) alerts.push({type:'HIGH', msg:`📨 ${c.courseName} deadline in ${d}d`});
       }
-      const d = getDaysRemaining(c.depDate);
-      if(d>=0 && d<=2 && !c.isNomination) alerts.push({type:'EXTREME', msg:`🚨 ${c.courseName} departs in ${d}d!`});
-      if(d>=0 && d<=7 && c.cmdrStatus!=='Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} - CMDR pending (${d}d)`});
-      if(d>=0 && d<=7 && c.modStatus!=='Received' && c.modStatus!=='Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} - MOD pending (${d}d)`});
+      const targetDate = c.isNomination ? c.deadlineDate : c.paymentDate;
+      if(targetDate) {
+        const d = getDaysRemaining(targetDate);
+        if(d>=0 && d<=2 && !c.isNomination) alerts.push({type:'EXTREME', msg:`💰 PAYMENT: ${c.courseName} in ${d}d!`});
+        if(d>=0 && d<=7 && c.cmdrStatus!=='Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} - CMDR pending (${d}d)`});
+        if(d>=0 && d<=7 && c.modStatus!=='Received' && c.modStatus!=='Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} - MOD pending (${d}d)`});
+      }
     });
     if(alerts.length===0) { container.innerHTML='<div style="padding:6px;color:var(--text-secondary);font-weight:800;font-size:1.1rem;">✅ All courses on track</div>'; return; }
     const unique = []; const seen = new Set();
@@ -947,7 +966,7 @@
     }
 
     filtered.forEach(course => {
-      const urgency = getUrgencyInfo(course.depDate, course.isCancelled, course.isNomination);
+      const urgency = getUrgencyInfo(course);
       const daysLeft = urgency.daysLeft !== null ? urgency.daysLeft : "—";
       const isEditing = (editingRowId === course.id);
       const isSelected = selectedCourses.has(course.id);
@@ -1024,7 +1043,7 @@
       else retCell.innerText = course.returnDate;
       tr.appendChild(retCell);
 
-      // days
+      // days (based on payment date or deadline for nominations)
       const daysCell = document.createElement("td"); daysCell.className = "col-days";
       let color = '';
       if(urgency.daysLeft !== null && urgency.daysLeft >= 0) {
@@ -1035,17 +1054,32 @@
       daysCell.innerHTML = `<span style="${color}">${daysLeft}</span>`;
       tr.appendChild(daysCell);
 
-      // deadline
-      const deadlineCell = document.createElement("td"); deadlineCell.className = "col-deadline";
-      if(isEditing) deadlineCell.innerHTML = `<input type="date" class="edit-input" id="edit-deadline-${course.id}" value="${course.deadlineDate||''}">`;
-      else {
-        if(course.isNomination && course.deadlineDate) {
-          const d = getDaysRemaining(course.deadlineDate);
-          if(d>=0 && d<=7) deadlineCell.innerHTML = `<span style="background:#dc2626;color:white;padding:6px 18px;border-radius:40px;font-weight:900;font-size:1.0rem;">${course.deadlineDate}</span>`;
-          else deadlineCell.innerText = course.deadlineDate;
-        } else { deadlineCell.innerText = "—"; }
+      // PAYMENT DATE column (replaces deadline for non-nominations)
+      const paymentCell = document.createElement("td"); paymentCell.className = "col-payment";
+      if(isEditing) {
+        paymentCell.innerHTML = `<input type="date" class="edit-input" id="edit-payment-${course.id}" value="${course.paymentDate||''}" style="font-weight:800;">`;
+      } else {
+        if(course.isNomination) {
+          // For nominations, show deadline with contrast
+          if(course.deadlineDate) {
+            const d = getDaysRemaining(course.deadlineDate);
+            if(d>=0 && d<=7) paymentCell.innerHTML = `<span style="background:#dc2626;color:white;padding:6px 14px;border-radius:40px;font-weight:900;font-size:1.0rem;">${course.deadlineDate}</span>`;
+            else paymentCell.innerText = course.deadlineDate;
+          } else { paymentCell.innerText = "—"; }
+        } else {
+          // For courses/visits, show payment date with contrast
+          if(course.paymentDate) {
+            const d = getDaysRemaining(course.paymentDate);
+            let style = 'font-weight:900;';
+            if(d>=0 && d<=2) style += 'background:#dc2626;color:white;padding:4px 12px;border-radius:40px;';
+            else if(d>=0 && d<=7) style += 'background:#f97316;color:white;padding:4px 12px;border-radius:40px;';
+            else if(d>=0 && d<=14) style += 'background:#eab308;color:black;padding:4px 12px;border-radius:40px;';
+            else style += 'background:var(--bg-tertiary);padding:4px 12px;border-radius:40px;border:1px solid var(--border-color);';
+            paymentCell.innerHTML = `<span style="${style}">${course.paymentDate}</span>`;
+          } else { paymentCell.innerText = "—"; }
+        }
       }
-      tr.appendChild(deadlineCell);
+      tr.appendChild(paymentCell);
 
       // CMDR
       const cmdrTd = document.createElement("td"); cmdrTd.className = "col-cmdr";
@@ -1074,7 +1108,7 @@
       } else { visaTd.innerHTML = getVisaStatusHtml(course.visaStatus); }
       tr.appendChild(visaTd);
 
-      // TICKET
+      // TICKET (with OFFER option)
       const ticketTd = document.createElement("td"); ticketTd.className = "col-ticket";
       if(isEditing) {
         ticketTd.innerHTML = `
@@ -1082,6 +1116,7 @@
             <option value="PENDING" ${course.ticketStatus==="PENDING"?"selected":""}>⏳ PENDING</option>
             <option value="TICKET DEMAND RAISED" ${course.ticketStatus==="TICKET DEMAND RAISED"?"selected":""}>📑 DEMAND</option>
             <option value="TICKET DEMAND BLINK" ${course.ticketStatus==="TICKET DEMAND BLINK"?"selected":""}>🚨 BLINK DEMAND</option>
+            <option value="OFFER" ${course.ticketStatus==="OFFER"?"selected":""}>💜 OFFER</option>
             <option value="TICKET CONFIRMED" ${course.ticketStatus==="TICKET CONFIRMED"?"selected":""}>🛫 CONFIRMED</option>
             <option value="TICKET OK" ${course.ticketStatus==="TICKET OK"?"selected":""}>✅ OK</option>
           </select>
@@ -1131,11 +1166,10 @@
 
     // If in fullscreen, auto-fit rows
     if(isFullscreen) {
-      const wrapper = document.querySelector('.table-wrapper');
       const rows = tbody.querySelectorAll('tr');
       const rowCount = rows.length;
       if(rowCount > 0) {
-        const availHeight = window.innerHeight - 20; // margin
+        const availHeight = window.innerHeight - 20;
         const headerHeight = document.querySelector('.editable-table thead')?.offsetHeight || 40;
         const rowHeight = Math.max(28, Math.min(40, (availHeight - headerHeight - 10) / rowCount));
         rows.forEach(r => {
@@ -1162,7 +1196,14 @@
     if(document.getElementById(`edit-country-${id}`)) c.country = document.getElementById(`edit-country-${id}`).value;
     if(dep) c.depDate = dep;
     if(ret) c.returnDate = ret;
-    if(document.getElementById(`edit-deadline-${id}`)) c.deadlineDate = document.getElementById(`edit-deadline-${id}`).value;
+    if(document.getElementById(`edit-payment-${id}`)) {
+      const payDate = document.getElementById(`edit-payment-${id}`).value;
+      if(c.isNomination) {
+        c.deadlineDate = payDate;
+      } else {
+        c.paymentDate = payDate;
+      }
+    }
     if(document.getElementById(`edit-cmdr-${id}`)) c.cmdrStatus = document.getElementById(`edit-cmdr-${id}`).value;
     if(document.getElementById(`edit-mod-${id}`)) c.modStatus = document.getElementById(`edit-mod-${id}`).value;
     if(document.getElementById(`edit-visa-${id}`)) c.visaStatus = document.getElementById(`edit-visa-${id}`).value;
@@ -1181,11 +1222,13 @@
   function addNewCourse() {
     const newId = Date.now();
     const today = new Date().toISOString().slice(0,10);
+    const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate()+7);
     coursesData.push({
       id: newId, type:"Course", courseName:"NEW COURSE", officersAirmen:"1 Officer", country:"Country",
-      depDate:today, returnDate:today, deadlineDate:"", cmdrStatus:"Not Sent", modStatus:"Not Sent",
-      visaStatus:"PENDING", ticketStatus:"PENDING", ticketDemandDate:"", ticketOpenDate:"",
-      woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"", isCancelled:false, isNomination:false
+      depDate:today, returnDate:today, paymentDate:nextWeek.toISOString().slice(0,10),
+      cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING",
+      ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"",
+      isCancelled:false, isNomination:false, deadlineDate:""
     });
     saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast("➕ New course");
     playBeep(700,0.1);
@@ -1199,7 +1242,7 @@
     const nomName = `NOM-${String(nominationCounter).padStart(3,'0')}`;
     coursesData.push({
       id: newId, type:"Nomination", courseName:nomName, officersAirmen:"1 Officer", country:"Country",
-      depDate:today, returnDate:today, deadlineDate:nextWeek.toISOString().slice(0,10),
+      depDate:today, returnDate:today, paymentDate:"", deadlineDate:nextWeek.toISOString().slice(0,10),
       cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING",
       ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"",
       isCancelled:false, isNomination:true
@@ -1223,8 +1266,20 @@
   function updateStats() {
     const total = coursesData.length;
     const nominations = coursesData.filter(c => c.isNomination).length;
-    const urgent48 = coursesData.filter(c => !c.isCancelled && getDaysRemaining(c.depDate) >= 0 && getDaysRemaining(c.depDate) <= 2).length;
-    const critical = coursesData.filter(c => !c.isCancelled && getDaysRemaining(c.depDate) >= 0 && getDaysRemaining(c.depDate) <= 7).length;
+    const urgent48 = coursesData.filter(c => {
+      if(c.isCancelled) return false;
+      const target = c.isNomination ? c.deadlineDate : c.paymentDate;
+      if(!target) return false;
+      const d = getDaysRemaining(target);
+      return d >= 0 && d <= 2;
+    }).length;
+    const critical = coursesData.filter(c => {
+      if(c.isCancelled) return false;
+      const target = c.isNomination ? c.deadlineDate : c.paymentDate;
+      if(!target) return false;
+      const d = getDaysRemaining(target);
+      return d >= 0 && d <= 7;
+    }).length;
     const awaitingCmdr = coursesData.filter(c => c.cmdrStatus === "Sent").length;
     const awaitingMod = coursesData.filter(c => c.modStatus === "Sent" || c.modStatus === "Pending").length;
     document.getElementById("totalCoursesCount").innerText = total;
@@ -1308,14 +1363,14 @@
       isFullscreen = true;
       showToast('⛶ Fullscreen mode');
       playBeep(800,0.12);
-      setTimeout(() => renderTable(), 200);
+      setTimeout(() => renderTable(), 250);
     } else {
       document.exitFullscreen?.().catch(() => {});
       document.body.classList.remove('fullscreen-mode');
       isFullscreen = false;
       showToast('⛶ Exited fullscreen');
       playBeep(400,0.1);
-      setTimeout(() => renderTable(), 200);
+      setTimeout(() => renderTable(), 250);
     }
   }
   function toggleStats() {
@@ -1392,12 +1447,11 @@
       if(e.key === 'f' && e.ctrlKey) { e.preventDefault(); toggleFullscreen(); }
     });
 
-    // Listen for fullscreen change to keep state
     document.addEventListener('fullscreenchange', () => {
       if(!document.fullscreenElement) {
         document.body.classList.remove('fullscreen-mode');
         isFullscreen = false;
-        renderTable();
+        setTimeout(() => renderTable(), 100);
       }
     });
 
