@@ -1,717 +1,681 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>SLAF FTC | TV Dashboard</title>
-    <style>
-        /* ===== RESET & BASE ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-        body {
-            background: #0a0e1a;
-            color: #f1f5f9;
-            padding: 6px 8px;
-            font-size: 14px;
-            line-height: 1.3;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        /* ===== THEME 1: SLAF BLUE (DEFAULT) ===== */
-        body.theme-blue {
-            --bg-primary: #111827;
-            --bg-secondary: #1e293b;
-            --bg-tertiary: #0f172a;
-            --border-color: #3b82f6;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            --card-bg: #1e293b;
-            --shadow: 0 0 20px rgba(59,130,246,0.2);
-            --bg-input: #0f172a;
-            --hover-bg: #2a3a55;
-        }
-        /* ===== THEME 2: NIGHT OPS ===== */
-        body.theme-nightops {
-            --bg-primary: #0a0e1a;
-            --bg-secondary: #141b2b;
-            --bg-tertiary: #0d1322;
-            --border-color: #64748b;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
-            --card-bg: #1e293b;
-            --shadow: 0 0 25px rgba(56, 189, 248, 0.15);
-            --bg-input: #0f172a;
-            --hover-bg: #27364b;
-        }
-        /* ===== THEME 3: ARCTIC CAMO ===== */
-        body.theme-arctic {
-            --bg-primary: #e2e8f0;
-            --bg-secondary: #cbd5e1;
-            --bg-tertiary: #f1f5f9;
-            --border-color: #475569;
-            --text-primary: #0f172a;
-            --text-secondary: #334155;
-            --accent-gradient: linear-gradient(135deg, #1e293b, #475569);
-            --card-bg: #f8fafc;
-            --shadow: 0 0 20px rgba(0,0,0,0.1);
-            --bg-input: #f8fafc;
-            --hover-bg: #d1d9e6;
-        }
-        /* ===== THEME 4: TACTICAL GREEN ===== */
-        body.theme-green {
-            --bg-primary: #0f1a12;
-            --bg-secondary: #1a2e1d;
-            --bg-tertiary: #0c1a0f;
-            --border-color: #4ade80;
-            --text-primary: #d1fae5;
-            --text-secondary: #86efac;
-            --accent-gradient: linear-gradient(135deg, #22c55e, #059669);
-            --card-bg: #1a2e1d;
-            --shadow: 0 0 25px rgba(74, 222, 128, 0.15);
-            --bg-input: #0f1a12;
-            --hover-bg: #2a4a2e;
-        }
-        body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-        }
-        .dashboard {
-            max-width: 100%;
-            background: var(--bg-primary);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            padding: 6px 8px;
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-        /* ===== HEADER ===== */
-        .header {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--bg-secondary);
-            border-bottom: 2px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 12px 12px 0 0;
-            gap: 6px;
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-        .title-section {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .title-logo { font-size: 1.8rem; }
-        .title-text h1 {
-            font-size: 1.4rem;
-            font-weight: 900;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .title-text .subtitle {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-        }
-        .title-text .subtitle span { 
-            color: var(--border-color); 
-            font-weight: 900; 
-            -webkit-text-fill-color: var(--border-color);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>SLAF FTC | TV Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: #0a0e1a;
+      color: #f1f5f9;
+      padding: 8px 12px;
+      font-size: 18px;
+      line-height: 1.4;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    /* THEMES – high contrast & creative */
+    body.theme-blue {
+      --bg-primary: #0b1426;
+      --bg-secondary: #1a2744;
+      --bg-tertiary: #0f1a30;
+      --border-color: #4a8af4;
+      --text-primary: #f0f6ff;
+      --text-secondary: #b0caf5;
+      --accent-gradient: linear-gradient(145deg, #3b82f6, #a78bfa);
+      --card-bg: #1e2d4a;
+      --shadow: 0 0 30px rgba(59,130,246,0.3);
+      --hover-bg: #2a3f66;
+      --badge-critical: #ef4444;
+      --badge-urgent: #f97316;
+      --badge-nom: #ec4899;
+    }
+    body.theme-nightops {
+      --bg-primary: #050b14;
+      --bg-secondary: #111d2e;
+      --bg-tertiary: #09121f;
+      --border-color: #38bdf8;
+      --text-primary: #eaf6ff;
+      --text-secondary: #8ab9f0;
+      --accent-gradient: linear-gradient(145deg, #0ea5e9, #818cf8);
+      --card-bg: #172a42;
+      --shadow: 0 0 35px rgba(56,189,248,0.25);
+      --hover-bg: #1f3a5a;
+      --badge-critical: #f87171;
+      --badge-urgent: #fb923c;
+      --badge-nom: #f472b6;
+    }
+    body.theme-arctic {
+      --bg-primary: #dce3ed;
+      --bg-secondary: #b6c4d9;
+      --bg-tertiary: #e8eef7;
+      --border-color: #1e3a5f;
+      --text-primary: #0b1a2e;
+      --text-secondary: #1f3a5f;
+      --accent-gradient: linear-gradient(145deg, #1e3a5f, #4f6f8f);
+      --card-bg: #f2f7ff;
+      --shadow: 0 0 25px rgba(0,0,0,0.15);
+      --hover-bg: #cbd8ed;
+      --badge-critical: #b91c1c;
+      --badge-urgent: #c2410c;
+      --badge-nom: #9d174d;
+    }
+    body.theme-green {
+      --bg-primary: #08170e;
+      --bg-secondary: #142d1a;
+      --bg-tertiary: #0a1f11;
+      --border-color: #4ade80;
+      --text-primary: #d9f5e6;
+      --text-secondary: #86efac;
+      --accent-gradient: linear-gradient(145deg, #22c55e, #10b981);
+      --card-bg: #1a3a22;
+      --shadow: 0 0 30px rgba(74,222,128,0.2);
+      --hover-bg: #2a5532;
+      --badge-critical: #fca5a5;
+      --badge-urgent: #fdba74;
+      --badge-nom: #f9a8d4;
+    }
+    body.theme-ember {
+      --bg-primary: #1f0a0a;
+      --bg-secondary: #3a1c1c;
+      --bg-tertiary: #2a1212;
+      --border-color: #f97316;
+      --text-primary: #fff0e0;
+      --text-secondary: #fbbf8a;
+      --accent-gradient: linear-gradient(145deg, #ea580c, #f43f5e);
+      --card-bg: #4a2525;
+      --shadow: 0 0 35px rgba(249,115,22,0.3);
+      --hover-bg: #5f3333;
+      --badge-critical: #fca5a5;
+      --badge-urgent: #fdba74;
+      --badge-nom: #f9a8d4;
+    }
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    .dashboard {
+      max-width: 100%;
+      background: var(--bg-primary);
+      border-radius: 24px;
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      padding: 8px 12px;
+      transition: all 0.3s;
+    }
+    /* HEADER */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-secondary);
+      border-bottom: 3px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 18px 18px 0 0;
+      gap: 8px;
+    }
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .title-logo { font-size: 2.6rem; }
+    .title-text h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 1px;
+    }
+    .title-text .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+    .title-text .subtitle span {
+      color: var(--border-color);
+      -webkit-text-fill-color: var(--border-color);
+      font-weight: 900;
+    }
+    /* CLOCKS */
+    .clock-container {
+      display: flex;
+      gap: 10px;
+      background: var(--bg-tertiary);
+      padding: 6px 24px;
+      border-radius: 60px;
+      border: 2px solid var(--border-color);
+      box-shadow: var(--shadow);
+    }
+    .clock { text-align: center; padding: 2px 8px; }
+    .clock-label { font-size: 0.7rem; color: var(--text-secondary); letter-spacing: 1px; }
+    .clock-time {
+      font-size: 1.6rem;
+      font-weight: 900;
+      font-family: 'Courier New', monospace;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .clock-divider { width: 2px; background: var(--border-color); opacity: 0.4; }
+    /* STATS ROW – TOGGLE MINIMIZE */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin: 6px 0;
+      transition: all 0.2s;
+    }
+    .stats-row.collapsed {
+      max-height: 0;
+      opacity: 0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 8px 4px;
+      text-align: center;
+      border-left: 6px solid var(--border-color);
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .stat-card:hover { transform: scale(1.03); background: var(--hover-bg); }
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 900;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .stat-critical .stat-number { background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-urgent .stat-number { background: linear-gradient(135deg, #f97316, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-nomination .stat-number { background: linear-gradient(135deg, #ec4899, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-toggle {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      border-radius: 40px;
+      padding: 2px 16px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+    /* FILTER BAR */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0;
+      align-items: center;
+      background: var(--bg-secondary);
+      padding: 8px 14px;
+      border-radius: 18px;
+      border: 2px solid var(--border-color);
+    }
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .filter-group select,
+    .filter-group input {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      padding: 8px 14px;
+      border-radius: 40px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 700;
+      min-width: 70px;
+      height: 44px;
+      cursor: pointer;
+    }
+    .filter-presets {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .filter-preset-btn {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      height: 44px;
+    }
+    .filter-preset-btn:hover,
+    .filter-preset-btn.active {
+      background: var(--border-color);
+      color: var(--bg-primary);
+    }
+    .btn-outline {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      height: 44px;
+    }
+    .btn-primary {
+      background: var(--accent-gradient);
+      border: none;
+      padding: 6px 20px;
+      border-radius: 40px;
+      color: white;
+      font-weight: 900;
+      font-size: 1.0rem;
+      cursor: pointer;
+      height: 44px;
+      box-shadow: 0 4px 14px rgba(59,130,246,0.4);
+    }
+    .btn-nomination {
+      background: linear-gradient(145deg, #ec4899, #be185d);
+      border: none;
+      padding: 6px 20px;
+      border-radius: 40px;
+      color: white;
+      font-weight: 900;
+      font-size: 1.0rem;
+      cursor: pointer;
+      height: 44px;
+      animation: pulseNom 1.8s infinite;
+    }
+    @keyframes pulseNom {
+      0%, 100% { background: linear-gradient(145deg, #ec4899, #be185d); }
+      50% { background: linear-gradient(145deg, #f472b6, #db2777); }
+    }
+    .theme-btn, .sound-btn {
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-weight: 700;
+      cursor: pointer;
+      height: 44px;
+      font-size: 1.4rem;
+      border: 2px solid var(--border-color);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+    /* TABLE – LARGE FONTS */
+    .table-wrapper {
+      margin: 6px 0;
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: 62vh;
+      border-radius: 18px;
+      border: 2px solid var(--border-color);
+      background: var(--bg-primary);
+    }
+    .editable-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.1rem;
+      min-width: 1200px;
+    }
+    .editable-table th {
+      background: var(--bg-secondary);
+      padding: 12px 4px;
+      text-align: center;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      border-bottom: 3px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .editable-table td {
+      padding: 10px 4px;
+      text-align: center;
+      border-bottom: 2px solid rgba(59,130,246,0.1);
+      vertical-align: middle;
+      font-weight: 600;
+    }
+    .editable-table tr:hover { background: rgba(59,130,246,0.15); }
+    .editable-table .course-name-cell { font-weight: 900; font-size: 1.2rem; }
 
-        /* ===== CLOCKS ===== */
-        .clock-container {
-            display: flex;
-            gap: 6px;
-            background: var(--bg-tertiary);
-            padding: 4px 14px;
-            border-radius: 30px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-        }
-        .clock { text-align: center; padding: 2px 4px; }
-        .clock-label { font-size: 0.5rem; color: var(--text-secondary); letter-spacing: 0.5px; }
-        .clock-time {
-            font-size: 1.0rem;
-            font-weight: 900;
-            font-family: 'Courier New', monospace;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .clock-divider {
-            width: 1px;
-            background: var(--border-color);
-            opacity: 0.3;
-        }
+    /* BADGES – HIGH CONTRAST */
+    .type-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-weight: 900;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    .type-course { background: #3b82f6; color: white; }
+    .type-visit { background: #8b5cf6; color: white; }
+    .type-nomination { background: #ec4899; color: white; animation: pulseNom 1.8s infinite; }
 
-        /* ===== STATS ROW (CONDENSED) ===== */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 4px;
-            margin: 4px 0;
-        }
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            padding: 4px 4px;
-            text-align: center;
-            border-left: 3px solid var(--border-color);
-            cursor: pointer;
-            transition: 0.15s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .stat-card:hover { transform: scale(1.02); background: var(--hover-bg); }
-        .stat-number {
-            font-size: 1.4rem;
-            font-weight: 900;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
-        .stat-label { 
-            font-size: 0.55rem; 
-            color: var(--text-secondary); 
-            font-weight: 700; 
-            letter-spacing: 0.3px; 
-        }
-        .stat-critical .stat-number { background: linear-gradient(135deg, #dc2626, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .stat-urgent .stat-number { background: linear-gradient(135deg, #f97316, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .stat-nomination .stat-number { background: linear-gradient(135deg, #dc2626, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    .status-notsent { background: #475569; color: #e2e8f0; }
+    .status-sent { background: #facc15; color: #0f172a; animation: blinkGold 0.9s infinite; }
+    .status-received { background: #10b981; color: white; }
+    .status-pending { background: #f97316; color: white; animation: blinkOrange 1.2s infinite; }
+    .status-host { background: #6366f1; color: white; }
 
-        /* ===== FILTER BAR ===== */
-        .filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            margin: 4px 0;
-            align-items: center;
-            background: var(--bg-secondary);
-            padding: 6px 10px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-        .filter-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            align-items: center;
-        }
-        .filter-group select,
-        .filter-group input {
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            padding: 6px 10px;
-            border-radius: 30px;
-            color: var(--text-primary);
-            font-size: 0.75rem;
-            font-weight: 600;
-            min-width: 60px;
-            height: 34px;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-        }
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: 2px solid var(--border-color);
-        }
-        .filter-presets {
-            display: flex;
-            gap: 3px;
-            flex-wrap: wrap;
-        }
-        .filter-preset-btn {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            padding: 4px 10px;
-            border-radius: 30px;
-            color: var(--text-primary);
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            height: 34px;
-            min-width: 36px;
-            transition: all 0.2s;
-        }
-        .filter-preset-btn:hover,
-        .filter-preset-btn.active {
-            background: var(--border-color);
-            color: var(--bg-primary);
-        }
-        .btn-outline {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            padding: 4px 12px;
-            border-radius: 30px;
-            color: var(--text-primary);
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            height: 34px;
-            transition: all 0.2s;
-        }
-        .btn-outline:hover {
-            background: var(--border-color);
-            color: var(--bg-primary);
-        }
-        .btn-primary {
-            background: var(--accent-gradient);
-            border: none;
-            padding: 4px 14px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 800;
-            font-size: 0.8rem;
-            cursor: pointer;
-            height: 34px;
-            box-shadow: 0 2px 8px rgba(59,130,246,0.3);
-            transition: opacity 0.2s;
-        }
-        .btn-primary:hover { opacity: 0.9; }
-        .btn-nomination {
-            background: linear-gradient(135deg, #dc2626, #7f1d1d);
-            border: none;
-            padding: 4px 14px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 800;
-            font-size: 0.8rem;
-            cursor: pointer;
-            height: 34px;
-            animation: pulseNom 1.5s infinite;
-        }
-        @keyframes pulseNom {
-            0%, 100% { background: linear-gradient(135deg, #dc2626, #7f1d1d); }
-            50% { background: linear-gradient(135deg, #ef4444, #991b1b); }
-        }
-        .btn-danger {
-            background: #dc2626;
-            border: none;
-            padding: 4px 12px;
-            border-radius: 30px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            height: 34px;
-        }
-        .sound-btn, .theme-btn {
-            padding: 4px 10px;
-            border-radius: 30px;
-            font-weight: 700;
-            cursor: pointer;
-            height: 34px;
-            font-size: 1.0rem;
-            border: 1px solid var(--border-color);
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            transition: all 0.2s;
-        }
-        .sound-btn:hover, .theme-btn:hover {
-            background: var(--border-color);
-            color: var(--bg-primary);
-        }
+    .status-blink-green {
+      background: #22c55e;
+      color: #0f172a;
+      animation: blinkGreen 0.9s infinite;
+    }
+    .status-blink-red {
+      background: #dc2626;
+      color: white;
+      animation: blinkRed 0.8s infinite;
+    }
 
-        /* ===== TABLE ===== */
-        .table-wrapper {
-            margin: 4px 0;
-            overflow-x: auto;
-            overflow-y: auto;
-            max-height: 60vh;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-primary);
-            transition: border-color 0.3s, background 0.3s;
-        }
-        .editable-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
-            min-width: 1000px;
-        }
-        .editable-table th {
-            background: var(--bg-secondary);
-            padding: 8px 4px;
-            text-align: center;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.6rem;
-            border-bottom: 2px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            color: var(--text-secondary);
-            white-space: nowrap;
-        }
-        .editable-table td {
-            padding: 6px 3px;
-            text-align: center;
-            border-bottom: 1px solid rgba(59,130,246,0.1);
-            vertical-align: middle;
-        }
-        .editable-table tr:hover { background: rgba(59,130,246,0.08); }
+    @keyframes blinkGold {
+      0%, 100% { background: #facc15; color: #0f172a; }
+      50% { background: #ca8a04; color: white; }
+    }
+    @keyframes blinkGreen {
+      0%, 100% { background: #22c55e; color: #0f172a; }
+      50% { background: #15803d; color: white; }
+    }
+    @keyframes blinkRed {
+      0%, 100% { background: #dc2626; color: white; }
+      50% { background: #7f1d1d; color: #f1f5f9; }
+    }
+    @keyframes blinkOrange {
+      0%, 100% { background: #f97316; color: white; }
+      50% { background: #c2410c; color: #f1f5f9; }
+    }
 
-        .col-checkbox { width: 30px; min-width: 30px; }
-        .col-type { width: 60px; min-width: 50px; }
-        .col-course { width: 160px; min-width: 120px; }
-        .col-officers { width: 60px; min-width: 50px; }
-        .col-country { width: 60px; min-width: 50px; }
-        .col-departure { width: 80px; min-width: 70px; }
-        .col-return { width: 80px; min-width: 70px; }
-        .col-days { width: 40px; min-width: 30px; }
-        .col-deadline { width: 80px; min-width: 70px; }
-        .col-urgency { width: 70px; min-width: 60px; }
-        .col-cmdr { width: 60px; min-width: 50px; }
-        .col-mod { width: 60px; min-width: 50px; }
-        .col-visa { width: 80px; min-width: 70px; }
-        .col-ticket { width: 100px; min-width: 80px; }
-        .col-wo { width: 90px; min-width: 70px; }
-        .col-actions { width: 60px; min-width: 50px; }
+    .urgency-chip { display: none; } /* removed urgency column */
 
-        /* badges */
-        .type-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 0.6rem;
-            white-space: nowrap;
-        }
-        .type-course { background: #3b82f6; color: white; }
-        .type-visit { background: #8b5cf6; color: white; }
-        .type-nomination { background: #dc2626; color: white; animation: pulseNom 1.5s infinite; }
+    .row-nomination td { background: rgba(236,72,153,0.2); border-left: 6px solid #ec4899; }
+    .row-critical td { background: rgba(239,68,68,0.2); border-left: 6px solid #dc2626; }
+    .row-high td { background: rgba(251,146,60,0.15); border-left: 6px solid #f97316; }
+    .row-past td { opacity: 0.65; }
 
-        .status-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.6rem;
-            white-space: nowrap;
-        }
-        .status-notsent { background: #475569; color: white; }
-        .status-sent { background: #dc2626; color: white; animation: pulseRed 0.8s infinite; }
-        .status-received { background: #10b981; color: white; }
-        .status-pending { background: #f97316; color: white; }
-        .status-host { background: #6366f1; color: white; }
+    .edit-input, .edit-select {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 6px 10px;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 0.9rem;
+      font-weight: 700;
+      min-width: 50px;
+    }
+    .action-icon {
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: 40px;
+      padding: 4px 14px;
+      margin: 2px;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    .inline-edit-btn {
+      background: #10b981;
+      border: none;
+      border-radius: 40px;
+      padding: 4px 16px;
+      color: white;
+      font-weight: 900;
+      cursor: pointer;
+    }
 
-        @keyframes pulseRed {
-            0%, 100% { background: #dc2626; }
-            50% { background: #7f1d1d; }
-        }
+    #bulkActions { display: none; gap: 8px; align-items: center; padding: 6px 14px; background: var(--bg-secondary); border-radius: 18px; margin: 4px 0; border: 2px solid var(--border-color); flex-wrap: wrap; }
+    #bulkActions.visible { display: flex; }
 
-        .urgency-chip {
-            background: var(--bg-secondary);
-            padding: 3px 10px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 0.65rem;
-            border: 1px solid var(--border-color);
-            white-space: nowrap;
-            color: var(--text-primary);
-        }
-        .row-nomination td { background: rgba(220,38,38,0.15); border-left: 3px solid #dc2626; }
-        .row-critical td { background: rgba(239,68,68,0.15); }
-        .row-high td { background: rgba(251,146,60,0.12); }
-        .row-past td { opacity: 0.6; }
-
-        .edit-input, .edit-select {
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 4px 6px;
-            border-radius: 6px;
-            width: 100%;
-            font-size: 0.7rem;
-            font-weight: 600;
-            min-width: 40px;
-        }
-        .action-icon {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 30px;
-            padding: 2px 10px;
-            margin: 1px;
-            color: var(--text-primary);
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.7rem;
-        }
-        .inline-edit-btn {
-            background: #10b981;
-            border: none;
-            border-radius: 30px;
-            padding: 2px 12px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* ===== BULK ACTIONS ===== */
-        #bulkActions {
-            display: none;
-            gap: 6px;
-            align-items: center;
-            padding: 4px 10px;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            margin: 2px 0;
-            border: 1px solid var(--border-color);
-            flex-wrap: wrap;
-        }
-        #bulkActions.visible { display: flex; }
-
-        /* ===== ALERT ===== */
-        #alertContainer {
-            padding: 4px 10px;
-            margin: 2px 0;
-            border-radius: 12px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            min-height: 34px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            align-items: center;
-        }
-        .alert-item-extreme {
-            background: linear-gradient(135deg, #dc2626, #7f1d1d);
-            color: white;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-weight: 800;
-            animation: blinkCritical 0.8s infinite;
-            border: 1px solid #ef4444;
-            font-size: 0.8rem;
-        }
-        .alert-item-high {
-            background: #f97316;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-weight: 700;
-            border: 1px solid #fb923c;
-            font-size: 0.75rem;
-        }
-        @keyframes blinkCritical {
-            0%, 100% { background: linear-gradient(135deg, #dc2626, #7f1d1d); }
-            50% { background: linear-gradient(135deg, #ef4444, #991b1b); }
-        }
-
-        /* ===== TOAST ===== */
-        .toast-msg {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            padding: 10px 24px;
-            border-radius: 40px;
-            z-index: 999;
-            border-left: 4px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-            font-weight: 700;
-            font-size: 0.9rem;
-            animation: slideUp 0.3s ease, fadeOut 3s 2.7s forwards;
-            border: 1px solid var(--border-color);
-            max-width: 90%;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-        }
-
-        /* ===== FOOTER ===== */
-        .footer-info {
-            text-align: center;
-            font-size: 0.65rem;
-            padding: 6px;
-            color: var(--text-secondary);
-            border-top: 1px solid var(--border-color);
-            margin-top: 2px;
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        /* ===== TV FRIENDLY TOUCH ===== */
-        button, select, input, .stat-card, .filter-preset-btn, .btn-outline, .btn-primary, .btn-danger {
-            touch-action: manipulation;
-        }
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            transform: scale(1.1);
-            cursor: pointer;
-        }
-        .col-checkbox { text-align: center; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            body { font-size: 11px; padding: 4px; }
-            .title-text h1 { font-size: 1.0rem; }
-            .stat-number { font-size: 1.2rem; }
-            .filter-group select, .filter-group input { height: 30px; font-size: 0.65rem; padding: 2px 8px; }
-            .btn-primary, .btn-nomination, .btn-outline, .btn-danger { height: 30px; font-size: 0.65rem; padding: 2px 8px; }
-            .editable-table { font-size: 0.6rem; min-width: 600px; }
-            .clock-time { font-size: 0.8rem; }
-            .stats-row { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 480px) {
-            .header { flex-direction: column; align-items: stretch; }
-            .stats-row { grid-template-columns: repeat(2, 1fr); }
-        }
-        /* print */
-        @media print {
-            .filter-bar, .stats-row, .header-controls, .col-actions, .col-checkbox { display: none !important; }
-            body { background: white; color: black; }
-            .dashboard { border: 1px solid #333; }
-        }
-    </style>
+    #alertContainer {
+      padding: 6px 14px;
+      margin: 4px 0;
+      border-radius: 18px;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      min-height: 48px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .alert-item-extreme {
+      background: linear-gradient(145deg, #dc2626, #7f1d1d);
+      color: white;
+      padding: 8px 24px;
+      border-radius: 60px;
+      font-weight: 900;
+      animation: blinkRed 0.8s infinite;
+      border: 2px solid #ef4444;
+      font-size: 1.2rem;
+    }
+    .alert-item-high {
+      background: #f97316;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 60px;
+      font-weight: 800;
+      border: 2px solid #fb923c;
+      font-size: 1.1rem;
+    }
+    .toast-msg {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      padding: 14px 32px;
+      border-radius: 60px;
+      z-index: 999;
+      border-left: 6px solid var(--border-color);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+      font-weight: 800;
+      font-size: 1.3rem;
+      border: 2px solid var(--border-color);
+      max-width: 90%;
+      animation: slideUp 0.3s ease, fadeOut 3s 2.7s forwards;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    }
+    .footer-info {
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 10px;
+      color: var(--text-secondary);
+      border-top: 2px solid var(--border-color);
+      margin-top: 4px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-weight: 600;
+    }
+    input[type="checkbox"] { width: 24px; height: 24px; transform: scale(1.1); cursor: pointer; }
+    @media (max-width: 768px) {
+      body { font-size: 14px; padding: 4px; }
+      .title-text h1 { font-size: 1.6rem; }
+      .stat-number { font-size: 1.8rem; }
+      .editable-table { font-size: 0.9rem; min-width: 800px; }
+      .clock-time { font-size: 1.2rem; }
+      .stats-row { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .header { flex-direction: column; align-items: stretch; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media print {
+      .filter-bar, .stats-row, .header-controls, .col-actions, .col-checkbox { display: none !important; }
+      body { background: white; color: black; }
+    }
+  </style>
 </head>
 <body class="theme-blue">
 <div class="dashboard">
-    <!-- HEADER -->
-    <div class="header">
-        <div class="title-section">
-            <span class="title-logo">✈️</span>
-            <div class="title-text">
-                <h1>FOREIGN TRAINING CELL</h1>
-                <div class="subtitle">SLAF · <span>FTC v8.0 TV</span></div>
-            </div>
-        </div>
-        <div class="clock-container">
-            <div class="clock"><div class="clock-label">🇱🇰 LST</div><div class="clock-time" id="lstClock">--:--:--</div></div>
-            <div class="clock-divider"></div>
-            <div class="clock"><div class="clock-label">🌍 UTC</div><div class="clock-time" id="utcClock">--:--:--</div></div>
-        </div>
-        <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
-            <button class="btn-primary" id="addNewRowBtn">➕ NEW</button>
-            <button class="btn-nomination" id="addNominationBtn">📨 NOM</button>
-            <button class="theme-btn" id="themeToggleBtn" title="Switch Theme">🎨</button>
-            <button class="sound-btn" id="soundToggleBtn">🔊</button>
-            <button class="btn-outline" id="resetDemoBtn">⟳</button>
-            <button class="btn-outline" id="fullscreenBtn">⛶</button>
-        </div>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="title-section">
+      <span class="title-logo">✈️</span>
+      <div class="title-text">
+        <h1>FOREIGN TRAINING CELL</h1>
+        <div class="subtitle">SLAF · <span>FTC v9.0 TV</span></div>
+      </div>
     </div>
-
-    <!-- ALERTS -->
-    <div id="alertContainer"><div style="padding:4px;color:var(--text-secondary);font-weight:700;">✅ All courses on track</div></div>
-
-    <!-- STATS (CONDENSED) -->
-    <div class="stats-row">
-        <div class="stat-card" data-filter="all"><div class="stat-number" id="totalCoursesCount">0</div><div class="stat-label">TOTAL</div></div>
-        <div class="stat-card stat-nomination" data-filter="nomination"><div class="stat-number" id="nominationCount">0</div><div class="stat-label">NOM</div></div>
-        <div class="stat-card stat-urgent" data-filter="48hr"><div class="stat-number" id="urgent48Count">0</div><div class="stat-label">48H</div></div>
-        <div class="stat-card stat-critical" data-filter="critical"><div class="stat-number" id="urgentDepartureCount">0</div><div class="stat-label">CRIT</div></div>
-        <div class="stat-card" data-filter="cmdr"><div class="stat-number" id="awaitingCmdrCount">0</div><div class="stat-label">CMDR</div></div>
-        <div class="stat-card" data-filter="mod"><div class="stat-number" id="awaitingModCount">0</div><div class="stat-label">MOD</div></div>
+    <div class="clock-container">
+      <div class="clock"><div class="clock-label">🇱🇰 LST</div><div class="clock-time" id="lstClock">--:--:--</div></div>
+      <div class="clock-divider"></div>
+      <div class="clock"><div class="clock-label">🌍 UTC</div><div class="clock-time" id="utcClock">--:--:--</div></div>
     </div>
-
-    <!-- BULK ACTIONS -->
-    <div id="bulkActions">
-        <span style="font-weight:700;color:var(--border-color);font-size:0.8rem;">📋 Bulk:</span>
-        <button class="btn-outline" onclick="bulkUpdateStatus('cmdrStatus','Received')">✅ CMDR</button>
-        <button class="btn-outline" onclick="bulkUpdateStatus('modStatus','Received')">✅ MOD</button>
-        <button class="btn-danger" onclick="bulkDeleteSelected()">🗑️</button>
-        <button class="btn-outline" onclick="clearSelection()">✖️</button>
-        <span id="selectionCount" style="font-weight:bold;color:var(--border-color);font-size:0.8rem;">0</span>
+    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+      <button class="btn-primary" id="addNewRowBtn">➕ NEW</button>
+      <button class="btn-nomination" id="addNominationBtn">📨 NOM</button>
+      <button class="theme-btn" id="themeToggleBtn">🎨</button>
+      <button class="sound-btn" id="soundToggleBtn">🔊</button>
+      <button class="btn-outline" id="resetDemoBtn">⟳</button>
+      <button class="btn-outline" id="fullscreenBtn">⛶</button>
     </div>
+  </div>
 
-    <!-- FILTERS -->
-    <div class="filter-bar">
-        <div class="filter-group">
-            <select id="countryFilter"><option value="all">🌍 ALL</option></select>
-            <select id="urgencyFilter"><option value="all">⏱️</option><option value="critical">🔥</option><option value="high">🟠</option><option value="normal">🟢</option><option value="past">⏰</option></select>
-            <select id="typeFilter"><option value="all">📋 ALL</option><option value="Course">📘</option><option value="Visit">📌</option><option value="Nomination">📨</option></select>
-            <select id="approvalFilter"><option value="all">📌</option><option value="sent">⏳</option><option value="received">✅</option></select>
-            <select id="modApprovalFilter"><option value="all">🛡️</option><option value="sent">⏳</option><option value="received">✅</option><option value="pending">⏳</option></select>
-            <input type="text" id="searchInput" placeholder="🔍 SEARCH..." list="courseSuggestList" style="min-width:70px;">
-            <datalist id="courseSuggestList"></datalist>
-        </div>
-        <div class="filter-presets">
-            <button class="filter-preset-btn" data-preset="nomination">📨</button>
-            <button class="filter-preset-btn" data-preset="urgent">🔥</button>
-            <button class="filter-preset-btn" data-preset="cmdr">⚠️</button>
-            <button class="filter-preset-btn" data-preset="mod">🛡️</button>
-            <button class="filter-preset-btn" data-preset="week">📅</button>
-        </div>
-        <div style="display:flex; gap:3px; flex-wrap:wrap;">
-            <button class="btn-outline" id="clearFiltersBtn">✖️</button>
-            <button class="btn-outline" id="undoBtn" style="opacity:0.4;">↩️</button>
-            <button class="btn-outline" id="redoBtn" style="opacity:0.4;">↪️</button>
-            <button class="btn-outline" id="refreshBtn">🔄</button>
-            <button class="btn-outline" id="autoRefreshBtn">⏱️</button>
-        </div>
-    </div>
+  <!-- ALERTS -->
+  <div id="alertContainer"><div style="padding:6px;color:var(--text-secondary);font-weight:800;font-size:1.1rem;">✅ All courses on track</div></div>
 
-    <!-- TABLE -->
-    <div class="table-wrapper">
-        <table class="editable-table" id="mainTable">
-            <thead><tr>
-                <th class="col-checkbox"><input type="checkbox" id="selectAllCheckbox"></th>
-                <th class="col-type">TYPE</th>
-                <th class="col-course">COURSE / VISIT / NOM</th>
-                <th class="col-officers">PERS</th>
-                <th class="col-country">CTRY</th>
-                <th class="col-departure">DEP</th>
-                <th class="col-return">RET</th>
-                <th class="col-days">DAYS</th>
-                <th class="col-deadline">DEADLINE</th>
-                <th class="col-urgency">URGENCY</th>
-                <th class="col-cmdr">CMDR</th>
-                <th class="col-mod">MOD</th>
-                <th class="col-visa">VISA</th>
-                <th class="col-ticket">TICKET</th>
-                <th class="col-wo">WARNING ORDER</th>
-                <th class="col-actions">⚡</th>
-            </tr></thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-    </div>
+  <!-- STATS ROW WITH TOGGLE -->
+  <div style="display:flex; justify-content:flex-end; margin:2px 0;">
+    <button class="stat-toggle" id="statsToggleBtn">▾ STATS</button>
+  </div>
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card" data-filter="all"><div class="stat-number" id="totalCoursesCount">0</div><div class="stat-label">TOTAL</div></div>
+    <div class="stat-card stat-nomination" data-filter="nomination"><div class="stat-number" id="nominationCount">0</div><div class="stat-label">NOM</div></div>
+    <div class="stat-card stat-urgent" data-filter="48hr"><div class="stat-number" id="urgent48Count">0</div><div class="stat-label">48H</div></div>
+    <div class="stat-card stat-critical" data-filter="critical"><div class="stat-number" id="urgentDepartureCount">0</div><div class="stat-label">CRIT</div></div>
+    <div class="stat-card" data-filter="cmdr"><div class="stat-number" id="awaitingCmdrCount">0</div><div class="stat-label">CMDR</div></div>
+    <div class="stat-card" data-filter="mod"><div class="stat-number" id="awaitingModCount">0</div><div class="stat-label">MOD</div></div>
+  </div>
 
-    <!-- FOOTER -->
-    <div class="footer-info">
-        <span>🕒 Updated: <span id="lastUpdated">--</span></span>
-        <span>💡 Click stats to filter</span>
-        <span>⌨️ Ctrl+N | Ctrl+Z | Ctrl+Y</span>
-        <span>🔄 Auto: <span id="autoRefreshStatus">ON</span></span>
+  <!-- BULK ACTIONS -->
+  <div id="bulkActions">
+    <span style="font-weight:900;color:var(--border-color);font-size:1.0rem;">📋 Bulk:</span>
+    <button class="btn-outline" onclick="bulkUpdateStatus('cmdrStatus','Received')">✅ CMDR</button>
+    <button class="btn-outline" onclick="bulkUpdateStatus('modStatus','Received')">✅ MOD</button>
+    <button class="btn-danger" onclick="bulkDeleteSelected()" style="background:#dc2626;border:none;padding:6px 18px;border-radius:40px;color:white;font-weight:900;height:44px;">🗑️</button>
+    <button class="btn-outline" onclick="clearSelection()">✖️</button>
+    <span id="selectionCount" style="font-weight:900;color:var(--border-color);font-size:1.0rem;">0</span>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <select id="countryFilter"><option value="all">🌍 ALL</option></select>
+      <select id="urgencyFilter" style="display:none;"> <!-- hidden, kept for compatibility --></select>
+      <select id="typeFilter"><option value="all">📋 ALL</option><option value="Course">📘</option><option value="Visit">📌</option><option value="Nomination">📨</option></select>
+      <select id="approvalFilter"><option value="all">📌 CMDR</option><option value="sent">⏳ SENT</option><option value="received">✅ REC</option></select>
+      <select id="modApprovalFilter"><option value="all">🛡️ MOD</option><option value="sent">⏳ SENT</option><option value="received">✅ REC</option><option value="pending">⏳ PEND</option></select>
+      <input type="text" id="searchInput" placeholder="🔍 SEARCH..." list="courseSuggestList" style="min-width:100px;height:44px;font-size:0.9rem;">
+      <datalist id="courseSuggestList"></datalist>
     </div>
+    <div class="filter-presets">
+      <button class="filter-preset-btn" data-preset="nomination">📨</button>
+      <button class="filter-preset-btn" data-preset="urgent">🔥</button>
+      <button class="filter-preset-btn" data-preset="cmdr">⚠️</button>
+      <button class="filter-preset-btn" data-preset="mod">🛡️</button>
+      <button class="filter-preset-btn" data-preset="week">📅</button>
+    </div>
+    <div style="display:flex; gap:4px; flex-wrap:wrap;">
+      <button class="btn-outline" id="clearFiltersBtn">✖️</button>
+      <button class="btn-outline" id="undoBtn" style="opacity:0.4;">↩️</button>
+      <button class="btn-outline" id="redoBtn" style="opacity:0.4;">↪️</button>
+      <button class="btn-outline" id="refreshBtn">🔄</button>
+      <button class="btn-outline" id="autoRefreshBtn">⏱️</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrapper">
+    <table class="editable-table" id="mainTable">
+      <thead><tr>
+        <th class="col-checkbox"><input type="checkbox" id="selectAllCheckbox"></th>
+        <th class="col-type">TYPE</th>
+        <th class="col-course">COURSE / VISIT / NOM</th>
+        <th class="col-officers">PERS</th>
+        <th class="col-country">CTRY</th>
+        <th class="col-departure">DEP</th>
+        <th class="col-return">RET</th>
+        <th class="col-days">DAYS</th>
+        <th class="col-deadline">DEADLINE</th>
+        <th class="col-cmdr">CMDR</th>
+        <th class="col-mod">MOD</th>
+        <th class="col-visa">VISA</th>
+        <th class="col-ticket">TICKET</th>
+        <th class="col-wo">WARNING ORDER</th>
+        <th class="col-actions">⚡</th>
+      </tr></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="footer-info">
+    <span>🕒 Updated: <span id="lastUpdated">--</span></span>
+    <span>💡 Click stats to filter</span>
+    <span>⌨️ Ctrl+N | Ctrl+Z | Ctrl+Y</span>
+    <span>🔄 Auto: <span id="autoRefreshStatus">ON</span></span>
+  </div>
 </div>
 
 <script>
-// ==================== DATA ====================
-const countryOptions = ["India","Bangladesh","Pakistan","USA","UK","Australia","UAE","Poland","Slovakia","France","MONACO","UN Mission","Myanmar","Thailand","Indonesia","Italy","Maldives","Vietnam","Singapore","Africa","Europe","Czech","Germany","Japan","China","Other"];
-let coursesData = [];
-let courseNameHistory = [];
-let historyStack = [], historyIndex = -1;
-let editingRowId = null;
-let selectedCourses = new Set();
-let soundEnabled = true;
-let autoRefreshInterval = null;
-let nominationCounter = 1;
+  // ==================== DATA ====================
+  const countryOptions = ["India","Bangladesh","Pakistan","USA","UK","Australia","UAE","Poland","Slovakia","France","MONACO","UN Mission","Myanmar","Thailand","Indonesia","Italy","Maldives","Vietnam","Singapore","Africa","Europe","Czech","Germany","Japan","China","Other"];
+  let coursesData = [];
+  let courseNameHistory = [];
+  let historyStack = [], historyIndex = -1;
+  let editingRowId = null;
+  let selectedCourses = new Set();
+  let soundEnabled = true;
+  let autoRefreshInterval = null;
+  let nominationCounter = 1;
+  let statsCollapsed = false;
 
-const defaultData = [
+  const defaultData = [
     { id:1, type:"Course", courseName:"Instructor Pilot Program", officersAirmen:"1 Officer", country:"China", depDate:"2026-01-01", returnDate:"2026-12-31", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-01", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-15", isCancelled:false, isNomination:false },
     { id:2, type:"Course", courseName:"Pre Flying Training", officersAirmen:"1 Officer", country:"India", depDate:"2026-01-01", returnDate:"2026-06-23", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-10", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-20", isCancelled:false, isNomination:false },
     { id:3, type:"Course", courseName:"Flight Safety Officers", officersAirmen:"1 Officer", country:"Bangladesh", depDate:"2026-01-18", returnDate:"2026-04-09", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"VISA DOC PREP", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-01-02", ticketOpenDate:"", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-01-05", isCancelled:false, isNomination:false },
@@ -720,489 +684,399 @@ const defaultData = [
     { id:6, type:"Nomination", courseName:"NOM-002 - India High Commission", officersAirmen:"1 Officer", country:"India", depDate:"2026-02-20", returnDate:"2026-02-22", deadlineDate:"2026-02-01", cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING", ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"2026-02-05", woActualDate:"", isCancelled:false, isNomination:true },
     { id:7, type:"Course", courseName:"Comm System Course", officersAirmen:"1 Officer", country:"Bangladesh", depDate:"2026-02-22", returnDate:"2026-03-12", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Pending", visaStatus:"VISA DOC PREP", ticketStatus:"TICKET DEMAND RAISED", ticketDemandDate:"2026-02-01", ticketOpenDate:"", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-02-10", isCancelled:false, isNomination:false },
     { id:8, type:"Course", courseName:"Insarag Course", officersAirmen:"1 Officer", country:"India", depDate:"2026-03-23", returnDate:"2026-03-27", deadlineDate:"", cmdrStatus:"Sent", modStatus:"Sent", visaStatus:"VISA H/O TO EMBASSY", ticketStatus:"TICKET CONFIRMED", ticketDemandDate:"2026-03-01", ticketOpenDate:"2026-03-05", woStatus:"SENT", woExpectedDate:"", woActualDate:"2026-03-10", isCancelled:false, isNomination:false }
-];
+  ];
 
-// ==================== HELPERS ====================
-function getDaysRemaining(dateStr) {
+  function getDaysRemaining(dateStr) {
     if(!dateStr) return 999;
     const today = new Date(); today.setHours(0,0,0,0);
     return Math.ceil((new Date(dateStr) - today) / 86400000);
-}
-function getUrgencyInfo(depDate, isCancelled, isNomination) {
+  }
+  function getUrgencyInfo(depDate, isCancelled, isNomination) {
     if(isCancelled) return { className:"", label:"❌ CANCELLED", daysLeft:null };
     const days = getDaysRemaining(depDate);
     if(isNomination) {
-        if(days < 0) return { className:"row-nomination", label:"📨 OVERDUE", daysLeft:days };
-        if(days <= 2) return { className:"row-nomination", label:"📨 URGENT", daysLeft:days };
-        if(days <= 7) return { className:"row-nomination", label:"📨 PENDING", daysLeft:days };
-        return { className:"row-nomination", label:"📨 NOMINATION", daysLeft:days };
+      if(days < 0) return { className:"row-nomination", label:"📨 OVERDUE", daysLeft:days };
+      if(days <= 2) return { className:"row-nomination", label:"📨 URGENT", daysLeft:days };
+      if(days <= 7) return { className:"row-nomination", label:"📨 PENDING", daysLeft:days };
+      return { className:"row-nomination", label:"📨 NOMINATION", daysLeft:days };
     }
     if(days < 0) return { className:"row-past", label:"⏰ OVERDUE", daysLeft:days };
     if(days <= 2) return { className:"row-critical", label:"🚨 48H", daysLeft:days };
     if(days <= 7) return { className:"row-critical", label:"🔥 CRITICAL", daysLeft:days };
     if(days <= 14) return { className:"row-high", label:"🟠 HIGH", daysLeft:days };
-    if(days <= 30) return { className:"row-medium", label:"🟡 MEDIUM", daysLeft:days };
     return { className:"", label:"🟢 NORMAL", daysLeft:days };
-}
-function escapeHtml(s) { if(!s) return ""; return s.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+  }
+  function escapeHtml(s) { if(!s) return ""; return s.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
 
-function getStatusHtml(status) {
+  function getStatusHtml(status, blinkGreen=false) {
     let cls="status-notsent", display="NOT";
     if(status==="Not Sent"){ cls="status-notsent"; display="📤 NOT"; }
-    else if(status==="Sent"){ cls="status-sent"; display="⏳ AWAIT"; }
+    else if(status==="Sent"){ 
+      if(blinkGreen) { cls="status-blink-green"; display="⏳ SENT"; }
+      else { cls="status-sent"; display="⏳ SENT"; }
+    }
     else if(status==="Received"){ cls="status-received"; display="✅ REC"; }
     else if(status==="Pending"){ cls="status-pending"; display="⏳ PEND"; }
     return `<span class="status-badge ${cls}">${display}</span>`;
-}
-function getVisaStatusHtml(s) {
+  }
+  function getVisaStatusHtml(s) {
     let cls="status-notsent", display="PENDING";
     if(s==="VISA DOC PREP"){ cls="status-pending"; display="📄 DOC PREP"; }
     else if(s==="VISA H/O TO EMBASSY"){ cls="status-sent"; display="✋ H/O"; }
     else if(s==="VISA COLLECTED"){ cls="status-received"; display="✅ COLLECTED"; }
     else if(s==="HOST COUNTRY HANDLING"){ cls="status-host"; display="🏛️ HOST"; }
     return `<span class="status-badge ${cls}">${display}</span>`;
-}
-function getTicketStatusHtml(s, dDate, oDate) {
+  }
+  function getTicketStatusHtml(s, dDate, oDate) {
     let cls="status-notsent", display="PENDING";
     let extra='';
     if(s==="TICKET DEMAND RAISED"){ cls="status-pending"; display="📑 DEMAND"; if(dDate) extra=`<br><small>${dDate}</small>`; }
     else if(s==="TICKET CONFIRMED"){ cls="status-sent"; display="🛫 CONFIRMED"; if(oDate) extra=`<br><small>${oDate}</small>`; }
     else if(s==="TICKET OK"){ cls="status-received"; display="✅ OK"; if(oDate) extra=`<br><small>${oDate}</small>`; }
+    else if(s==="TICKET DEMAND BLINK"){ cls="status-blink-red"; display="🚨 DEMAND"; if(dDate) extra=`<br><small>${dDate}</small>`; }
     return `<span class="status-badge ${cls}">${display}</span>${extra}`;
-}
-function getWOStatusHtml(s, expDate, actDate) {
+  }
+  function getWOStatusHtml(s, expDate, actDate) {
     let cls="status-notsent", display="NOT SENT";
     let extra='';
-    if(s==="SENT"){ cls="status-sent"; display="⏳ SENT"; if(actDate) extra=`<br><small>${actDate}</small>`; }
+    if(s==="SENT"){ cls="status-blink-green"; display="⏳ SENT"; if(actDate) extra=`<br><small>${actDate}</small>`; }
     else if(s==="RECEIVED"){ cls="status-received"; display="✅ REC"; if(actDate) extra=`<br><small>${actDate}</small>`; }
     else { if(expDate) extra=`<br><small>EXP: ${expDate}</small>`; }
     return `<span class="status-badge ${cls}">${display}</span>${extra}`;
-}
+  }
 
-// ==================== THEME SYSTEM ====================
-const themes = ['theme-blue', 'theme-nightops', 'theme-arctic', 'theme-green'];
-let currentThemeIndex = 0;
-
-function cycleTheme() {
-    const body = document.body;
-    body.classList.remove(...themes);
+  // THEME SYSTEM
+  const themes = ['theme-blue', 'theme-nightops', 'theme-arctic', 'theme-green', 'theme-ember'];
+  let currentThemeIndex = 0;
+  function cycleTheme() {
+    document.body.classList.remove(...themes);
     currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-    body.classList.add(themes[currentThemeIndex]);
+    document.body.classList.add(themes[currentThemeIndex]);
     localStorage.setItem('slaf_ftc_theme', themes[currentThemeIndex]);
     showToast(`🎨 Theme: ${themes[currentThemeIndex].replace('theme-', '').toUpperCase()}`);
-}
-function loadTheme() {
+  }
+  function loadTheme() {
     const saved = localStorage.getItem('slaf_ftc_theme');
-    if (saved && themes.includes(saved)) {
-        document.body.classList.add(saved);
-        currentThemeIndex = themes.indexOf(saved);
-    } else {
-        document.body.classList.add('theme-blue');
-    }
-}
+    if (saved && themes.includes(saved)) { document.body.classList.add(saved); currentThemeIndex = themes.indexOf(saved); }
+    else { document.body.classList.add('theme-blue'); }
+  }
 
-// ==================== TOAST & SOUND ====================
-function showToast(msg, isErr=false) {
-    const t = document.createElement("div");
-    t.className = "toast-msg";
-    t.innerText = msg;
+  function showToast(msg, isErr=false) {
+    const t = document.createElement("div"); t.className = "toast-msg"; t.innerText = msg;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
+    setTimeout(() => t.remove(), 3000);
     if(isErr) playBeep(300, 0.2, "square");
     else playBeep(600, 0.08);
-}
-function playBeep(freq=800, dur=0.12, type="sine") {
+  }
+  function playBeep(freq=800, dur=0.12, type="sine") {
     if(!soundEnabled) return;
     try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.frequency.value = freq;
-        osc.type = type;
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+dur);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime+dur);
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator(); const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq; osc.type = type;
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+dur);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime+dur);
     } catch(e) {}
-}
+  }
 
-// ==================== HISTORY ====================
-function saveToHistory() {
+  // HISTORY
+  function saveToHistory() {
     const copy = JSON.parse(JSON.stringify(coursesData));
     historyStack = historyStack.slice(0, historyIndex+1);
-    historyStack.push(copy);
-    historyIndex++;
+    historyStack.push(copy); historyIndex++;
     if(historyStack.length > 50) historyStack.shift();
     updateUndoButtons();
-}
-function undo() {
-    if(historyIndex > 0) { historyIndex--; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↩️ Undo"); }
-}
-function redo() {
-    if(historyIndex < historyStack.length-1) { historyIndex++; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↪️ Redo"); }
-}
-function updateUndoButtons() {
+  }
+  function undo() { if(historyIndex > 0) { historyIndex--; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↩️ Undo"); } }
+  function redo() { if(historyIndex < historyStack.length-1) { historyIndex++; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↪️ Redo"); } }
+  function updateUndoButtons() {
     document.getElementById("undoBtn").style.opacity = historyIndex>0 ? 1 : 0.4;
     document.getElementById("redoBtn").style.opacity = historyIndex<historyStack.length-1 ? 1 : 0.4;
-}
+  }
 
-// ==================== ALERTS ====================
-function checkAlerts() {
+  // ALERTS
+  function checkAlerts() {
     const container = document.getElementById('alertContainer');
     let alerts = [];
     coursesData.forEach(c => {
-        if(c.isCancelled) return;
-        if(c.isNomination && c.deadlineDate) {
-            const d = getDaysRemaining(c.deadlineDate);
-            if(d>=0 && d<=2) alerts.push({type:'EXTREME', msg:`📨 NOM DEADLINE: ${c.courseName} - ${d}d left!`});
-            else if(d>=0 && d<=7) alerts.push({type:'HIGH', msg:`📨 ${c.courseName} deadline in ${d}d`});
-        }
-        const d = getDaysRemaining(c.depDate);
-        if(d>=0 && d<=2 && !c.isNomination) alerts.push({type:'EXTREME', msg:`🚨 ${c.courseName} departs in ${d}d!`});
-        if(d>=0 && d<=7 && c.cmdrStatus!=='Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} - CMDR pending (${d}d)`});
-        if(d>=0 && d<=7 && c.modStatus!=='Received' && c.modStatus!=='Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} - MOD pending (${d}d)`});
+      if(c.isCancelled) return;
+      if(c.isNomination && c.deadlineDate) {
+        const d = getDaysRemaining(c.deadlineDate);
+        if(d>=0 && d<=2) alerts.push({type:'EXTREME', msg:`📨 NOM DEADLINE: ${c.courseName} - ${d}d left!`});
+        else if(d>=0 && d<=7) alerts.push({type:'HIGH', msg:`📨 ${c.courseName} deadline in ${d}d`});
+      }
+      const d = getDaysRemaining(c.depDate);
+      if(d>=0 && d<=2 && !c.isNomination) alerts.push({type:'EXTREME', msg:`🚨 ${c.courseName} departs in ${d}d!`});
+      if(d>=0 && d<=7 && c.cmdrStatus!=='Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} - CMDR pending (${d}d)`});
+      if(d>=0 && d<=7 && c.modStatus!=='Received' && c.modStatus!=='Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} - MOD pending (${d}d)`});
     });
-    if(alerts.length===0) { container.innerHTML='<div style="padding:4px;color:var(--text-secondary);font-weight:700;">✅ All courses on track</div>'; return; }
-    const unique = [];
-    const seen = new Set();
+    if(alerts.length===0) { container.innerHTML='<div style="padding:6px;color:var(--text-secondary);font-weight:800;font-size:1.1rem;">✅ All courses on track</div>'; return; }
+    const unique = []; const seen = new Set();
     alerts.forEach(a => { if(!seen.has(a.msg)) { seen.add(a.msg); unique.push(a); } });
-    container.innerHTML = unique.slice(0,4).map(a => `<div class="alert-item-${a.type.toLowerCase()}">${a.msg}</div>`).join('');
+    container.innerHTML = unique.slice(0,5).map(a => `<div class="alert-item-${a.type.toLowerCase()}">${a.msg}</div>`).join('');
     if(alerts.some(a => a.type==='EXTREME')) playBeep(1000,0.15);
-}
+  }
 
-// ==================== BULK ====================
-function toggleSelection(id) {
+  // BULK
+  function toggleSelection(id) {
     if(selectedCourses.has(id)) selectedCourses.delete(id);
     else selectedCourses.add(id);
-    updateSelectionUI();
-    renderTable();
-}
-function toggleAllSelection() {
+    updateSelectionUI(); renderTable();
+  }
+  function toggleAllSelection() {
     const checked = document.getElementById('selectAllCheckbox').checked;
     if(checked) coursesData.forEach(c => selectedCourses.add(c.id));
     else selectedCourses.clear();
-    updateSelectionUI();
-    renderTable();
-}
-function updateSelectionUI() {
+    updateSelectionUI(); renderTable();
+  }
+  function updateSelectionUI() {
     const count = selectedCourses.size;
-    const actions = document.getElementById('bulkActions');
     document.getElementById('selectionCount').textContent = count;
-    if(count>0) actions.classList.add('visible');
-    else actions.classList.remove('visible');
+    if(count>0) document.getElementById('bulkActions').classList.add('visible');
+    else document.getElementById('bulkActions').classList.remove('visible');
     const all = coursesData.length>0 && coursesData.every(c => selectedCourses.has(c.id));
     document.getElementById('selectAllCheckbox').checked = all;
-}
-function clearSelection() { selectedCourses.clear(); updateSelectionUI(); renderTable(); }
-function bulkUpdateStatus(field, status) {
+  }
+  function clearSelection() { selectedCourses.clear(); updateSelectionUI(); renderTable(); }
+  function bulkUpdateStatus(field, status) {
     if(selectedCourses.size===0) { showToast('⚠️ Select courses', true); return; }
     if(!confirm(`Update ${selectedCourses.size} courses?`)) return;
     let updated=0;
     selectedCourses.forEach(id => {
-        const c = coursesData.find(x => x.id===id);
-        if(c) { c[field]=status; updated++; }
+      const c = coursesData.find(x => x.id===id);
+      if(c) { c[field]=status; updated++; }
     });
     saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`✅ Updated ${updated}`); clearSelection();
-}
-function bulkDeleteSelected() {
+  }
+  function bulkDeleteSelected() {
     if(selectedCourses.size===0) { showToast('⚠️ Select courses', true); return; }
     if(!confirm(`Delete ${selectedCourses.size} courses?`)) return;
     const ids = Array.from(selectedCourses);
     coursesData = coursesData.filter(c => !ids.includes(c.id));
     selectedCourses.clear();
     saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`🗑️ Deleted ${ids.length}`);
-}
+  }
 
-// ==================== RENDER ====================
-function renderTable() {
+  // RENDER
+  function renderTable() {
     const countryVal = document.getElementById("countryFilter").value;
-    const urgencyVal = document.getElementById("urgencyFilter").value;
     const typeVal = document.getElementById("typeFilter").value;
     const cmdrFilter = document.getElementById("approvalFilter").value;
     const modFilter = document.getElementById("modApprovalFilter").value;
     const searchTerm = document.getElementById("searchInput").value.toLowerCase();
 
     let filtered = coursesData.filter(c => {
-        if(countryVal !== "all" && c.country !== countryVal) return false;
-        if(typeVal !== "all" && c.type !== typeVal) return false;
-        if(searchTerm && !c.courseName.toLowerCase().includes(searchTerm)) return false;
-        if(cmdrFilter !== "all") {
-            if(cmdrFilter === "sent" && c.cmdrStatus !== "Sent") return false;
-            if(cmdrFilter === "received" && c.cmdrStatus !== "Received") return false;
-        }
-        if(modFilter !== "all") {
-            if(modFilter === "sent" && c.modStatus !== "Sent") return false;
-            if(modFilter === "received" && c.modStatus !== "Received") return false;
-            if(modFilter === "pending" && c.modStatus !== "Pending") return false;
-        }
-        if(urgencyVal !== "all" && !c.isCancelled) {
-            const d = getDaysRemaining(c.depDate);
-            if(urgencyVal === "critical" && (d > 7 || d < 0)) return false;
-            if(urgencyVal === "high" && (d <= 7 || d > 14 || d < 0)) return false;
-            if(urgencyVal === "normal" && (d <= 14 || d < 0)) return false;
-            if(urgencyVal === "past" && !(d < 0)) return false;
-        }
-        return true;
+      if(countryVal !== "all" && c.country !== countryVal) return false;
+      if(typeVal !== "all" && c.type !== typeVal) return false;
+      if(searchTerm && !c.courseName.toLowerCase().includes(searchTerm)) return false;
+      if(cmdrFilter !== "all") {
+        if(cmdrFilter === "sent" && c.cmdrStatus !== "Sent") return false;
+        if(cmdrFilter === "received" && c.cmdrStatus !== "Received") return false;
+      }
+      if(modFilter !== "all") {
+        if(modFilter === "sent" && c.modStatus !== "Sent") return false;
+        if(modFilter === "received" && c.modStatus !== "Received") return false;
+        if(modFilter === "pending" && c.modStatus !== "Pending") return false;
+      }
+      return true;
     });
 
     updateStats();
     const tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
     if(filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="16" style="text-align:center;padding:16px;font-size:0.9rem;color:var(--text-secondary);">📭 No data</td></tr>';
-        return;
+      tbody.innerHTML = '<tr><td colspan="15" style="text-align:center;padding:20px;font-size:1.4rem;color:var(--text-secondary);">📭 No data</td></tr>';
+      return;
     }
 
     filtered.forEach(course => {
-        const urgency = getUrgencyInfo(course.depDate, course.isCancelled, course.isNomination);
-        const daysLeft = urgency.daysLeft !== null ? urgency.daysLeft : "—";
-        const isEditing = (editingRowId === course.id);
-        const isSelected = selectedCourses.has(course.id);
-        const rowClass = course.isCancelled ? "" : urgency.className;
+      const urgency = getUrgencyInfo(course.depDate, course.isCancelled, course.isNomination);
+      const daysLeft = urgency.daysLeft !== null ? urgency.daysLeft : "—";
+      const isEditing = (editingRowId === course.id);
+      const isSelected = selectedCourses.has(course.id);
+      const rowClass = course.isCancelled ? "" : urgency.className;
 
-        const tr = document.createElement("tr");
-        tr.className = `${rowClass} ${isSelected ? 'row-selected' : ''}`;
-        tr.dataset.id = course.id;
+      const tr = document.createElement("tr");
+      tr.className = `${rowClass} ${isSelected ? 'row-selected' : ''}`;
+      tr.dataset.id = course.id;
 
-        // checkbox
-        const cbTd = document.createElement("td");
-        cbTd.className = "col-checkbox";
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.checked = isSelected;
-        cb.onchange = () => toggleSelection(course.id);
-        cbTd.appendChild(cb);
-        tr.appendChild(cbTd);
+      // checkbox
+      const cbTd = document.createElement("td"); cbTd.className = "col-checkbox";
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = isSelected;
+      cb.onchange = () => toggleSelection(course.id);
+      cbTd.appendChild(cb); tr.appendChild(cbTd);
 
-        // type
-        const typeCell = document.createElement("td");
-        typeCell.className = "col-type";
-        if(isEditing) {
-            const sel = document.createElement("select");
-            sel.className = "edit-select";
-            sel.id = `edit-type-${course.id}`;
-            sel.innerHTML = `<option value="Course" ${course.type==="Course"?"selected":""}>📘 COURSE</option><option value="Visit" ${course.type==="Visit"?"selected":""}>📌 VISIT</option><option value="Nomination" ${course.type==="Nomination"?"selected":""}>📨 NOM</option>`;
-            typeCell.appendChild(sel);
-        } else {
-            let badgeClass = course.type === "Course" ? "type-course" : course.type === "Visit" ? "type-visit" : "type-nomination";
-            let icon = course.type === "Course" ? "📘" : course.type === "Visit" ? "📌" : "📨";
-            typeCell.innerHTML = `<span class="type-badge ${badgeClass}">${icon} ${course.type==="Nomination"?"NOM":course.type}</span>`;
-        }
-        tr.appendChild(typeCell);
+      // type
+      const typeCell = document.createElement("td"); typeCell.className = "col-type";
+      if(isEditing) {
+        const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-type-${course.id}`;
+        sel.innerHTML = `<option value="Course" ${course.type==="Course"?"selected":""}>📘 COURSE</option><option value="Visit" ${course.type==="Visit"?"selected":""}>📌 VISIT</option><option value="Nomination" ${course.type==="Nomination"?"selected":""}>📨 NOM</option>`;
+        typeCell.appendChild(sel);
+      } else {
+        let badgeClass = course.type === "Course" ? "type-course" : course.type === "Visit" ? "type-visit" : "type-nomination";
+        let icon = course.type === "Course" ? "📘" : course.type === "Visit" ? "📌" : "📨";
+        typeCell.innerHTML = `<span class="type-badge ${badgeClass}">${icon} ${course.type==="Nomination"?"NOM":course.type}</span>`;
+      }
+      tr.appendChild(typeCell);
 
-        // course name
-        const courseCell = document.createElement("td");
-        courseCell.className = "col-course course-name-cell";
-        if(isEditing) {
-            const inp = document.createElement("input");
-            inp.className = "edit-input";
-            inp.id = `edit-name-${course.id}`;
-            inp.value = course.courseName;
-            inp.setAttribute("list", "courseSuggestList");
-            inp.style.fontWeight="700";
-            inp.addEventListener('focus', function() {
-                // Auto-select the text to allow easy overwrite
-                this.select();
-            });
-            courseCell.appendChild(inp);
-        } else {
-            const isUrgent = urgency.daysLeft !== null && urgency.daysLeft >= 0 && urgency.daysLeft <= 7;
-            let extra = '';
-            if(course.isNomination) extra = `<span class="type-badge type-nomination" style="font-size:0.55rem;padding:2px 8px;margin-left:4px;">NOM</span>`;
-            else if(isUrgent) extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:2px 10px;border-radius:30px;font-size:0.55rem;font-weight:800;margin-left:4px;">URGENT</span>`;
-            courseCell.innerHTML = `<span style="font-weight:900;">${escapeHtml(course.courseName)}</span>${extra}`;
-        }
-        tr.appendChild(courseCell);
+      // course name
+      const courseCell = document.createElement("td"); courseCell.className = "col-course course-name-cell";
+      if(isEditing) {
+        const inp = document.createElement("input"); inp.className = "edit-input"; inp.id = `edit-name-${course.id}`;
+        inp.value = course.courseName; inp.setAttribute("list", "courseSuggestList"); inp.style.fontWeight="900"; inp.style.fontSize="1.2rem";
+        inp.addEventListener('focus', function() { this.select(); });
+        courseCell.appendChild(inp);
+      } else {
+        const isUrgent = urgency.daysLeft !== null && urgency.daysLeft >= 0 && urgency.daysLeft <= 7;
+        let extra = '';
+        if(course.isNomination) extra = `<span class="type-badge type-nomination" style="font-size:0.8rem;padding:4px 14px;margin-left:8px;">NOM</span>`;
+        else if(isUrgent) extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:4px 16px;border-radius:40px;font-size:0.85rem;font-weight:900;margin-left:8px;">URGENT</span>`;
+        courseCell.innerHTML = `<span style="font-weight:900;font-size:1.3rem;">${escapeHtml(course.courseName)}</span>${extra}`;
+      }
+      tr.appendChild(courseCell);
 
-        // officers
-        const oaCell = document.createElement("td");
-        oaCell.className = "col-officers";
-        if(isEditing) {
-            const sel = document.createElement("select");
-            sel.className = "edit-select";
-            sel.id = `edit-officers-${course.id}`;
-            sel.innerHTML = `<option value="1 Officer" ${course.officersAirmen==="1 Officer"?"selected":""}>1 Off</option><option value="2 Officers" ${course.officersAirmen==="2 Officers"?"selected":""}>2 Off</option><option value="3 Officers" ${course.officersAirmen==="3 Officers"?"selected":""}>3 Off</option><option value="4 Airmen" ${course.officersAirmen==="4 Airmen"?"selected":""}>4 Air</option><option value="Officer" ${course.officersAirmen==="Officer"?"selected":""}>Off</option><option value="Airmen" ${course.officersAirmen==="Airmen"?"selected":""}>Air</option><option value="Both" ${course.officersAirmen==="Both"?"selected":""}>Both</option>`;
-            oaCell.appendChild(sel);
-        } else {
-            oaCell.innerText = course.officersAirmen;
-        }
-        tr.appendChild(oaCell);
+      // officers
+      const oaCell = document.createElement("td"); oaCell.className = "col-officers";
+      if(isEditing) {
+        const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-officers-${course.id}`;
+        sel.innerHTML = `<option value="1 Officer" ${course.officersAirmen==="1 Officer"?"selected":""}>1 Off</option><option value="2 Officers" ${course.officersAirmen==="2 Officers"?"selected":""}>2 Off</option><option value="3 Officers" ${course.officersAirmen==="3 Officers"?"selected":""}>3 Off</option><option value="4 Airmen" ${course.officersAirmen==="4 Airmen"?"selected":""}>4 Air</option><option value="Officer" ${course.officersAirmen==="Officer"?"selected":""}>Off</option><option value="Airmen" ${course.officersAirmen==="Airmen"?"selected":""}>Air</option><option value="Both" ${course.officersAirmen==="Both"?"selected":""}>Both</option>`;
+        oaCell.appendChild(sel);
+      } else { oaCell.innerText = course.officersAirmen; }
+      tr.appendChild(oaCell);
 
-        // country with datalist for suggestions
-        const countryCell = document.createElement("td");
-        countryCell.className = "col-country";
-        if(isEditing) {
-            const inp = document.createElement("input");
-            inp.className = "edit-input";
-            inp.id = `edit-country-${course.id}`;
-            inp.value = course.country;
-            inp.setAttribute("list", `countryList-${course.id}`);
-            inp.style.minWidth = "60px";
-            const dl = document.createElement("datalist");
-            dl.id = `countryList-${course.id}`;
-            countryOptions.forEach(c => { const o=document.createElement("option"); o.value=c; dl.appendChild(o); });
-            countryCell.appendChild(inp); countryCell.appendChild(dl);
-        } else {
-            countryCell.innerText = course.country;
-        }
-        tr.appendChild(countryCell);
+      // country
+      const countryCell = document.createElement("td"); countryCell.className = "col-country";
+      if(isEditing) {
+        const inp = document.createElement("input"); inp.className = "edit-input"; inp.id = `edit-country-${course.id}`;
+        inp.value = course.country; inp.setAttribute("list", `countryList-${course.id}`);
+        const dl = document.createElement("datalist"); dl.id = `countryList-${course.id}`;
+        countryOptions.forEach(c => { const o=document.createElement("option"); o.value=c; dl.appendChild(o); });
+        countryCell.appendChild(inp); countryCell.appendChild(dl);
+      } else { countryCell.innerText = course.country; }
+      tr.appendChild(countryCell);
 
-        // dep
-        const depCell = document.createElement("td");
-        depCell.className = "col-departure";
-        if(isEditing) depCell.innerHTML = `<input type="date" class="edit-input" id="edit-dep-${course.id}" value="${course.depDate}">`;
-        else depCell.innerText = course.depDate;
-        tr.appendChild(depCell);
+      // dep
+      const depCell = document.createElement("td"); depCell.className = "col-departure";
+      if(isEditing) depCell.innerHTML = `<input type="date" class="edit-input" id="edit-dep-${course.id}" value="${course.depDate}">`;
+      else depCell.innerText = course.depDate;
+      tr.appendChild(depCell);
 
-        // return
-        const retCell = document.createElement("td");
-        retCell.className = "col-return";
-        if(isEditing) retCell.innerHTML = `<input type="date" class="edit-input" id="edit-ret-${course.id}" value="${course.returnDate}">`;
-        else retCell.innerText = course.returnDate;
-        tr.appendChild(retCell);
+      // return
+      const retCell = document.createElement("td"); retCell.className = "col-return";
+      if(isEditing) retCell.innerHTML = `<input type="date" class="edit-input" id="edit-ret-${course.id}" value="${course.returnDate}">`;
+      else retCell.innerText = course.returnDate;
+      tr.appendChild(retCell);
 
-        // days
-        const daysCell = document.createElement("td");
-        daysCell.className = "col-days";
-        let color = '';
-        if(urgency.daysLeft !== null && urgency.daysLeft >= 0) {
-            if(urgency.daysLeft <= 2) color = 'color:#dc2626;font-weight:900;';
-            else if(urgency.daysLeft <= 7) color = 'color:#f97316;font-weight:800;';
-            else if(urgency.daysLeft <= 14) color = 'color:#eab308;font-weight:700;';
-        }
-        daysCell.innerHTML = `<span style="${color}">${daysLeft}</span>`;
-        tr.appendChild(daysCell);
+      // days
+      const daysCell = document.createElement("td"); daysCell.className = "col-days";
+      let color = '';
+      if(urgency.daysLeft !== null && urgency.daysLeft >= 0) {
+        if(urgency.daysLeft <= 2) color = 'color:#dc2626;font-weight:900;font-size:1.4rem;';
+        else if(urgency.daysLeft <= 7) color = 'color:#f97316;font-weight:900;font-size:1.3rem;';
+        else if(urgency.daysLeft <= 14) color = 'color:#eab308;font-weight:800;font-size:1.2rem;';
+      }
+      daysCell.innerHTML = `<span style="${color}">${daysLeft}</span>`;
+      tr.appendChild(daysCell);
 
-        // deadline
-        const deadlineCell = document.createElement("td");
-        deadlineCell.className = "col-deadline";
-        if(isEditing) deadlineCell.innerHTML = `<input type="date" class="edit-input" id="edit-deadline-${course.id}" value="${course.deadlineDate||''}">`;
-        else {
-            if(course.isNomination && course.deadlineDate) {
-                const d = getDaysRemaining(course.deadlineDate);
-                if(d>=0 && d<=7) deadlineCell.innerHTML = `<span style="background:#dc2626;color:white;padding:2px 10px;border-radius:30px;font-weight:900;font-size:0.65rem;">${course.deadlineDate}</span>`;
-                else deadlineCell.innerText = course.deadlineDate;
-            } else { deadlineCell.innerText = "—"; }
-        }
-        tr.appendChild(deadlineCell);
+      // deadline
+      const deadlineCell = document.createElement("td"); deadlineCell.className = "col-deadline";
+      if(isEditing) deadlineCell.innerHTML = `<input type="date" class="edit-input" id="edit-deadline-${course.id}" value="${course.deadlineDate||''}">`;
+      else {
+        if(course.isNomination && course.deadlineDate) {
+          const d = getDaysRemaining(course.deadlineDate);
+          if(d>=0 && d<=7) deadlineCell.innerHTML = `<span style="background:#dc2626;color:white;padding:6px 18px;border-radius:40px;font-weight:900;font-size:1.0rem;">${course.deadlineDate}</span>`;
+          else deadlineCell.innerText = course.deadlineDate;
+        } else { deadlineCell.innerText = "—"; }
+      }
+      tr.appendChild(deadlineCell);
 
-        // urgency
-        const urgencyCell = document.createElement("td");
-        urgencyCell.className = "col-urgency";
-        urgencyCell.innerHTML = `<span class="urgency-chip">${urgency.label}</span>`;
-        tr.appendChild(urgencyCell);
+      // CMDR
+      const cmdrTd = document.createElement("td"); cmdrTd.className = "col-cmdr";
+      if(isEditing) {
+        const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-cmdr-${course.id}`;
+        sel.innerHTML = `<option value="Not Sent" ${course.cmdrStatus==="Not Sent"?"selected":""}>NOT</option><option value="Sent" ${course.cmdrStatus==="Sent"?"selected":""}>SENT</option><option value="Received" ${course.cmdrStatus==="Received"?"selected":""}>REC</option>`;
+        cmdrTd.appendChild(sel);
+      } else { cmdrTd.innerHTML = getStatusHtml(course.cmdrStatus); }
+      tr.appendChild(cmdrTd);
 
-        // cmdr
-        const cmdrTd = document.createElement("td");
-        cmdrTd.className = "col-cmdr";
-        if(isEditing) {
-            const sel = document.createElement("select");
-            sel.className = "edit-select";
-            sel.id = `edit-cmdr-${course.id}`;
-            sel.innerHTML = `<option value="Not Sent" ${course.cmdrStatus==="Not Sent"?"selected":""}>NOT</option><option value="Sent" ${course.cmdrStatus==="Sent"?"selected":""}>SENT</option><option value="Received" ${course.cmdrStatus==="Received"?"selected":""}>REC</option>`;
-            cmdrTd.appendChild(sel);
-        } else { cmdrTd.innerHTML = getStatusHtml(course.cmdrStatus); }
-        tr.appendChild(cmdrTd);
+      // MOD
+      const modTd = document.createElement("td"); modTd.className = "col-mod";
+      if(isEditing) {
+        const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-mod-${course.id}`;
+        sel.innerHTML = `<option value="Not Sent" ${course.modStatus==="Not Sent"?"selected":""}>NOT</option><option value="Sent" ${course.modStatus==="Sent"?"selected":""}>SENT</option><option value="Received" ${course.modStatus==="Received"?"selected":""}>REC</option><option value="Pending" ${course.modStatus==="Pending"?"selected":""}>PEND</option>`;
+        modTd.appendChild(sel);
+      } else { modTd.innerHTML = getStatusHtml(course.modStatus); }
+      tr.appendChild(modTd);
 
-        // mod
-        const modTd = document.createElement("td");
-        modTd.className = "col-mod";
-        if(isEditing) {
-            const sel = document.createElement("select");
-            sel.className = "edit-select";
-            sel.id = `edit-mod-${course.id}`;
-            sel.innerHTML = `<option value="Not Sent" ${course.modStatus==="Not Sent"?"selected":""}>NOT</option><option value="Sent" ${course.modStatus==="Sent"?"selected":""}>SENT</option><option value="Received" ${course.modStatus==="Received"?"selected":""}>REC</option><option value="Pending" ${course.modStatus==="Pending"?"selected":""}>PEND</option>`;
-            modTd.appendChild(sel);
-        } else { modTd.innerHTML = getStatusHtml(course.modStatus); }
-        tr.appendChild(modTd);
+      // VISA – for nominations, hide? but we keep simple
+      const visaTd = document.createElement("td"); visaTd.className = "col-visa";
+      if(isEditing) {
+        const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-visa-${course.id}`;
+        sel.innerHTML = `<option value="PENDING" ${course.visaStatus==="PENDING"?"selected":""}>⏳ PENDING</option><option value="VISA DOC PREP" ${course.visaStatus==="VISA DOC PREP"?"selected":""}>📄 DOC PREP</option><option value="VISA H/O TO EMBASSY" ${course.visaStatus==="VISA H/O TO EMBASSY"?"selected":""}>✋ H/O</option><option value="VISA COLLECTED" ${course.visaStatus==="VISA COLLECTED"?"selected":""}>✅ COLLECTED</option><option value="HOST COUNTRY HANDLING" ${course.visaStatus==="HOST COUNTRY HANDLING"?"selected":""}>🏛️ HOST</option>`;
+        visaTd.appendChild(sel);
+      } else { visaTd.innerHTML = getVisaStatusHtml(course.visaStatus); }
+      tr.appendChild(visaTd);
 
-        // visa
-        const visaTd = document.createElement("td");
-        visaTd.className = "col-visa";
-        if(isEditing) {
-            const sel = document.createElement("select");
-            sel.className = "edit-select";
-            sel.id = `edit-visa-${course.id}`;
-            sel.innerHTML = `<option value="PENDING" ${course.visaStatus==="PENDING"?"selected":""}>⏳ PENDING</option><option value="VISA DOC PREP" ${course.visaStatus==="VISA DOC PREP"?"selected":""}>📄 DOC PREP</option><option value="VISA H/O TO EMBASSY" ${course.visaStatus==="VISA H/O TO EMBASSY"?"selected":""}>✋ H/O</option><option value="VISA COLLECTED" ${course.visaStatus==="VISA COLLECTED"?"selected":""}>✅ COLLECTED</option><option value="HOST COUNTRY HANDLING" ${course.visaStatus==="HOST COUNTRY HANDLING"?"selected":""}>🏛️ HOST</option>`;
-            visaTd.appendChild(sel);
-        } else { visaTd.innerHTML = getVisaStatusHtml(course.visaStatus); }
-        tr.appendChild(visaTd);
+      // TICKET – with blink for demand
+      const ticketTd = document.createElement("td"); ticketTd.className = "col-ticket";
+      if(isEditing) {
+        ticketTd.innerHTML = `
+          <select class="edit-select" id="edit-ticket-${course.id}" style="margin-bottom:4px;">
+            <option value="PENDING" ${course.ticketStatus==="PENDING"?"selected":""}>⏳ PENDING</option>
+            <option value="TICKET DEMAND RAISED" ${course.ticketStatus==="TICKET DEMAND RAISED"?"selected":""}>📑 DEMAND</option>
+            <option value="TICKET DEMAND BLINK" ${course.ticketStatus==="TICKET DEMAND BLINK"?"selected":""}>🚨 BLINK DEMAND</option>
+            <option value="TICKET CONFIRMED" ${course.ticketStatus==="TICKET CONFIRMED"?"selected":""}>🛫 CONFIRMED</option>
+            <option value="TICKET OK" ${course.ticketStatus==="TICKET OK"?"selected":""}>✅ OK</option>
+          </select>
+          <input type="date" class="edit-input" id="edit-demanddate-${course.id}" value="${course.ticketDemandDate||''}" style="font-size:0.8rem;margin-top:4px;">
+          <input type="date" class="edit-input" id="edit-opendate-${course.id}" value="${course.ticketOpenDate||''}" style="font-size:0.8rem;margin-top:4px;">
+        `;
+      } else {
+        ticketTd.innerHTML = getTicketStatusHtml(course.ticketStatus, course.ticketDemandDate, course.ticketOpenDate);
+      }
+      tr.appendChild(ticketTd);
 
-        // ticket
-        const ticketTd = document.createElement("td");
-        ticketTd.className = "col-ticket";
-        if(isEditing) {
-            ticketTd.innerHTML = `
-                <select class="edit-select" id="edit-ticket-${course.id}" style="margin-bottom:2px;">
-                    <option value="PENDING" ${course.ticketStatus==="PENDING"?"selected":""}>⏳ PENDING</option>
-                    <option value="TICKET DEMAND RAISED" ${course.ticketStatus==="TICKET DEMAND RAISED"?"selected":""}>📑 DEMAND</option>
-                    <option value="TICKET CONFIRMED" ${course.ticketStatus==="TICKET CONFIRMED"?"selected":""}>🛫 CONFIRMED</option>
-                    <option value="TICKET OK" ${course.ticketStatus==="TICKET OK"?"selected":""}>✅ OK</option>
-                </select>
-                <input type="date" class="edit-input" id="edit-demanddate-${course.id}" value="${course.ticketDemandDate||''}" style="font-size:0.6rem;margin-top:2px;">
-                <input type="date" class="edit-input" id="edit-opendate-${course.id}" value="${course.ticketOpenDate||''}" style="font-size:0.6rem;margin-top:2px;">
-            `;
-        } else {
-            ticketTd.innerHTML = getTicketStatusHtml(course.ticketStatus, course.ticketDemandDate, course.ticketOpenDate);
-        }
-        tr.appendChild(ticketTd);
+      // WO – SENT blinks green, REC removed (only SENT / NOT SENT)
+      const woCell = document.createElement("td"); woCell.className = "col-wo";
+      if(isEditing) {
+        woCell.innerHTML = `
+          <select class="edit-select" id="edit-wo-${course.id}" style="margin-bottom:4px;">
+            <option value="NOT SENT" ${course.woStatus==="NOT SENT"?"selected":""}>📤 NOT SENT</option>
+            <option value="SENT" ${course.woStatus==="SENT"?"selected":""}>⏳ SENT (BLINK)</option>
+          </select>
+          <input type="date" class="edit-input" id="edit-woexpected-${course.id}" value="${course.woExpectedDate||''}" style="font-size:0.8rem;margin-top:4px;">
+          <input type="date" class="edit-input" id="edit-woactual-${course.id}" value="${course.woActualDate||''}" style="font-size:0.8rem;margin-top:4px;">
+        `;
+      } else {
+        woCell.innerHTML = getWOStatusHtml(course.woStatus, course.woExpectedDate, course.woActualDate);
+      }
+      tr.appendChild(woCell);
 
-        // wo
-        const woCell = document.createElement("td");
-        woCell.className = "col-wo";
-        if(isEditing) {
-            woCell.innerHTML = `
-                <select class="edit-select" id="edit-wo-${course.id}" style="margin-bottom:2px;">
-                    <option value="NOT SENT" ${course.woStatus==="NOT SENT"?"selected":""}>📤 NOT SENT</option>
-                    <option value="SENT" ${course.woStatus==="SENT"?"selected":""}>⏳ SENT</option>
-                    <option value="RECEIVED" ${course.woStatus==="RECEIVED"?"selected":""}>✅ REC</option>
-                </select>
-                <input type="date" class="edit-input" id="edit-woexpected-${course.id}" value="${course.woExpectedDate||''}" style="font-size:0.6rem;margin-top:2px;">
-                <input type="date" class="edit-input" id="edit-woactual-${course.id}" value="${course.woActualDate||''}" style="font-size:0.6rem;margin-top:2px;">
-            `;
-        } else {
-            woCell.innerHTML = getWOStatusHtml(course.woStatus, course.woExpectedDate, course.woActualDate);
-        }
-        tr.appendChild(woCell);
-
-        // actions
-        const actionTd = document.createElement("td");
-        actionTd.className = "col-actions";
-        if(isEditing) {
-            const saveBtn = document.createElement("button");
-            saveBtn.innerText = "💾";
-            saveBtn.className = "inline-edit-btn";
-            saveBtn.onclick = () => saveEdit(course.id);
-            const cancelBtn = document.createElement("button");
-            cancelBtn.innerText = "✖️";
-            cancelBtn.className = "action-icon";
-            cancelBtn.onclick = () => { editingRowId = null; renderTable(); };
-            actionTd.append(saveBtn, cancelBtn);
-        } else {
-            const editBtn = document.createElement("button");
-            editBtn.innerText = "✏️";
-            editBtn.className = "action-icon";
-            editBtn.onclick = () => { editingRowId = course.id; renderTable(); };
-            const delBtn = document.createElement("button");
-            delBtn.innerText = "🗑️";
-            delBtn.className = "action-icon";
-            delBtn.onclick = () => {
-                if(confirm(`Delete "${course.courseName}"?`)) {
-                    coursesData = coursesData.filter(c => c.id !== course.id);
-                    saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`🗑️ Deleted`); playBeep(300,0.2,"square");
-                }
-            };
-            actionTd.append(editBtn, delBtn);
-        }
-        tr.appendChild(actionTd);
-        tbody.appendChild(tr);
+      // actions
+      const actionTd = document.createElement("td"); actionTd.className = "col-actions";
+      if(isEditing) {
+        const saveBtn = document.createElement("button"); saveBtn.innerText = "💾"; saveBtn.className = "inline-edit-btn"; saveBtn.onclick = () => saveEdit(course.id);
+        const cancelBtn = document.createElement("button"); cancelBtn.innerText = "✖️"; cancelBtn.className = "action-icon"; cancelBtn.onclick = () => { editingRowId = null; renderTable(); };
+        actionTd.append(saveBtn, cancelBtn);
+      } else {
+        const editBtn = document.createElement("button"); editBtn.innerText = "✏️"; editBtn.className = "action-icon"; editBtn.onclick = () => { editingRowId = course.id; renderTable(); };
+        const delBtn = document.createElement("button"); delBtn.innerText = "🗑️"; delBtn.className = "action-icon"; delBtn.onclick = () => {
+          if(confirm(`Delete "${course.courseName}"?`)) {
+            coursesData = coursesData.filter(c => c.id !== course.id);
+            saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`🗑️ Deleted`); playBeep(300,0.2,"square");
+          }
+        };
+        actionTd.append(editBtn, delBtn);
+      }
+      tr.appendChild(actionTd);
+      tbody.appendChild(tr);
     });
-}
+  }
 
-// ==================== SAVE EDIT ====================
-function saveEdit(id) {
+  // SAVE EDIT
+  function saveEdit(id) {
     const c = coursesData.find(x => x.id === id);
     if(!c) return;
     const dep = document.getElementById(`edit-dep-${id}`)?.value;
@@ -1229,63 +1103,49 @@ function saveEdit(id) {
     if(document.getElementById(`edit-woactual-${id}`)) c.woActualDate = document.getElementById(`edit-woactual-${id}`).value;
 
     saveToHistory(); saveToLocal(); editingRowId = null; renderTable(); checkAlerts(); showToast(`✅ Updated`);
-}
+  }
 
-// ==================== ADD FUNCTIONS ====================
-function addNewCourse() {
+  // ADD
+  function addNewCourse() {
     const newId = Date.now();
     const today = new Date().toISOString().slice(0,10);
     coursesData.push({
-        id: newId, type:"Course", courseName:"NEW COURSE", officersAirmen:"1 Officer", country:"Country",
-        depDate:today, returnDate:today, deadlineDate:"", cmdrStatus:"Not Sent", modStatus:"Not Sent",
-        visaStatus:"PENDING", ticketStatus:"PENDING", ticketDemandDate:"", ticketOpenDate:"",
-        woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"", isCancelled:false, isNomination:false
+      id: newId, type:"Course", courseName:"NEW COURSE", officersAirmen:"1 Officer", country:"Country",
+      depDate:today, returnDate:today, deadlineDate:"", cmdrStatus:"Not Sent", modStatus:"Not Sent",
+      visaStatus:"PENDING", ticketStatus:"PENDING", ticketDemandDate:"", ticketOpenDate:"",
+      woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"", isCancelled:false, isNomination:false
     });
     saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast("➕ New course");
-    // Auto-focus and select the course name field after render
-    setTimeout(() => {
-        const nameInput = document.getElementById(`edit-name-${newId}`);
-        if(nameInput) {
-            nameInput.focus();
-            nameInput.select();
-        }
-    }, 100);
-}
-function addNomination() {
+    setTimeout(() => { const inp = document.getElementById(`edit-name-${newId}`); if(inp){ inp.focus(); inp.select(); } }, 150);
+  }
+  function addNomination() {
     const newId = Date.now();
     const today = new Date().toISOString().slice(0,10);
     const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate()+7);
     nominationCounter++;
     const nomName = `NOM-${String(nominationCounter).padStart(3,'0')}`;
     coursesData.push({
-        id: newId, type:"Nomination", courseName:nomName, officersAirmen:"1 Officer", country:"Country",
-        depDate:today, returnDate:today, deadlineDate:nextWeek.toISOString().slice(0,10),
-        cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING",
-        ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"",
-        isCancelled:false, isNomination:true
+      id: newId, type:"Nomination", courseName:nomName, officersAirmen:"1 Officer", country:"Country",
+      depDate:today, returnDate:today, deadlineDate:nextWeek.toISOString().slice(0,10),
+      cmdrStatus:"Not Sent", modStatus:"Not Sent", visaStatus:"PENDING", ticketStatus:"PENDING",
+      ticketDemandDate:"", ticketOpenDate:"", woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"",
+      isCancelled:false, isNomination:true
     });
     saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast(`📨 Nomination: ${nomName}`);
-    setTimeout(() => {
-        const nameInput = document.getElementById(`edit-name-${newId}`);
-        if(nameInput) {
-            nameInput.focus();
-            nameInput.select();
-        }
-    }, 100);
-}
+    setTimeout(() => { const inp = document.getElementById(`edit-name-${newId}`); if(inp){ inp.focus(); inp.select(); } }, 150);
+  }
 
-function resetDemo() {
+  function resetDemo() {
     if(confirm("Reset to demo data?")) {
-        coursesData = JSON.parse(JSON.stringify(defaultData));
-        courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
-        selectedCourses.clear();
-        nominationCounter = 1;
-        saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast("🔄 Reset");
+      coursesData = JSON.parse(JSON.stringify(defaultData));
+      courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
+      selectedCourses.clear(); nominationCounter = 1;
+      saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast("🔄 Reset");
     }
-}
+  }
 
-// ==================== STATS ====================
-function updateStats() {
+  // STATS
+  function updateStats() {
     const total = coursesData.length;
     const nominations = coursesData.filter(c => c.isNomination).length;
     const urgent48 = coursesData.filter(c => !c.isCancelled && getDaysRemaining(c.depDate) >= 0 && getDaysRemaining(c.depDate) <= 2).length;
@@ -1299,111 +1159,86 @@ function updateStats() {
     document.getElementById("awaitingCmdrCount").innerText = awaitingCmdr;
     document.getElementById("awaitingModCount").innerText = awaitingMod;
     document.getElementById("lastUpdated").innerText = new Date().toLocaleTimeString();
-}
+  }
 
-// ==================== PERSISTENCE ====================
-function saveToLocal() {
+  // PERSISTENCE
+  function saveToLocal() {
     try {
-        localStorage.setItem("slaf_ftc_tv", JSON.stringify(coursesData));
-        localStorage.setItem("courseHistory_tv", JSON.stringify(courseNameHistory));
-        localStorage.setItem("nominationCounter", nominationCounter);
+      localStorage.setItem("slaf_ftc_tv", JSON.stringify(coursesData));
+      localStorage.setItem("courseHistory_tv", JSON.stringify(courseNameHistory));
+      localStorage.setItem("nominationCounter", nominationCounter);
     } catch(e) {}
-}
-function loadFromLocal() {
+  }
+  function loadFromLocal() {
     try {
-        const stored = localStorage.getItem("slaf_ftc_tv");
-        if(stored) coursesData = JSON.parse(stored);
-        else coursesData = JSON.parse(JSON.stringify(defaultData));
-        const hist = localStorage.getItem("courseHistory_tv");
-        if(hist) courseNameHistory = JSON.parse(hist);
-        else courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
-        const savedCounter = localStorage.getItem("nominationCounter");
-        if(savedCounter) nominationCounter = parseInt(savedCounter);
+      const stored = localStorage.getItem("slaf_ftc_tv");
+      if(stored) coursesData = JSON.parse(stored);
+      else coursesData = JSON.parse(JSON.stringify(defaultData));
+      const hist = localStorage.getItem("courseHistory_tv");
+      if(hist) courseNameHistory = JSON.parse(hist);
+      else courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
+      const savedCounter = localStorage.getItem("nominationCounter");
+      if(savedCounter) nominationCounter = parseInt(savedCounter);
     } catch(e) { coursesData = JSON.parse(JSON.stringify(defaultData)); }
-    updateCourseDatalist();
-    populateCountryFilter();
-    renderTable();
-    saveToHistory();
-    checkAlerts();
-}
-function populateCountryFilter() {
+    updateCourseDatalist(); populateCountryFilter(); renderTable(); saveToHistory(); checkAlerts();
+  }
+  function populateCountryFilter() {
     const countries = [...new Set(coursesData.map(c => c.country))].sort();
     const sel = document.getElementById("countryFilter");
     sel.innerHTML = '<option value="all">🌍 ALL</option>';
     countries.forEach(c => { const o=document.createElement("option"); o.value=c; o.innerText=c; sel.appendChild(o); });
-}
-function updateCourseDatalist() {
+  }
+  function updateCourseDatalist() {
     const dl = document.getElementById("courseSuggestList");
     dl.innerHTML = "";
     courseNameHistory.forEach(n => { const o=document.createElement("option"); o.value=n; dl.appendChild(o); });
-}
+  }
 
-// ==================== PRESETS ====================
-function applyPreset(preset) {
+  // PRESETS
+  function applyPreset(preset) {
     document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`.filter-preset-btn[data-preset="${preset}"]`)?.classList.add('active');
-    document.getElementById("urgencyFilter").value = "all";
     document.getElementById("approvalFilter").value = "all";
     document.getElementById("modApprovalFilter").value = "all";
     document.getElementById("typeFilter").value = "all";
     document.getElementById("searchInput").value = "";
     document.getElementById("countryFilter").value = "all";
     if(preset==='nomination') document.getElementById("typeFilter").value = "Nomination";
-    else if(preset==='urgent') document.getElementById("urgencyFilter").value = "critical";
+    else if(preset==='urgent') { document.getElementById("searchInput").value = "48hr"; }
     else if(preset==='cmdr') document.getElementById("approvalFilter").value = "sent";
     else if(preset==='mod') document.getElementById("modApprovalFilter").value = "pending";
     else if(preset==='week') document.getElementById("searchInput").value = "departing:week";
     renderTable();
-}
+  }
 
-// ==================== CLOCKS ====================
-function updateClocks() {
+  // CLOCKS
+  function updateClocks() {
     const now = new Date();
-    // LST: UTC+5:30
     const lst = new Date(now.getTime() + (5.5 * 3600 * 1000));
     document.getElementById("lstClock").innerText = lst.toISOString().slice(11,19);
     document.getElementById("utcClock").innerText = now.toUTCString().slice(17,25);
-}
+  }
 
-// ==================== TOGGLE SOUND & AUTO ====================
-function toggleSound() {
-    soundEnabled = !soundEnabled;
-    document.getElementById("soundToggleBtn").innerText = soundEnabled ? "🔊" : "🔇";
-    showToast(soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF");
-}
-function toggleAutoRefresh() {
-    if(autoRefreshInterval) {
-        clearInterval(autoRefreshInterval);
-        autoRefreshInterval = null;
-        document.getElementById('autoRefreshStatus').textContent = 'OFF';
-        document.getElementById('autoRefreshBtn').textContent = '⏱️';
-        showToast('🔄 Auto OFF');
-    } else {
-        autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000);
-        document.getElementById('autoRefreshStatus').textContent = 'ON';
-        document.getElementById('autoRefreshBtn').textContent = '⏱️';
-        showToast('🔄 Auto ON (5 min)');
-    }
-}
+  function toggleSound() { soundEnabled = !soundEnabled; document.getElementById("soundToggleBtn").innerText = soundEnabled ? "🔊" : "🔇"; showToast(soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF"); }
+  function toggleAutoRefresh() {
+    if(autoRefreshInterval) { clearInterval(autoRefreshInterval); autoRefreshInterval = null; document.getElementById('autoRefreshStatus').textContent = 'OFF'; document.getElementById('autoRefreshBtn').textContent = '⏱️'; showToast('🔄 Auto OFF'); }
+    else { autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000); document.getElementById('autoRefreshStatus').textContent = 'ON'; document.getElementById('autoRefreshBtn').textContent = '⏱️'; showToast('🔄 Auto ON (5 min)'); }
+  }
+  function toggleFullscreen() { if(!document.fullscreenElement) { document.documentElement.requestFullscreen?.().catch(() => {}); } else { document.exitFullscreen?.().catch(() => {}); } }
+  function toggleStats() {
+    statsCollapsed = !statsCollapsed;
+    document.getElementById('statsRow').classList.toggle('collapsed', statsCollapsed);
+    document.getElementById('statsToggleBtn').innerText = statsCollapsed ? '▸ STATS' : '▾ STATS';
+  }
 
-// ==================== FULLSCREEN ====================
-function toggleFullscreen() {
-    if(!document.fullscreenElement) {
-        document.documentElement.requestFullscreen?.().catch(() => {});
-    } else {
-        document.exitFullscreen?.().catch(() => {});
-    }
-}
-
-// ==================== INIT ====================
-document.addEventListener("DOMContentLoaded", function() {
+  // INIT
+  document.addEventListener("DOMContentLoaded", function() {
     loadTheme();
     loadFromLocal();
     updateClocks();
     setInterval(updateClocks, 1000);
     autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000);
 
-    // event listeners
     document.getElementById("addNewRowBtn").addEventListener("click", addNewCourse);
     document.getElementById("addNominationBtn").addEventListener("click", addNomination);
     document.getElementById("resetDemoBtn").addEventListener("click", resetDemo);
@@ -1414,78 +1249,64 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("redoBtn").addEventListener("click", redo);
     document.getElementById("refreshBtn").addEventListener("click", () => { renderTable(); checkAlerts(); showToast("🔄 Refreshed"); });
     document.getElementById("autoRefreshBtn").addEventListener("click", toggleAutoRefresh);
+    document.getElementById("statsToggleBtn").addEventListener("click", toggleStats);
 
     document.getElementById("clearFiltersBtn").addEventListener("click", () => {
-        document.getElementById("countryFilter").value = "all";
-        document.getElementById("urgencyFilter").value = "all";
-        document.getElementById("typeFilter").value = "all";
-        document.getElementById("approvalFilter").value = "all";
-        document.getElementById("modApprovalFilter").value = "all";
-        document.getElementById("searchInput").value = "";
-        document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
-        renderTable();
-        showToast("✖️ Filters cleared");
+      document.getElementById("countryFilter").value = "all";
+      document.getElementById("typeFilter").value = "all";
+      document.getElementById("approvalFilter").value = "all";
+      document.getElementById("modApprovalFilter").value = "all";
+      document.getElementById("searchInput").value = "";
+      document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
+      renderTable(); showToast("✖️ Filters cleared");
     });
 
     document.getElementById("countryFilter").addEventListener("change", renderTable);
-    document.getElementById("urgencyFilter").addEventListener("change", renderTable);
     document.getElementById("typeFilter").addEventListener("change", renderTable);
     document.getElementById("approvalFilter").addEventListener("change", renderTable);
     document.getElementById("modApprovalFilter").addEventListener("change", renderTable);
     document.getElementById("searchInput").addEventListener("input", renderTable);
 
     document.querySelectorAll('.filter-preset-btn').forEach(btn => {
-        btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+      btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
     });
 
     document.querySelectorAll('.stat-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const filter = this.dataset.filter;
-            document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById("searchInput").value = "";
-            if(filter==="nomination") document.getElementById("typeFilter").value = "Nomination";
-            else if(filter==="critical") document.getElementById("urgencyFilter").value = "critical";
-            else if(filter==="cmdr") document.getElementById("approvalFilter").value = "sent";
-            else if(filter==="mod") document.getElementById("modApprovalFilter").value = "pending";
-            else if(filter==="48hr") { document.getElementById("urgencyFilter").value = "critical"; document.getElementById("searchInput").value = "48hr"; }
-            else { document.getElementById("urgencyFilter").value = "all"; document.getElementById("approvalFilter").value = "all"; document.getElementById("modApprovalFilter").value = "all"; document.getElementById("typeFilter").value = "all"; document.getElementById("countryFilter").value = "all"; }
-            renderTable();
-            playBeep(500,0.08);
-        });
+      card.addEventListener('click', function() {
+        const filter = this.dataset.filter;
+        document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById("searchInput").value = "";
+        if(filter==="nomination") document.getElementById("typeFilter").value = "Nomination";
+        else if(filter==="critical") document.getElementById("searchInput").value = "48hr";
+        else if(filter==="cmdr") document.getElementById("approvalFilter").value = "sent";
+        else if(filter==="mod") document.getElementById("modApprovalFilter").value = "pending";
+        else if(filter==="48hr") { document.getElementById("searchInput").value = "48hr"; }
+        else { document.getElementById("approvalFilter").value = "all"; document.getElementById("modApprovalFilter").value = "all"; document.getElementById("typeFilter").value = "all"; document.getElementById("countryFilter").value = "all"; }
+        renderTable();
+        playBeep(500,0.08);
+      });
     });
 
     document.getElementById("selectAllCheckbox").addEventListener("change", toggleAllSelection);
 
     document.addEventListener("keydown", (e) => {
-        if(e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
-        if(e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
-        if(e.ctrlKey && e.key === 'n') { e.preventDefault(); addNewCourse(); }
-        if(e.key === 'Escape') { if(editingRowId) { editingRowId=null; renderTable(); } if(document.fullscreenElement) document.exitFullscreen?.(); }
+      if(e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
+      if(e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+      if(e.ctrlKey && e.key === 'n') { e.preventDefault(); addNewCourse(); }
+      if(e.key === 'Escape') { if(editingRowId) { editingRowId=null; renderTable(); } if(document.fullscreenElement) document.exitFullscreen?.(); }
     });
 
-    // expose for inline onclick
-    window.toggleSelection = toggleSelection;
-    window.clearSelection = clearSelection;
-    window.bulkUpdateStatus = bulkUpdateStatus;
-    window.bulkDeleteSelected = bulkDeleteSelected;
-    window.saveEdit = saveEdit;
-    window.renderTable = renderTable;
-    window.checkAlerts = checkAlerts;
-    window.addNewCourse = addNewCourse;
-    window.addNomination = addNomination;
-    window.undo = undo;
-    window.redo = redo;
-    window.resetDemo = resetDemo;
-    window.toggleSound = toggleSound;
-    window.toggleFullscreen = toggleFullscreen;
-    window.toggleAutoRefresh = toggleAutoRefresh;
-    window.cycleTheme = cycleTheme;
-    window.playBeep = playBeep;
-    window.showToast = showToast;
+    window.toggleSelection = toggleSelection; window.clearSelection = clearSelection;
+    window.bulkUpdateStatus = bulkUpdateStatus; window.bulkDeleteSelected = bulkDeleteSelected;
+    window.saveEdit = saveEdit; window.renderTable = renderTable; window.checkAlerts = checkAlerts;
+    window.addNewCourse = addNewCourse; window.addNomination = addNomination; window.undo = undo; window.redo = redo;
+    window.resetDemo = resetDemo; window.toggleSound = toggleSound; window.toggleFullscreen = toggleFullscreen;
+    window.toggleAutoRefresh = toggleAutoRefresh; window.cycleTheme = cycleTheme; window.toggleStats = toggleStats;
+    window.playBeep = playBeep; window.showToast = showToast;
 
     setTimeout(checkAlerts, 1000);
     setTimeout(checkAlerts, 3000);
-});
+  });
 </script>
 </body>
 </html>
