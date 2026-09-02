@@ -108,7 +108,58 @@
       overflow: hidden;
       padding: 8px 12px;
       transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      height: auto;
     }
+    /* FULLSCREEN MODE – hide everything except table */
+    body.fullscreen-mode .header,
+    body.fullscreen-mode .stats-row,
+    body.fullscreen-mode #alertContainer,
+    body.fullscreen-mode .filter-bar,
+    body.fullscreen-mode #bulkActions,
+    body.fullscreen-mode .footer-info,
+    body.fullscreen-mode .stat-toggle {
+      display: none !important;
+    }
+    body.fullscreen-mode .dashboard {
+      padding: 4px 6px;
+      border-radius: 12px;
+      border-width: 1px;
+    }
+    body.fullscreen-mode .table-wrapper {
+      max-height: 92vh !important;
+      border-radius: 8px;
+      margin: 0;
+    }
+    body.fullscreen-mode .editable-table {
+      font-size: 1.0rem;
+      min-width: unset;
+    }
+    body.fullscreen-mode .editable-table th {
+      padding: 6px 2px;
+      font-size: 0.7rem;
+    }
+    body.fullscreen-mode .editable-table td {
+      padding: 4px 2px;
+      font-size: 0.85rem;
+    }
+    body.fullscreen-mode .editable-table .course-name-cell {
+      font-size: 1.0rem;
+    }
+    body.fullscreen-mode .col-actions,
+    body.fullscreen-mode .col-checkbox {
+      display: none;
+    }
+    body.fullscreen-mode .editable-table .type-badge {
+      font-size: 0.7rem;
+      padding: 2px 10px;
+    }
+    body.fullscreen-mode .editable-table .status-badge {
+      font-size: 0.7rem;
+      padding: 2px 10px;
+    }
+
     /* HEADER */
     .header {
       display: flex;
@@ -331,10 +382,11 @@
       margin: 6px 0;
       overflow-x: auto;
       overflow-y: auto;
-      max-height: 62vh;
+      max-height: 58vh;
       border-radius: 18px;
       border: 2px solid var(--border-color);
       background: var(--bg-primary);
+      transition: max-height 0.3s;
     }
     .editable-table {
       width: 100%;
@@ -420,8 +472,6 @@
       0%, 100% { background: #f97316; color: white; }
       50% { background: #c2410c; color: #f1f5f9; }
     }
-
-    .urgency-chip { display: none; } /* removed urgency column */
 
     .row-nomination td { background: rgba(236,72,153,0.2); border-left: 6px solid #ec4899; }
     .row-critical td { background: rgba(239,68,68,0.2); border-left: 6px solid #dc2626; }
@@ -607,7 +657,6 @@
   <div class="filter-bar">
     <div class="filter-group">
       <select id="countryFilter"><option value="all">🌍 ALL</option></select>
-      <select id="urgencyFilter" style="display:none;"> <!-- hidden, kept for compatibility --></select>
       <select id="typeFilter"><option value="all">📋 ALL</option><option value="Course">📘</option><option value="Visit">📌</option><option value="Nomination">📨</option></select>
       <select id="approvalFilter"><option value="all">📌 CMDR</option><option value="sent">⏳ SENT</option><option value="received">✅ REC</option></select>
       <select id="modApprovalFilter"><option value="all">🛡️ MOD</option><option value="sent">⏳ SENT</option><option value="received">✅ REC</option><option value="pending">⏳ PEND</option></select>
@@ -674,6 +723,7 @@
   let autoRefreshInterval = null;
   let nominationCounter = 1;
   let statsCollapsed = false;
+  let isFullscreen = false;
 
   const defaultData = [
     { id:1, type:"Course", courseName:"Instructor Pilot Program", officersAirmen:"1 Officer", country:"China", depDate:"2026-01-01", returnDate:"2026-12-31", deadlineDate:"", cmdrStatus:"Received", modStatus:"Received", visaStatus:"VISA COLLECTED", ticketStatus:"TICKET OK", ticketDemandDate:"", ticketOpenDate:"2025-12-01", woStatus:"SENT", woExpectedDate:"", woActualDate:"2025-12-15", isCancelled:false, isNomination:false },
@@ -754,6 +804,7 @@
     document.body.classList.add(themes[currentThemeIndex]);
     localStorage.setItem('slaf_ftc_theme', themes[currentThemeIndex]);
     showToast(`🎨 Theme: ${themes[currentThemeIndex].replace('theme-', '').toUpperCase()}`);
+    playBeep(800, 0.1, 'sine');
   }
   function loadTheme() {
     const saved = localStorage.getItem('slaf_ftc_theme');
@@ -778,6 +829,8 @@
       gain.gain.setValueAtTime(0.2, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+dur);
       osc.start(ctx.currentTime); osc.stop(ctx.currentTime+dur);
+      // haptic for mobile
+      if(navigator.vibrate) navigator.vibrate(20);
     } catch(e) {}
   }
 
@@ -789,8 +842,8 @@
     if(historyStack.length > 50) historyStack.shift();
     updateUndoButtons();
   }
-  function undo() { if(historyIndex > 0) { historyIndex--; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↩️ Undo"); } }
-  function redo() { if(historyIndex < historyStack.length-1) { historyIndex++; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↪️ Redo"); } }
+  function undo() { if(historyIndex > 0) { historyIndex--; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↩️ Undo"); playBeep(400,0.1); } }
+  function redo() { if(historyIndex < historyStack.length-1) { historyIndex++; coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); saveToLocal(); renderTable(); checkAlerts(); showToast("↪️ Redo"); playBeep(500,0.1); } }
   function updateUndoButtons() {
     document.getElementById("undoBtn").style.opacity = historyIndex>0 ? 1 : 0.4;
     document.getElementById("redoBtn").style.opacity = historyIndex<historyStack.length-1 ? 1 : 0.4;
@@ -816,7 +869,7 @@
     const unique = []; const seen = new Set();
     alerts.forEach(a => { if(!seen.has(a.msg)) { seen.add(a.msg); unique.push(a); } });
     container.innerHTML = unique.slice(0,5).map(a => `<div class="alert-item-${a.type.toLowerCase()}">${a.msg}</div>`).join('');
-    if(alerts.some(a => a.type==='EXTREME')) playBeep(1000,0.15);
+    if(alerts.some(a => a.type==='EXTREME')) { playBeep(1000,0.15); if(navigator.vibrate) navigator.vibrate([30,50,30]); }
   }
 
   // BULK
@@ -849,6 +902,7 @@
       if(c) { c[field]=status; updated++; }
     });
     saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`✅ Updated ${updated}`); clearSelection();
+    playBeep(700,0.1);
   }
   function bulkDeleteSelected() {
     if(selectedCourses.size===0) { showToast('⚠️ Select courses', true); return; }
@@ -857,6 +911,7 @@
     coursesData = coursesData.filter(c => !ids.includes(c.id));
     selectedCourses.clear();
     saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`🗑️ Deleted ${ids.length}`);
+    playBeep(200,0.2,'square');
   }
 
   // RENDER
@@ -1010,7 +1065,7 @@
       } else { modTd.innerHTML = getStatusHtml(course.modStatus); }
       tr.appendChild(modTd);
 
-      // VISA – for nominations, hide? but we keep simple
+      // VISA
       const visaTd = document.createElement("td"); visaTd.className = "col-visa";
       if(isEditing) {
         const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-visa-${course.id}`;
@@ -1019,7 +1074,7 @@
       } else { visaTd.innerHTML = getVisaStatusHtml(course.visaStatus); }
       tr.appendChild(visaTd);
 
-      // TICKET – with blink for demand
+      // TICKET
       const ticketTd = document.createElement("td"); ticketTd.className = "col-ticket";
       if(isEditing) {
         ticketTd.innerHTML = `
@@ -1038,7 +1093,7 @@
       }
       tr.appendChild(ticketTd);
 
-      // WO – SENT blinks green, REC removed (only SENT / NOT SENT)
+      // WO
       const woCell = document.createElement("td"); woCell.className = "col-wo";
       if(isEditing) {
         woCell.innerHTML = `
@@ -1073,6 +1128,22 @@
       tr.appendChild(actionTd);
       tbody.appendChild(tr);
     });
+
+    // If in fullscreen, auto-fit rows
+    if(isFullscreen) {
+      const wrapper = document.querySelector('.table-wrapper');
+      const rows = tbody.querySelectorAll('tr');
+      const rowCount = rows.length;
+      if(rowCount > 0) {
+        const availHeight = window.innerHeight - 20; // margin
+        const headerHeight = document.querySelector('.editable-table thead')?.offsetHeight || 40;
+        const rowHeight = Math.max(28, Math.min(40, (availHeight - headerHeight - 10) / rowCount));
+        rows.forEach(r => {
+          r.style.height = rowHeight + 'px';
+          r.style.lineHeight = rowHeight + 'px';
+        });
+      }
+    }
   }
 
   // SAVE EDIT
@@ -1103,6 +1174,7 @@
     if(document.getElementById(`edit-woactual-${id}`)) c.woActualDate = document.getElementById(`edit-woactual-${id}`).value;
 
     saveToHistory(); saveToLocal(); editingRowId = null; renderTable(); checkAlerts(); showToast(`✅ Updated`);
+    playBeep(800,0.08);
   }
 
   // ADD
@@ -1116,6 +1188,7 @@
       woStatus:"NOT SENT", woExpectedDate:"", woActualDate:"", isCancelled:false, isNomination:false
     });
     saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast("➕ New course");
+    playBeep(700,0.1);
     setTimeout(() => { const inp = document.getElementById(`edit-name-${newId}`); if(inp){ inp.focus(); inp.select(); } }, 150);
   }
   function addNomination() {
@@ -1132,6 +1205,7 @@
       isCancelled:false, isNomination:true
     });
     saveToHistory(); saveToLocal(); editingRowId = newId; renderTable(); checkAlerts(); showToast(`📨 Nomination: ${nomName}`);
+    playBeep(900,0.15);
     setTimeout(() => { const inp = document.getElementById(`edit-name-${newId}`); if(inp){ inp.focus(); inp.select(); } }, 150);
   }
 
@@ -1141,6 +1215,7 @@
       courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
       selectedCourses.clear(); nominationCounter = 1;
       saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast("🔄 Reset");
+      playBeep(500,0.15);
     }
   }
 
@@ -1209,6 +1284,7 @@
     else if(preset==='mod') document.getElementById("modApprovalFilter").value = "pending";
     else if(preset==='week') document.getElementById("searchInput").value = "departing:week";
     renderTable();
+    playBeep(600,0.08);
   }
 
   // CLOCKS
@@ -1223,12 +1299,30 @@
   function toggleAutoRefresh() {
     if(autoRefreshInterval) { clearInterval(autoRefreshInterval); autoRefreshInterval = null; document.getElementById('autoRefreshStatus').textContent = 'OFF'; document.getElementById('autoRefreshBtn').textContent = '⏱️'; showToast('🔄 Auto OFF'); }
     else { autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000); document.getElementById('autoRefreshStatus').textContent = 'ON'; document.getElementById('autoRefreshBtn').textContent = '⏱️'; showToast('🔄 Auto ON (5 min)'); }
+    playBeep(500,0.1);
   }
-  function toggleFullscreen() { if(!document.fullscreenElement) { document.documentElement.requestFullscreen?.().catch(() => {}); } else { document.exitFullscreen?.().catch(() => {}); } }
+  function toggleFullscreen() {
+    if(!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+      document.body.classList.add('fullscreen-mode');
+      isFullscreen = true;
+      showToast('⛶ Fullscreen mode');
+      playBeep(800,0.12);
+      setTimeout(() => renderTable(), 200);
+    } else {
+      document.exitFullscreen?.().catch(() => {});
+      document.body.classList.remove('fullscreen-mode');
+      isFullscreen = false;
+      showToast('⛶ Exited fullscreen');
+      playBeep(400,0.1);
+      setTimeout(() => renderTable(), 200);
+    }
+  }
   function toggleStats() {
     statsCollapsed = !statsCollapsed;
     document.getElementById('statsRow').classList.toggle('collapsed', statsCollapsed);
     document.getElementById('statsToggleBtn').innerText = statsCollapsed ? '▸ STATS' : '▾ STATS';
+    playBeep(500,0.06);
   }
 
   // INIT
@@ -1247,7 +1341,7 @@
     document.getElementById("themeToggleBtn").addEventListener("click", cycleTheme);
     document.getElementById("undoBtn").addEventListener("click", undo);
     document.getElementById("redoBtn").addEventListener("click", redo);
-    document.getElementById("refreshBtn").addEventListener("click", () => { renderTable(); checkAlerts(); showToast("🔄 Refreshed"); });
+    document.getElementById("refreshBtn").addEventListener("click", () => { renderTable(); checkAlerts(); showToast("🔄 Refreshed"); playBeep(600,0.08); });
     document.getElementById("autoRefreshBtn").addEventListener("click", toggleAutoRefresh);
     document.getElementById("statsToggleBtn").addEventListener("click", toggleStats);
 
@@ -1259,6 +1353,7 @@
       document.getElementById("searchInput").value = "";
       document.querySelectorAll('.filter-preset-btn').forEach(b => b.classList.remove('active'));
       renderTable(); showToast("✖️ Filters cleared");
+      playBeep(400,0.06);
     });
 
     document.getElementById("countryFilter").addEventListener("change", renderTable);
@@ -1293,7 +1388,17 @@
       if(e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
       if(e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
       if(e.ctrlKey && e.key === 'n') { e.preventDefault(); addNewCourse(); }
-      if(e.key === 'Escape') { if(editingRowId) { editingRowId=null; renderTable(); } if(document.fullscreenElement) document.exitFullscreen?.(); }
+      if(e.key === 'Escape') { if(editingRowId) { editingRowId=null; renderTable(); } }
+      if(e.key === 'f' && e.ctrlKey) { e.preventDefault(); toggleFullscreen(); }
+    });
+
+    // Listen for fullscreen change to keep state
+    document.addEventListener('fullscreenchange', () => {
+      if(!document.fullscreenElement) {
+        document.body.classList.remove('fullscreen-mode');
+        isFullscreen = false;
+        renderTable();
+      }
     });
 
     window.toggleSelection = toggleSelection; window.clearSelection = clearSelection;
