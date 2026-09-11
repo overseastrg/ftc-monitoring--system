@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>SLAF FTC | TV Dashboard v12</title>
+  <title>SLAF FTC | TV Dashboard v12.1</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,-apple-system,sans-serif; }
     body { background:#0a0e1a; color:#f1f5f9; padding:8px 12px; font-size:18px; line-height:1.4; transition:background .3s,color .3s; }
@@ -68,11 +68,11 @@
     .editable-table td { padding:8px 4px; text-align:center; border-bottom:2px solid rgba(59,130,246,0.08); vertical-align:middle; font-weight:600; }
     .editable-table tr:hover { background:rgba(59,130,246,0.12); }
     .editable-table .course-name-cell { font-weight:900; font-size:1.15rem; }
-    .type-badge { display:inline-block; padding:6px 18px; border-radius:40px; font-weight:900; font-size:.9rem; white-space:nowrap; }
+    .type-badge { display:inline-block; padding:4px 12px; border-radius:40px; font-weight:900; font-size:.75rem; white-space:nowrap; }
     .type-course { background:#3b82f6; color:#fff; }
     .type-visit { background:#8b5cf6; color:#fff; }
     .type-nomination { background:#ec4899; color:#fff; animation:pulseNom 1.8s infinite; }
-    .status-badge { display:inline-block; padding:6px 14px; border-radius:40px; font-weight:800; font-size:.85rem; white-space:nowrap; }
+    .status-badge { display:inline-block; padding:4px 10px; border-radius:40px; font-weight:800; font-size:.75rem; white-space:nowrap; }
     .status-notsent { background:#475569; color:#e2e8f0; }
     .status-sent { background:#22c55e; color:#0f172a; }
     .status-received { background:#10b981; color:#fff; }
@@ -127,46 +127,54 @@
 
     /* ===== LOGIN ===== */
     #loginOverlay { position:fixed; inset:0; background:rgba(5,12,24,0.96); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; }
-    .login-box { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:32px; padding:36px 40px; max-width:520px; width:100%; box-shadow:var(--shadow); text-align:center; max-height:90vh; overflow-y:auto; }
-    .login-box h2 { font-size:2rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:6px; }
-    .login-box p { color:var(--text-secondary); font-weight:600; margin-bottom:20px; font-size:.9rem; letter-spacing:1px; }
-    .login-box input { width:100%; padding:14px 18px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.1rem; font-weight:700; margin-bottom:14px; outline:none; }
+    .login-box { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:32px; padding:30px 34px; max-width:480px; width:100%; box-shadow:var(--shadow); text-align:center; max-height:92vh; overflow-y:auto; }
+    .login-box h2 { font-size:1.8rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:6px; }
+    .login-box p { color:var(--text-secondary); font-weight:600; margin-bottom:16px; font-size:.85rem; letter-spacing:1px; }
+    .login-box input { width:100%; padding:13px 16px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.05rem; font-weight:700; margin-bottom:12px; outline:none; }
     .login-box input:focus { border-color:var(--badge-urgent); box-shadow:0 0 12px rgba(249,115,22,0.4); }
-    .login-box button { width:100%; padding:14px; border-radius:60px; border:none; background:var(--accent-gradient); color:#fff; font-weight:900; font-size:1.2rem; cursor:pointer; transition:all .2s; margin-top:6px; }
+    .login-box button { width:100%; padding:13px; border-radius:60px; border:none; background:var(--accent-gradient); color:#fff; font-weight:900; font-size:1.15rem; cursor:pointer; transition:all .2s; margin-top:4px; }
     .login-box button:hover { transform:scale(1.02); box-shadow:0 6px 24px rgba(26,107,138,0.5); }
-    .login-error { color:#f87171; font-weight:800; margin-top:10px; min-height:24px; }
-    .login-hint { margin-top:16px; font-size:.75rem; color:var(--text-secondary); line-height:1.8; text-align:left; background:var(--bg-tertiary); padding:12px 16px; border-radius:14px; border:1px solid var(--border-color); }
+    .login-error { color:#f87171; font-weight:800; margin-top:8px; min-height:22px; font-size:.9rem; }
+    .login-hint { margin-top:14px; font-size:.72rem; color:var(--text-secondary); line-height:1.7; text-align:left; background:var(--bg-tertiary); padding:10px 14px; border-radius:14px; border:1px solid var(--border-color); }
     .login-hint b { color:var(--border-color); }
     .user-badge { font-size:.75rem; background:var(--bg-tertiary); border:1px solid var(--border-color); padding:4px 12px; border-radius:30px; color:var(--text-secondary); font-weight:700; }
     .user-badge span { color:var(--border-color); font-weight:900; }
 
+    /* recovery section */
+    .recovery-toggle { font-size:.75rem; color:var(--border-color); cursor:pointer; font-weight:800; margin-top:8px; text-decoration:underline; }
+    .recovery-box { display:none; margin-top:10px; padding:10px 12px; background:var(--bg-tertiary); border-radius:14px; border:1px solid var(--border-color); text-align:left; }
+    .recovery-box.show { display:block; }
+    .recovery-box p { font-size:.75rem; color:var(--text-secondary); margin-bottom:6px; font-weight:600; }
+    .recovery-box input { margin-bottom:6px; padding:10px 14px; font-size:.9rem; }
+    .recovery-box button { padding:10px; font-size:.9rem; margin-top:2px; }
+
     /* audit tooltip */
-    .audit-tip { position:relative; cursor:help; border-bottom:1px dotted var(--text-secondary); }
-    .audit-tip .audit-text { visibility:hidden; width:220px; background:var(--bg-secondary); color:var(--text-primary); text-align:left; border-radius:12px; padding:10px 14px; position:absolute; z-index:100; bottom:130%; left:50%; transform:translateX(-50%); border:2px solid var(--border-color); box-shadow:0 8px 24px rgba(0,0,0,0.5); font-size:.75rem; font-weight:600; line-height:1.5; opacity:0; transition:opacity .2s; pointer-events:none; }
+    .audit-tip { position:relative; cursor:help; border-bottom:1px dotted var(--text-secondary); font-size:.75rem; }
+    .audit-tip .audit-text { visibility:hidden; width:200px; background:var(--bg-secondary); color:var(--text-primary); text-align:left; border-radius:12px; padding:8px 12px; position:absolute; z-index:100; bottom:130%; left:50%; transform:translateX(-50%); border:2px solid var(--border-color); box-shadow:0 8px 24px rgba(0,0,0,0.5); font-size:.7rem; font-weight:600; line-height:1.4; opacity:0; transition:opacity .2s; pointer-events:none; }
     .audit-tip:hover .audit-text { visibility:visible; opacity:1; }
 
-    /* subject icons */
-    .subject-icon { display:inline-block; width:14px; height:14px; margin-right:4px; vertical-align:middle; border:2px solid currentColor; }
-    .icon-cmdr { border-radius:50%; border-color:#3b82f6; background:transparent; }
-    .icon-mod { border-radius:2px; border-color:#8b5cf6; background:transparent; transform:rotate(45deg); width:12px; height:12px; }
-    .icon-payment { border-radius:50%; border-color:#10b981; background:transparent; border-style:dashed; }
-    .icon-visa { border-radius:0; border-color:#f59e0b; background:transparent; clip-path:polygon(50% 0%, 100% 100%, 0% 100%); width:16px; height:14px; border:none; background:currentColor; color:#f59e0b; }
-    .icon-ticket { border-radius:50%; border-color:#ef4444; background:transparent; border-style:dotted; }
-    .icon-wo { border-radius:0; border-color:#ec4899; background:transparent; clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); width:14px; height:14px; border:none; background:currentColor; color:#ec4899; }
+    /* subject icons — compact, high-contrast, distinct per column */
+    .subject-icon { display:inline-block; width:12px; height:12px; margin-right:3px; vertical-align:middle; border:2px solid currentColor; }
+    .icon-payment { border-radius:50%; border-color:#10b981; background:transparent; border-style:dashed; box-shadow:0 0 4px #10b981; }
+    .icon-cmdr { border-radius:50%; border-color:#3b82f6; background:transparent; box-shadow:0 0 4px #3b82f6; }
+    .icon-mod { border-radius:2px; border-color:#8b5cf6; background:transparent; transform:rotate(45deg); width:10px; height:10px; box-shadow:0 0 4px #8b5cf6; }
+    .icon-visa { border-radius:0; border-color:#f59e0b; background:transparent; clip-path:polygon(50% 0%, 100% 100%, 0% 100%); width:14px; height:12px; border:none; background:currentColor; color:#f59e0b; filter:drop-shadow(0 0 3px #f59e0b); }
+    .icon-ticket { border-radius:50%; border-color:#ef4444; background:transparent; border-style:dotted; box-shadow:0 0 4px #ef4444; }
+    .icon-wo { border-radius:0; border-color:#ec4899; background:transparent; clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); width:12px; height:12px; border:none; background:currentColor; color:#ec4899; filter:drop-shadow(0 0 3px #ec4899); }
     .clerk-col { transition:background .2s; }
     .clerk-col:hover { background:rgba(255,255,255,0.06); }
 
     /* ===== PASSWORD CHANGE MODAL ===== */
     #pwdModal { position:fixed; inset:0; background:rgba(5,12,24,0.92); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:11000; padding:20px; }
     #pwdModal.show { display:flex; }
-    .pwd-box { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:28px; padding:30px 34px; max-width:460px; width:100%; box-shadow:var(--shadow); text-align:center; }
-    .pwd-box h3 { font-size:1.5rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:18px; }
-    .pwd-box input { width:100%; padding:13px 16px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1rem; font-weight:700; margin-bottom:12px; outline:none; }
+    .pwd-box { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:28px; padding:26px 30px; max-width:440px; width:100%; box-shadow:var(--shadow); text-align:center; }
+    .pwd-box h3 { font-size:1.4rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:16px; }
+    .pwd-box input { width:100%; padding:12px 16px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:.95rem; font-weight:700; margin-bottom:10px; outline:none; }
     .pwd-box input:focus { border-color:var(--badge-urgent); box-shadow:0 0 12px rgba(249,115,22,0.4); }
-    .pwd-box button { width:100%; padding:13px; border-radius:60px; border:none; background:var(--accent-gradient); color:#fff; font-weight:900; font-size:1.05rem; cursor:pointer; margin-top:6px; transition:all .2s; }
+    .pwd-box button { width:100%; padding:12px; border-radius:60px; border:none; background:var(--accent-gradient); color:#fff; font-weight:900; font-size:1rem; cursor:pointer; margin-top:4px; transition:all .2s; }
     .pwd-box button:hover { transform:scale(1.02); }
     .pwd-box .btn-cancel { background:var(--bg-tertiary); border:2px solid var(--border-color); color:var(--text-primary); }
-    .pwd-msg { min-height:22px; font-weight:800; margin-top:8px; font-size:.85rem; }
+    .pwd-msg { min-height:20px; font-weight:800; margin-top:6px; font-size:.8rem; }
     .pwd-msg.ok { color:#22c55e; }
     .pwd-msg.err { color:#f87171; }
   </style>
@@ -176,23 +184,25 @@
 <!-- LOGIN OVERLAY -->
 <div id="loginOverlay">
   <div class="login-box">
-    <div style="font-size:3rem;margin-bottom:6px;">🔐</div>
+    <div style="font-size:2.6rem;margin-bottom:4px;">🔐</div>
     <h2>FTC ACCESS</h2>
     <p>Authorised Personnel Only</p>
-    <input type="text" id="loginUser" placeholder="Appointment / Username" autocomplete="off">
+    <input type="text" id="loginUser" placeholder="Service Number (e.g. 02802)" autocomplete="off" inputmode="numeric">
     <input type="password" id="loginPass" placeholder="Password" autocomplete="off">
     <button id="loginBtn">🚪 SIGN IN</button>
     <div class="login-error" id="loginError"></div>
+    <div class="recovery-toggle" id="recoveryToggle">🔁 Forgot password?</div>
+    <div class="recovery-box" id="recoveryBox">
+      <p>Enter your service number and the last 4 digits of your NIC / registered phone to reset to default.</p>
+      <input type="text" id="recoveryService" placeholder="Service Number" inputmode="numeric">
+      <input type="text" id="recoverySecret" placeholder="Last 4 digits of NIC or phone" inputmode="numeric">
+      <button id="recoveryBtn" style="background:linear-gradient(145deg,#f97316,#ea580c);">🔄 Reset to default password</button>
+      <div class="login-error" id="recoveryMsg" style="min-height:18px;margin-top:6px;"></div>
+    </div>
     <div class="login-hint">
-      <b>Authorised Appointments:</b><br>
-      • SO TRG I<br>
-      • ASO TRG I<br>
-      • SNCO IC PAYMENT<br>
-      • SNCO IC B/PROCEEDING<br>
-      • SNCO IC VISA/PASSPORT<br>
-      • JNCO IC PAYMENT<br>
-      • SNCO IC AIR TICKET<br>
-      <span style="opacity:.7;">Default password: <b>password</b></span>
+      <b>Authorised Service Numbers:</b><br>
+      02802, 03650, 29816, 31834, 35465, 39116, 41336, 38922, 33557, A/W 4702, A/W 4208<br>
+      <span style="opacity:.7;">Default password: <b>password</b> · Contact SO TRG I for account issues.</span>
     </div>
   </div>
 </div>
@@ -212,11 +222,11 @@
 
 <div class="dashboard" id="mainDashboard" style="display:none;">
   <div class="header">
-    <div class="title-section"><span class="title-logo">✈️</span><div class="title-text"><h1>FOREIGN TRAINING CELL</h1><div class="subtitle">SLAF · <span>FTC v12</span></div></div></div>
+    <div class="title-section"><span class="title-logo">✈️</span><div class="title-text"><h1>FOREIGN TRAINING CELL</h1><div class="subtitle">SLAF · <span>FTC v12.1</span></div></div></div>
     <div class="clock-container"><div class="clock"><div class="clock-label">🇱🇰 LST</div><div class="clock-time" id="lstClock">--:--:--</div></div><div class="clock-divider"></div><div class="clock"><div class="clock-label">🌍 UTC</div><div class="clock-time" id="utcClock">--:--:--</div></div></div>
     <div class="toolbar-actions">
       <span class="user-badge">👤 <span id="currentUserDisplay">--</span></span>
-      <button class="btn-outline" id="changePwdBtn" title="Change Password" style="font-size:.85rem;">🔑 PWD</button>
+      <button class="btn-outline" id="changePwdBtn" title="Change Password" style="font-size:.8rem;">🔑 PWD</button>
       <button class="btn-primary" id="addNewRowBtn">➕ NEW</button>
       <button class="btn-nomination" id="addNominationBtn">📨 NOM</button>
       <button class="print-btn" id="printBtn" title="Print">🖨️</button>
@@ -229,7 +239,7 @@
     </div>
   </div>
   <div class="shortcuts-hint"><span>⌨️ <kbd>Ctrl+N</kbd> New</span><span><kbd>Ctrl+Z</kbd> Undo</span><span><kbd>Ctrl+Y</kbd> Redo</span><span><kbd>Ctrl+F</kbd> Fullscreen</span><span><kbd>Esc</kbd> Cancel Edit</span></div>
-  <div id="alertContainer"><div style="padding:6px;color:var(--text-secondary);font-weight:800;font-size:1.1rem;">✅ All courses on track</div></div>
+  <div id="alertContainer"><div style="padding:6px;color:var(--text-secondary);font-weight:800;font-size:1rem;">✅ All courses on track</div></div>
   <div style="display:flex; justify-content:flex-end; margin:2px 0;"><button class="stat-toggle" id="statsToggleBtn">▾ STATS</button></div>
   <div class="stats-row" id="statsRow">
     <div class="stat-card" data-filter="all"><div class="stat-number" id="totalCoursesCount">0</div><div class="stat-label">TOTAL</div></div>
@@ -239,7 +249,7 @@
     <div class="stat-card" data-filter="cmdr"><div class="stat-number" id="awaitingCmdrCount">0</div><div class="stat-label">CMDR</div></div>
     <div class="stat-card" data-filter="mod"><div class="stat-number" id="awaitingModCount">0</div><div class="stat-label">MOD</div></div>
   </div>
-  <div id="bulkActions"><span style="font-weight:900;color:var(--border-color);font-size:1rem;">📋 Bulk:</span><button class="btn-outline" onclick="bulkUpdateStatus('cmdrStatus','Received')">✅ CMDR</button><button class="btn-outline" onclick="bulkUpdateStatus('modStatus','Received')">✅ MOD</button><button class="btn-danger" onclick="bulkDeleteSelected()">🗑️</button><button class="btn-outline" onclick="clearSelection()">✖️</button><span id="selectionCount" style="font-weight:900;color:var(--border-color);font-size:1rem;">0</span></div>
+  <div id="bulkActions"><span style="font-weight:900;color:var(--border-color);font-size:.9rem;">📋 Bulk:</span><button class="btn-outline" onclick="bulkUpdateStatus('cmdrStatus','Received')">✅ CMDR</button><button class="btn-outline" onclick="bulkUpdateStatus('modStatus','Received')">✅ MOD</button><button class="btn-danger" onclick="bulkDeleteSelected()">🗑️</button><button class="btn-outline" onclick="clearSelection()">✖️</button><span id="selectionCount" style="font-weight:900;color:var(--border-color);font-size:.9rem;">0</span></div>
   <div class="filter-bar">
     <div class="filter-group">
       <select id="countryFilter"><option value="all">🌍 ALL</option></select>
@@ -262,22 +272,25 @@
 </div>
 
 <script>
-  // ==================== AUTHENTICATION SYSTEM ====================
+  // ==================== AUTHENTICATION SYSTEM (SERVICE NUMBER BASED) ====================
   const DEFAULT_PASSWORD = "password";
 
-  // 7 authorised appointments
-  const APPOINTMENTS = [
-    { key: "SO TRG I",              name: "SO TRG I",              role: "CMDR" },
-    { key: "ASO TRG I",             name: "ASO TRG I",             role: "MOD" },
-    { key: "SNCO IC PAYMENT",       name: "SNCO IC PAYMENT",       role: "PAYMENT" },
-    { key: "SNCO IC B/PROCEEDING",  name: "SNCO IC B/PROCEEDING",  role: "B/PROCEEDING" },
-    { key: "SNCO IC VISA/PASSPORT", name: "SNCO IC VISA/PASSPORT", role: "VISA" },
-    { key: "JNCO IC PAYMENT",       name: "JNCO IC PAYMENT",       role: "PAYMENT" },
-    { key: "SNCO IC AIR TICKET",    name: "SNCO IC AIR TICKET",    role: "TICKET" }
+  // Service numbers mapped to appointment roles
+  const SERVICE_NUMBERS = [
+    { service: "02802", name: "SO TRG I",              role: "CMDR" },
+    { service: "03650", name: "ASO TRG I",             role: "MOD" },
+    { service: "29816", name: "SNCO IC PAYMENT",       role: "PAYMENT" },
+    { service: "31834", name: "SNCO IC B/PROCEEDING",  role: "B/PROCEEDING" },
+    { service: "35465", name: "SNCO IC VISA/PASSPORT", role: "VISA" },
+    { service: "39116", name: "JNCO IC PAYMENT",       role: "PAYMENT" },
+    { service: "41336", name: "SNCO IC AIR TICKET",    role: "TICKET" },
+    { service: "38922", name: "SNCO IC AIR TICKET",    role: "TICKET" },
+    { service: "33557", name: "SNCO IC VISA/PASSPORT", role: "VISA" },
+    { service: "A/W 4702", name: "SNCO IC PAYMENT",    role: "PAYMENT" },
+    { service: "A/W 4208", name: "SNCO IC B/PROCEEDING", role: "B/PROCEEDING" }
   ];
 
-  // In-memory + localStorage credential store
-  // key: appointment (uppercase), value: { password }
+  // Credentials store: key = service number (uppercase), value = { password, changed }
   let CREDENTIALS = {};
 
   function loadCredentials() {
@@ -289,10 +302,11 @@
         CREDENTIALS = {};
       }
     } catch(e) { CREDENTIALS = {}; }
-    // Ensure all appointments exist
-    APPOINTMENTS.forEach(a => {
-      if (!CREDENTIALS[a.key]) {
-        CREDENTIALS[a.key] = { password: DEFAULT_PASSWORD, changed: false };
+    // Ensure all service numbers exist
+    SERVICE_NUMBERS.forEach(s => {
+      const key = s.service.toUpperCase();
+      if (!CREDENTIALS[key]) {
+        CREDENTIALS[key] = { password: DEFAULT_PASSWORD, changed: false };
       }
     });
     saveCredentials();
@@ -304,39 +318,39 @@
     } catch(e) {}
   }
 
-  let currentUser = null;      // appointment object
-  let currentUserKey = null;   // appointment key string
+  let currentUser = null;       // service object
+  let currentUserKey = null;    // service number string (uppercase)
 
   function attemptLogin() {
     const u = document.getElementById('loginUser').value.trim().toUpperCase();
     const p = document.getElementById('loginPass').value;
     const err = document.getElementById('loginError');
 
-    if (!u) { err.innerText = '❌ Please enter your appointment.'; playBeep(300,0.2,'square'); return; }
+    if (!u) { err.innerText = '❌ Please enter your service number.'; playBeep(300,0.2,'square'); return; }
 
-    const appt = APPOINTMENTS.find(a => a.key.toUpperCase() === u);
-    if (!appt) {
-      err.innerText = '❌ Unknown appointment. Please check spelling.';
+    const svc = SERVICE_NUMBERS.find(s => s.service.toUpperCase() === u);
+    if (!svc) {
+      err.innerText = '❌ Unknown service number. Check spelling.';
       playBeep(300,0.2,'square');
       return;
     }
 
-    const cred = CREDENTIALS[appt.key];
+    const cred = CREDENTIALS[svc.service.toUpperCase()];
     if (!cred || cred.password !== p) {
       err.innerText = '❌ Incorrect password.';
       playBeep(300,0.2,'square');
       return;
     }
 
-    currentUser = appt;
-    currentUserKey = appt.key;
+    currentUser = svc;
+    currentUserKey = svc.service.toUpperCase();
     err.innerText = '';
     document.getElementById('loginOverlay').style.display = 'none';
     document.getElementById('mainDashboard').style.display = 'flex';
-    document.getElementById('currentUserDisplay').innerText = appt.name;
-    sessionStorage.setItem('ftc_user_v12', appt.key);
+    document.getElementById('currentUserDisplay').innerText = svc.name + ' (' + svc.service + ')';
+    sessionStorage.setItem('ftc_user_v12', svc.service);
     initDashboard();
-    showToast('✅ Welcome, ' + appt.name);
+    showToast('✅ Welcome, ' + svc.name);
     playBeep(800,0.1);
 
     // If first-time login (still default password), prompt to change
@@ -359,16 +373,53 @@
     loadCredentials();
     const saved = sessionStorage.getItem('ftc_user_v12');
     if (saved) {
-      const appt = APPOINTMENTS.find(a => a.key === saved);
-      if (appt) {
-        currentUser = appt;
-        currentUserKey = appt.key;
+      const svc = SERVICE_NUMBERS.find(s => s.service === saved);
+      if (svc) {
+        currentUser = svc;
+        currentUserKey = svc.service.toUpperCase();
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('mainDashboard').style.display = 'flex';
-        document.getElementById('currentUserDisplay').innerText = appt.name;
+        document.getElementById('currentUserDisplay').innerText = svc.name + ' (' + svc.service + ')';
       }
     }
   })();
+
+  // ===== PASSWORD RECOVERY =====
+  function recoverPassword() {
+    const svc = document.getElementById('recoveryService').value.trim().toUpperCase();
+    const secret = document.getElementById('recoverySecret').value.trim();
+    const msg = document.getElementById('recoveryMsg');
+    msg.className = 'login-error';
+    msg.innerText = '';
+
+    if (!svc || !secret) { msg.innerText = '❌ Please fill both fields.'; return; }
+
+    const found = SERVICE_NUMBERS.find(s => s.service.toUpperCase() === svc);
+    if (!found) { msg.innerText = '❌ Service number not recognised.'; return; }
+
+    // Simple secret check: last 4 digits of NIC or phone — demo uses "1234" for any
+    // In production, replace with real check.
+    if (secret !== '1234') {
+      msg.innerText = '❌ Verification failed. Use last 4 digits (demo: 1234).';
+      return;
+    }
+
+    const key = found.service.toUpperCase();
+    CREDENTIALS[key].password = DEFAULT_PASSWORD;
+    CREDENTIALS[key].changed = false;
+    saveCredentials();
+
+    msg.style.color = '#22c55e';
+    msg.innerText = '✅ Password reset to default: "password"';
+    playBeep(800, 0.1);
+    showToast('🔑 Password reset for ' + found.service);
+    setTimeout(() => {
+      document.getElementById('recoveryBox').classList.remove('show');
+      document.getElementById('recoveryService').value = '';
+      document.getElementById('recoverySecret').value = '';
+      msg.innerText = '';
+    }, 1800);
+  }
 
   // ===== PASSWORD CHANGE =====
   function openPwdModal() {
@@ -631,7 +682,7 @@
         if(d>=0 && d<=7 && c.modStatus!=='Received' && c.modStatus!=='Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} - MOD pending (${d}d)`});
       }
     });
-    if(alerts.length===0) { container.innerHTML='<div style="padding:6px;color:var(--text-secondary);font-weight:800;font-size:1.1rem;">✅ All courses on track</div>'; return; }
+    if(alerts.length===0) { container.innerHTML='<div style="padding:6px;color:var(--text-secondary);font-weight:800;font-size:1rem;">✅ All courses on track</div>'; return; }
     const unique = []; const seen = new Set();
     alerts.forEach(a => { if(!seen.has(a.msg)) { seen.add(a.msg); unique.push(a); } });
     container.innerHTML = unique.slice(0,5).map(a => `<div class="alert-item-${a.type.toLowerCase()}">${a.msg}</div>`).join('');
@@ -686,7 +737,7 @@
 
   function exportData() {
     const data = {
-      version: '12.0',
+      version: '12.1',
       exportedAt: new Date().toISOString(),
       exportedBy: currentUserKey || 'unknown',
       courses: coursesData,
@@ -755,7 +806,7 @@
     const tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
     if(filtered.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="15" style="text-align:center;padding:20px;font-size:1.4rem;color:var(--text-secondary);">📭 No data</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="15" style="text-align:center;padding:20px;font-size:1.2rem;color:var(--text-secondary);">📭 No data</td></tr>';
       return;
     }
 
@@ -790,7 +841,7 @@
       const courseCell = document.createElement("td"); courseCell.className = "col-course course-name-cell";
       if(isEditing) {
         const inp = document.createElement("input"); inp.className = "edit-input"; inp.id = `edit-name-${course.id}`;
-        inp.value = course.courseName; inp.setAttribute("list", "courseSuggestList"); inp.style.fontWeight="900"; inp.style.fontSize="1.2rem";
+        inp.value = course.courseName; inp.setAttribute("list", "courseSuggestList"); inp.style.fontWeight="900"; inp.style.fontSize="1rem";
         inp.addEventListener('focus', function() { this.select(); });
         courseCell.appendChild(inp);
       } else {
@@ -798,17 +849,17 @@
         let extra = '';
         if(course.isNomination) {
           blinkClass = 'course-nom-blink';
-          extra = `<span class="type-badge type-nomination" style="font-size:0.7rem;padding:2px 12px;margin-left:8px;">NOM</span>`;
+          extra = `<span class="type-badge type-nomination" style="font-size:0.6rem;padding:1px 8px;margin-left:6px;">NOM</span>`;
         } else if(urgency.urgencyLevel === 'critical') {
           blinkClass = 'course-critical-blink';
-          extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:2px 14px;border-radius:40px;font-size:0.75rem;font-weight:900;margin-left:8px;animation:blinkRed 0.8s infinite;">CRITICAL</span>`;
+          extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:1px 8px;border-radius:40px;font-size:0.6rem;font-weight:900;margin-left:6px;animation:blinkRed 0.8s infinite;">CRIT</span>`;
         } else if(urgency.urgencyLevel === 'high') {
           blinkClass = 'course-urgent-blink';
-          extra = `<span style="display:inline-block;background:#f97316;color:white;padding:2px 14px;border-radius:40px;font-size:0.75rem;font-weight:900;margin-left:8px;animation:blinkOrange 1.2s infinite;">HIGH</span>`;
+          extra = `<span style="display:inline-block;background:#f97316;color:white;padding:1px 8px;border-radius:40px;font-size:0.6rem;font-weight:900;margin-left:6px;animation:blinkOrange 1.2s infinite;">HIGH</span>`;
         } else if(urgency.urgencyLevel === 'nom') {
           blinkClass = 'course-nom-blink';
         }
-        courseCell.innerHTML = `<span class="${blinkClass}" style="font-weight:900;font-size:1.2rem;">${escapeHtml(course.courseName)}</span>${extra} ${auditTip(course)}`;
+        courseCell.innerHTML = `<span class="${blinkClass}" style="font-weight:900;font-size:1rem;">${escapeHtml(course.courseName)}</span>${extra} ${auditTip(course)}`;
       }
       tr.appendChild(courseCell);
 
@@ -831,44 +882,44 @@
       tr.appendChild(countryCell);
 
       const depCell = document.createElement("td"); depCell.className = "col-departure";
-      if(isEditing) depCell.innerHTML = `<input type="date" class="edit-input" id="edit-dep-${course.id}" value="${course.depDate}" style="font-size:1rem;font-weight:900;">`;
-      else depCell.innerHTML = `<span style="font-size:1.05rem;font-weight:900;">${course.depDate}</span>`;
+      if(isEditing) depCell.innerHTML = `<input type="date" class="edit-input" id="edit-dep-${course.id}" value="${course.depDate}" style="font-size:0.9rem;font-weight:900;">`;
+      else depCell.innerHTML = `<span style="font-size:0.95rem;font-weight:900;">${course.depDate}</span>`;
       tr.appendChild(depCell);
 
       const retCell = document.createElement("td"); retCell.className = "col-return";
-      if(isEditing) retCell.innerHTML = `<input type="date" class="edit-input" id="edit-ret-${course.id}" value="${course.returnDate}" style="font-size:1rem;font-weight:900;">`;
-      else retCell.innerHTML = `<span style="font-size:1.05rem;font-weight:900;">${course.returnDate}</span>`;
+      if(isEditing) retCell.innerHTML = `<input type="date" class="edit-input" id="edit-ret-${course.id}" value="${course.returnDate}" style="font-size:0.9rem;font-weight:900;">`;
+      else retCell.innerHTML = `<span style="font-size:0.95rem;font-weight:900;">${course.returnDate}</span>`;
       tr.appendChild(retCell);
 
       const daysCell = document.createElement("td"); daysCell.className = "col-days";
       let color = '';
       if(urgency.daysLeft !== null && urgency.daysLeft >= 0) {
-        if(urgency.daysLeft <= 2) color = 'color:#dc2626;font-weight:900;font-size:1.4rem;';
-        else if(urgency.daysLeft <= 7) color = 'color:#f97316;font-weight:900;font-size:1.3rem;';
-        else if(urgency.daysLeft <= 14) color = 'color:#eab308;font-weight:800;font-size:1.2rem;';
+        if(urgency.daysLeft <= 2) color = 'color:#dc2626;font-weight:900;font-size:1.2rem;';
+        else if(urgency.daysLeft <= 7) color = 'color:#f97316;font-weight:900;font-size:1.1rem;';
+        else if(urgency.daysLeft <= 14) color = 'color:#eab308;font-weight:800;font-size:1rem;';
       }
       daysCell.innerHTML = `<span style="${color}">${daysLeft}</span>`;
       tr.appendChild(daysCell);
 
       const paymentCell = document.createElement("td"); paymentCell.className = "col-payment clerk-col";
       if(isEditing) {
-        paymentCell.innerHTML = `<input type="date" class="edit-input" id="edit-payment-${course.id}" value="${course.paymentDate||''}" style="font-weight:900;font-size:1rem;">`;
+        paymentCell.innerHTML = `<input type="date" class="edit-input" id="edit-payment-${course.id}" value="${course.paymentDate||''}" style="font-weight:900;font-size:0.9rem;">`;
       } else {
         let iconHtml = `<span class="subject-icon icon-payment"></span>`;
         if(course.isNomination) {
           if(course.deadlineDate) {
             const d = getDaysRemaining(course.deadlineDate);
-            if(d>=0 && d<=7) paymentCell.innerHTML = `${iconHtml}<span style="background:#dc2626;color:white;padding:6px 14px;border-radius:40px;font-weight:900;font-size:1rem;">${course.deadlineDate}</span>`;
-            else paymentCell.innerHTML = `${iconHtml}<span style="font-weight:900;font-size:1rem;">${course.deadlineDate}</span>`;
+            if(d>=0 && d<=7) paymentCell.innerHTML = `${iconHtml}<span style="background:#dc2626;color:white;padding:4px 10px;border-radius:40px;font-weight:900;font-size:0.9rem;">${course.deadlineDate}</span>`;
+            else paymentCell.innerHTML = `${iconHtml}<span style="font-weight:900;font-size:0.9rem;">${course.deadlineDate}</span>`;
           } else { paymentCell.innerHTML = `${iconHtml}—`; }
         } else {
           if(course.paymentDate) {
             const d = getDaysRemaining(course.paymentDate);
-            let style = 'font-weight:900;font-size:1rem;';
-            if(d>=0 && d<=2) style += 'background:#dc2626;color:white;padding:4px 12px;border-radius:40px;';
-            else if(d>=0 && d<=7) style += 'background:#f97316;color:white;padding:4px 12px;border-radius:40px;';
-            else if(d>=0 && d<=14) style += 'background:#eab308;color:black;padding:4px 12px;border-radius:40px;';
-            else style += 'background:var(--bg-tertiary);padding:4px 12px;border-radius:40px;border:1px solid var(--border-color);';
+            let style = 'font-weight:900;font-size:0.9rem;';
+            if(d>=0 && d<=2) style += 'background:#dc2626;color:white;padding:3px 10px;border-radius:40px;';
+            else if(d>=0 && d<=7) style += 'background:#f97316;color:white;padding:3px 10px;border-radius:40px;';
+            else if(d>=0 && d<=14) style += 'background:#eab308;color:black;padding:3px 10px;border-radius:40px;';
+            else style += 'background:var(--bg-tertiary);padding:3px 10px;border-radius:40px;border:1px solid var(--border-color);';
             paymentCell.innerHTML = `${iconHtml}<span style="${style}">${course.paymentDate}</span>`;
           } else { paymentCell.innerHTML = `${iconHtml}—`; }
         }
@@ -918,8 +969,8 @@
             <option value="TICKET CONFIRMED" ${course.ticketStatus==="TICKET CONFIRMED"?"selected":""}>🛫 CONFIRMED</option>
             <option value="TICKET OK" ${course.ticketStatus==="TICKET OK"?"selected":""}>✅ OK</option>
           </select>
-          <input type="date" class="edit-input" id="edit-demanddate-${course.id}" value="${course.ticketDemandDate||''}" style="font-size:0.9rem;margin-top:4px;">
-          <input type="date" class="edit-input" id="edit-opendate-${course.id}" value="${course.ticketOpenDate||''}" style="font-size:0.9rem;margin-top:4px;">
+          <input type="date" class="edit-input" id="edit-demanddate-${course.id}" value="${course.ticketDemandDate||''}" style="font-size:0.8rem;margin-top:4px;">
+          <input type="date" class="edit-input" id="edit-opendate-${course.id}" value="${course.ticketOpenDate||''}" style="font-size:0.8rem;margin-top:4px;">
         `;
       } else {
         ticketTd.innerHTML = `<span class="subject-icon icon-ticket" style="color:#ef4444;"></span>` + getTicketStatusHtml(course.ticketStatus, course.ticketDemandDate, course.ticketOpenDate);
@@ -933,8 +984,8 @@
             <option value="NOT SENT" ${course.woStatus==="NOT SENT"?"selected":""}>📤 NOT SENT</option>
             <option value="SENT" ${course.woStatus==="SENT"?"selected":""}>✅ SENT</option>
           </select>
-          <input type="date" class="edit-input" id="edit-woexpected-${course.id}" value="${course.woExpectedDate||''}" style="font-size:0.9rem;margin-top:4px;">
-          <input type="date" class="edit-input" id="edit-woactual-${course.id}" value="${course.woActualDate||''}" style="font-size:0.9rem;margin-top:4px;">
+          <input type="date" class="edit-input" id="edit-woexpected-${course.id}" value="${course.woExpectedDate||''}" style="font-size:0.8rem;margin-top:4px;">
+          <input type="date" class="edit-input" id="edit-woactual-${course.id}" value="${course.woActualDate||''}" style="font-size:0.8rem;margin-top:4px;">
         `;
       } else {
         woCell.innerHTML = `<span class="subject-icon icon-wo" style="color:#ec4899;"></span>` + getWOStatusHtml(course.woStatus, course.woExpectedDate, course.woActualDate);
@@ -1313,6 +1364,12 @@
   document.getElementById('loginBtn').addEventListener('click', attemptLogin);
   document.getElementById('loginPass').addEventListener('keydown', (e) => { if(e.key === 'Enter') attemptLogin(); });
   document.getElementById('loginUser').addEventListener('keydown', (e) => { if(e.key === 'Enter') document.getElementById('loginPass').focus(); });
+
+  document.getElementById('recoveryToggle').addEventListener('click', () => {
+    document.getElementById('recoveryBox').classList.toggle('show');
+  });
+  document.getElementById('recoveryBtn').addEventListener('click', recoverPassword);
+  document.getElementById('recoverySecret').addEventListener('keydown', (e) => { if(e.key === 'Enter') recoverPassword(); });
 
   document.getElementById('pwdSaveBtn').addEventListener('click', changePassword);
   document.getElementById('pwdCancelBtn').addEventListener('click', closePwdModal);
