@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>SLAF FTC | TV Dashboard v12.1</title>
+  <title>SLAF FTC | TV Dashboard v12.2</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,-apple-system,sans-serif; }
     body { background:#0a0e1a; color:#f1f5f9; padding:8px 12px; font-size:18px; line-height:1.4; transition:background .3s,color .3s; }
@@ -24,7 +24,7 @@
     body.fullscreen-mode .editable-table .course-name-cell { font-size:.9rem; }
     body.fullscreen-mode .col-actions, body.fullscreen-mode .col-checkbox { display:none; }
     body.fullscreen-mode .editable-table .type-badge { font-size:.6rem; padding:2px 8px; }
-    body.fullscreen-mode .editable-table .status-badge { font-size:.6rem; padding:2px 8px; }
+    body.fullscreen-mode .editable-table .status-badge { font-size:.55rem; padding:1px 5px; }
     .header { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; background:var(--bg-secondary); border-bottom:3px solid var(--border-color); padding:8px 16px; border-radius:18px 18px 0 0; gap:8px; }
     .title-section { display:flex; align-items:center; gap:12px; }
     .title-logo { font-size:2.6rem; filter:drop-shadow(0 0 10px rgba(26,107,138,0.5)); }
@@ -65,14 +65,15 @@
     .table-wrapper { margin:6px 0; overflow-x:auto; overflow-y:auto; max-height:58vh; border-radius:18px; border:2px solid var(--border-color); background:var(--bg-primary); transition:max-height .3s; }
     .editable-table { width:100%; border-collapse:collapse; font-size:1rem; min-width:1300px; }
     .editable-table th { background:var(--bg-secondary); padding:10px 4px; text-align:center; font-weight:900; text-transform:uppercase; font-size:.8rem; border-bottom:3px solid var(--border-color); position:sticky; top:0; z-index:10; color:var(--text-secondary); white-space:nowrap; }
-    .editable-table td { padding:8px 4px; text-align:center; border-bottom:2px solid rgba(59,130,246,0.08); vertical-align:middle; font-weight:600; }
+    .editable-table td { padding:6px 4px; text-align:center; border-bottom:2px solid rgba(59,130,246,0.08); vertical-align:middle; font-weight:600; }
     .editable-table tr:hover { background:rgba(59,130,246,0.12); }
-    .editable-table .course-name-cell { font-weight:900; font-size:1.15rem; }
-    .type-badge { display:inline-block; padding:4px 12px; border-radius:40px; font-weight:900; font-size:.75rem; white-space:nowrap; }
+    .editable-table .course-name-cell { font-weight:900; font-size:1.1rem; text-align:left; padding-left:14px; }
+    .editable-table th.col-course { text-align:left; padding-left:14px; }
+    .type-badge { display:inline-block; padding:2px 8px; border-radius:40px; font-weight:900; font-size:.68rem; white-space:nowrap; letter-spacing:.3px; }
     .type-course { background:#3b82f6; color:#fff; }
     .type-visit { background:#8b5cf6; color:#fff; }
     .type-nomination { background:#ec4899; color:#fff; animation:pulseNom 1.8s infinite; }
-    .status-badge { display:inline-block; padding:4px 10px; border-radius:40px; font-weight:800; font-size:.75rem; white-space:nowrap; }
+    .status-badge { display:inline-block; padding:1px 7px; border-radius:20px; font-weight:800; font-size:.62rem; white-space:nowrap; letter-spacing:.2px; line-height:1.5; }
     .status-notsent { background:#475569; color:#e2e8f0; }
     .status-sent { background:#22c55e; color:#0f172a; }
     .status-received { background:#10b981; color:#fff; }
@@ -101,6 +102,7 @@
     .row-past td { opacity:.6; }
     .row-selected td { background:rgba(59,130,246,0.25) !important; }
     .edit-input,.edit-select { background:var(--bg-tertiary); border:2px solid var(--border-color); color:var(--text-primary); padding:6px 10px; border-radius:10px; width:100%; font-size:.9rem; font-weight:700; min-width:50px; }
+    .edit-input:focus,.edit-select:focus { outline:none; border-color:var(--badge-urgent); box-shadow:0 0 8px rgba(249,115,22,0.4); }
     .action-icon { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:40px; padding:4px 14px; margin:2px; color:var(--text-primary); cursor:pointer; font-weight:800; font-size:.9rem; transition:all .2s; }
     .action-icon:hover { background:var(--border-color); color:var(--bg-primary); }
     .inline-edit-btn { background:#10b981; border:none; border-radius:40px; padding:4px 16px; color:#fff; font-weight:900; cursor:pointer; transition:all .2s; }
@@ -123,14 +125,57 @@
     @media print { .filter-bar,.stats-row,.header-controls,.col-actions,.col-checkbox,.stat-toggle,.toolbar-actions,#alertContainer,#bulkActions,.shortcuts-hint { display:none !important; } body { background:#fff; color:#000; } .dashboard { border:1px solid #ccc; box-shadow:none; } .editable-table { font-size:10pt; } .editable-table th { background:#e0e0e0; color:#000; } .editable-table td { border-bottom:1px solid #ccc; } .status-badge { border:1px solid #999; } .type-badge { border:1px solid #999; } }
     .shortcuts-hint { font-size:.7rem; color:var(--text-secondary); opacity:.6; display:flex; gap:12px; flex-wrap:wrap; padding:4px 10px; }
     .shortcuts-hint kbd { background:var(--bg-tertiary); padding:2px 8px; border-radius:4px; border:1px solid var(--border-color); font-size:.7rem; font-weight:700; }
-    .wo-expected-highlight { background:#facc15; color:#0f172a; padding:2px 10px; border-radius:30px; font-weight:800; font-size:.75rem; display:inline-block; }
+    .wo-expected-highlight { background:#facc15; color:#0f172a; padding:2px 10px; border-radius:30px; font-weight:800; font-size:.65rem; display:inline-block; }
+
+    /* ===== DISTINCT SUBJECT ICONS (shape + colour = clerk identity) ===== */
+    .subject-icon {
+      display:inline-block; width:14px; height:14px; margin-right:5px;
+      vertical-align:middle; flex-shrink:0;
+    }
+    /* PAYMENT — hollow ring, emerald */
+    .icon-payment {
+      border-radius:50%; border:3px solid #10b981; background:transparent;
+      box-shadow:0 0 6px #10b981, inset 0 0 3px #10b981;
+    }
+    /* CMDR — upward triangle, sapphire blue */
+    .icon-cmdr {
+      clip-path:polygon(50% 0%, 100% 100%, 0% 100%);
+      background:linear-gradient(145deg,#60a5fa,#2563eb);
+      filter:drop-shadow(0 0 4px #3b82f6);
+    }
+    /* MOD — hexagon, violet */
+    .icon-mod {
+      clip-path:polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+      background:linear-gradient(145deg,#c084fc,#7c3aed);
+      filter:drop-shadow(0 0 4px #a855f7);
+    }
+    /* VISA — diamond, amber/gold */
+    .icon-visa {
+      clip-path:polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+      background:linear-gradient(145deg,#fbbf24,#d97706);
+      filter:drop-shadow(0 0 4px #f59e0b);
+    }
+    /* TICKET — 5-point star, crimson */
+    .icon-ticket {
+      clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      background:linear-gradient(145deg,#f87171,#dc2626);
+      filter:drop-shadow(0 0 4px #ef4444);
+    }
+    /* WARNING ORDER — plus/cross, hot pink */
+    .icon-wo {
+      clip-path:polygon(38% 0, 62% 0, 62% 38%, 100% 38%, 100% 62%, 62% 62%, 62% 100%, 38% 100%, 38% 62%, 0 62%, 0 38%, 38% 38%);
+      background:linear-gradient(145deg,#f472b6,#db2777);
+      filter:drop-shadow(0 0 4px #ec4899);
+    }
+    .clerk-col { transition:background .2s; }
+    .clerk-col:hover { background:rgba(255,255,255,0.06); }
 
     /* ===== LOGIN ===== */
     #loginOverlay { position:fixed; inset:0; background:rgba(5,12,24,0.96); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; }
-    .login-box { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:32px; padding:30px 34px; max-width:480px; width:100%; box-shadow:var(--shadow); text-align:center; max-height:92vh; overflow-y:auto; }
+    .login-box { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:32px; padding:30px 34px; max-width:500px; width:100%; box-shadow:var(--shadow); text-align:center; max-height:92vh; overflow-y:auto; }
     .login-box h2 { font-size:1.8rem; font-weight:900; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:6px; }
     .login-box p { color:var(--text-secondary); font-weight:600; margin-bottom:16px; font-size:.85rem; letter-spacing:1px; }
-    .login-box input { width:100%; padding:13px 16px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.05rem; font-weight:700; margin-bottom:12px; outline:none; }
+    .login-box input[type=text], .login-box input[type=password] { width:100%; padding:13px 16px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.05rem; font-weight:700; margin-bottom:12px; outline:none; }
     .login-box input:focus { border-color:var(--badge-urgent); box-shadow:0 0 12px rgba(249,115,22,0.4); }
     .login-box button { width:100%; padding:13px; border-radius:60px; border:none; background:var(--accent-gradient); color:#fff; font-weight:900; font-size:1.15rem; cursor:pointer; transition:all .2s; margin-top:4px; }
     .login-box button:hover { transform:scale(1.02); box-shadow:0 6px 24px rgba(26,107,138,0.5); }
@@ -139,6 +184,8 @@
     .login-hint b { color:var(--border-color); }
     .user-badge { font-size:.75rem; background:var(--bg-tertiary); border:1px solid var(--border-color); padding:4px 12px; border-radius:30px; color:var(--text-secondary); font-weight:700; }
     .user-badge span { color:var(--border-color); font-weight:900; }
+    .remember-row { display:flex; align-items:center; justify-content:center; gap:8px; margin:2px 0 8px; font-size:.85rem; color:var(--text-secondary); font-weight:700; cursor:pointer; user-select:none; }
+    .remember-row input[type=checkbox] { width:20px; height:20px; transform:none; margin:0; accent-color:var(--border-color); }
 
     /* recovery section */
     .recovery-toggle { font-size:.75rem; color:var(--border-color); cursor:pointer; font-weight:800; margin-top:8px; text-decoration:underline; }
@@ -152,17 +199,6 @@
     .audit-tip { position:relative; cursor:help; border-bottom:1px dotted var(--text-secondary); font-size:.75rem; }
     .audit-tip .audit-text { visibility:hidden; width:200px; background:var(--bg-secondary); color:var(--text-primary); text-align:left; border-radius:12px; padding:8px 12px; position:absolute; z-index:100; bottom:130%; left:50%; transform:translateX(-50%); border:2px solid var(--border-color); box-shadow:0 8px 24px rgba(0,0,0,0.5); font-size:.7rem; font-weight:600; line-height:1.4; opacity:0; transition:opacity .2s; pointer-events:none; }
     .audit-tip:hover .audit-text { visibility:visible; opacity:1; }
-
-    /* subject icons — compact, high-contrast, distinct per column */
-    .subject-icon { display:inline-block; width:12px; height:12px; margin-right:3px; vertical-align:middle; border:2px solid currentColor; }
-    .icon-payment { border-radius:50%; border-color:#10b981; background:transparent; border-style:dashed; box-shadow:0 0 4px #10b981; }
-    .icon-cmdr { border-radius:50%; border-color:#3b82f6; background:transparent; box-shadow:0 0 4px #3b82f6; }
-    .icon-mod { border-radius:2px; border-color:#8b5cf6; background:transparent; transform:rotate(45deg); width:10px; height:10px; box-shadow:0 0 4px #8b5cf6; }
-    .icon-visa { border-radius:0; border-color:#f59e0b; background:transparent; clip-path:polygon(50% 0%, 100% 100%, 0% 100%); width:14px; height:12px; border:none; background:currentColor; color:#f59e0b; filter:drop-shadow(0 0 3px #f59e0b); }
-    .icon-ticket { border-radius:50%; border-color:#ef4444; background:transparent; border-style:dotted; box-shadow:0 0 4px #ef4444; }
-    .icon-wo { border-radius:0; border-color:#ec4899; background:transparent; clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); width:12px; height:12px; border:none; background:currentColor; color:#ec4899; filter:drop-shadow(0 0 3px #ec4899); }
-    .clerk-col { transition:background .2s; }
-    .clerk-col:hover { background:rgba(255,255,255,0.06); }
 
     /* ===== PASSWORD CHANGE MODAL ===== */
     #pwdModal { position:fixed; inset:0; background:rgba(5,12,24,0.92); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:11000; padding:20px; }
@@ -187,21 +223,25 @@
     <div style="font-size:2.6rem;margin-bottom:4px;">🔐</div>
     <h2>FTC ACCESS</h2>
     <p>Authorised Personnel Only</p>
-    <input type="text" id="loginUser" placeholder="Service Number (e.g. 02802)" autocomplete="off" inputmode="numeric">
+    <input type="text" id="loginUser" placeholder="Service Number (e.g. 02802)" autocomplete="off" list="serviceSuggestList" inputmode="text">
+    <datalist id="serviceSuggestList"></datalist>
     <input type="password" id="loginPass" placeholder="Password" autocomplete="off">
+    <label class="remember-row" for="rememberMe">
+      <input type="checkbox" id="rememberMe"> <span>Remember me on this device</span>
+    </label>
     <button id="loginBtn">🚪 SIGN IN</button>
     <div class="login-error" id="loginError"></div>
     <div class="recovery-toggle" id="recoveryToggle">🔁 Forgot password?</div>
     <div class="recovery-box" id="recoveryBox">
       <p>Enter your service number and the last 4 digits of your NIC / registered phone to reset to default.</p>
-      <input type="text" id="recoveryService" placeholder="Service Number" inputmode="numeric">
+      <input type="text" id="recoveryService" placeholder="Service Number" inputmode="text">
       <input type="text" id="recoverySecret" placeholder="Last 4 digits of NIC or phone" inputmode="numeric">
       <button id="recoveryBtn" style="background:linear-gradient(145deg,#f97316,#ea580c);">🔄 Reset to default password</button>
       <div class="login-error" id="recoveryMsg" style="min-height:18px;margin-top:6px;"></div>
     </div>
     <div class="login-hint">
       <b>Authorised Service Numbers:</b><br>
-      02802, 03650, 29816, 31834, 35465, 39116, 41336, 38922, 33557, A/W 4702, A/W 4208<br>
+      02802, 03650, 29816, 33557, 41979, 41336, 38922, AW 4208, AW 4702<br>
       <span style="opacity:.7;">Default password: <b>password</b> · Contact SO TRG I for account issues.</span>
     </div>
   </div>
@@ -222,7 +262,7 @@
 
 <div class="dashboard" id="mainDashboard" style="display:none;">
   <div class="header">
-    <div class="title-section"><span class="title-logo">✈️</span><div class="title-text"><h1>FOREIGN TRAINING CELL</h1><div class="subtitle">SLAF · <span>FTC v12.1</span></div></div></div>
+    <div class="title-section"><span class="title-logo">✈️</span><div class="title-text"><h1>FOREIGN TRAINING CELL</h1><div class="subtitle">SLAF · <span>FTC v12.2</span></div></div></div>
     <div class="clock-container"><div class="clock"><div class="clock-label">🇱🇰 LST</div><div class="clock-time" id="lstClock">--:--:--</div></div><div class="clock-divider"></div><div class="clock"><div class="clock-label">🌍 UTC</div><div class="clock-time" id="utcClock">--:--:--</div></div></div>
     <div class="toolbar-actions">
       <span class="user-badge">👤 <span id="currentUserDisplay">--</span></span>
@@ -264,7 +304,7 @@
   </div>
   <div class="table-wrapper">
     <table class="editable-table" id="mainTable">
-      <thead><tr><th class="col-checkbox"><input type="checkbox" id="selectAllCheckbox"></th><th class="col-type">TYPE</th><th class="col-course">COURSE / VISIT / NOM</th><th class="col-officers">PERS</th><th class="col-country">CTRY</th><th class="col-departure">DEP</th><th class="col-return">RET</th><th class="col-days">DAYS</th><th class="col-payment">PAYMENT</th><th class="col-cmdr">CMDR</th><th class="col-mod">MOD</th><th class="col-visa">VISA</th><th class="col-ticket">TICKET</th><th class="col-wo">WARNING ORDER</th><th class="col-actions">⚡</th></tr></thead>
+      <thead><tr><th class="col-checkbox"><input type="checkbox" id="selectAllCheckbox"></th><th class="col-type">TYPE</th><th class="col-course">COURSE / VISIT / NOM</th><th class="col-officers">PERS</th><th class="col-country">CTRY</th><th class="col-departure">DEP</th><th class="col-return">RET</th><th class="col-days">DAYS</th><th class="col-payment" id="paymentHeader">PAYMENT</th><th class="col-cmdr">CMDR</th><th class="col-mod">MOD</th><th class="col-visa">VISA</th><th class="col-ticket">TICKET</th><th class="col-wo">WARNING ORDER</th><th class="col-actions">⚡</th></tr></thead>
       <tbody id="tableBody"></tbody>
     </table>
   </div>
@@ -275,36 +315,36 @@
   // ==================== AUTHENTICATION SYSTEM (SERVICE NUMBER BASED) ====================
   const DEFAULT_PASSWORD = "password";
 
-  // Service numbers mapped to appointment roles
+  // ---- Corrected service numbers and appointments (v12.2) ----
   const SERVICE_NUMBERS = [
-    { service: "02802", name: "SO TRG I",              role: "CMDR" },
-    { service: "03650", name: "ASO TRG I",             role: "MOD" },
-    { service: "29816", name: "SNCO IC PAYMENT",       role: "PAYMENT" },
-    { service: "31834", name: "SNCO IC B/PROCEEDING",  role: "B/PROCEEDING" },
-    { service: "35465", name: "SNCO IC VISA/PASSPORT", role: "VISA" },
-    { service: "39116", name: "JNCO IC PAYMENT",       role: "PAYMENT" },
-    { service: "41336", name: "SNCO IC AIR TICKET",    role: "TICKET" },
-    { service: "38922", name: "SNCO IC AIR TICKET",    role: "TICKET" },
-    { service: "33557", name: "SNCO IC VISA/PASSPORT", role: "VISA" },
-    { service: "A/W 4702", name: "SNCO IC PAYMENT",    role: "PAYMENT" },
-    { service: "A/W 4208", name: "SNCO IC B/PROCEEDING", role: "B/PROCEEDING" }
+    { service: "02802",    name: "SO TRG I",              role: "CMDR" },
+    { service: "03650",    name: "ASO TRG I",             role: "MOD" },
+    { service: "29816",    name: "WO IC",                 role: "PAYMENT" },
+    { service: "33557",    name: "SNCO IC B/PROCEEDINGS", role: "B/PROCEEDING" },
+    { service: "41979",    name: "SNCO IC AIR TICKET",    role: "TICKET" },
+    { service: "41336",    name: "SNCO IC PAYMENT",       role: "PAYMENT" },
+    { service: "38922",    name: "JNCO IC PAYMENT",       role: "PAYMENT" },
+    { service: "AW 4208",  name: "ACCT CLK",              role: "PAYMENT" },
+    { service: "AW 4702",  name: "JNCO IC AIR TICKET",    role: "TICKET" }
   ];
 
-  // Credentials store: key = service number (uppercase), value = { password, changed }
+  // Normalise service number for tolerant lookup ("AW 4208", "A/W 4208", "aw4208" all work)
+  function normalizeService(s) {
+    return String(s || "").toUpperCase().replace(/[\s\/\-\.]/g, "");
+  }
+
+  // Credentials store: key = normalized service number, value = { password, changed }
   let CREDENTIALS = {};
+
+  function credKey(svc) { return normalizeService(svc); }
 
   function loadCredentials() {
     try {
       const stored = localStorage.getItem("ftc_credentials_v12");
-      if (stored) {
-        CREDENTIALS = JSON.parse(stored);
-      } else {
-        CREDENTIALS = {};
-      }
+      CREDENTIALS = stored ? JSON.parse(stored) : {};
     } catch(e) { CREDENTIALS = {}; }
-    // Ensure all service numbers exist
     SERVICE_NUMBERS.forEach(s => {
-      const key = s.service.toUpperCase();
+      const key = credKey(s.service);
       if (!CREDENTIALS[key]) {
         CREDENTIALS[key] = { password: DEFAULT_PASSWORD, changed: false };
       }
@@ -313,29 +353,94 @@
   }
 
   function saveCredentials() {
-    try {
-      localStorage.setItem("ftc_credentials_v12", JSON.stringify(CREDENTIALS));
-    } catch(e) {}
+    try { localStorage.setItem("ftc_credentials_v12", JSON.stringify(CREDENTIALS)); } catch(e) {}
   }
 
-  let currentUser = null;       // service object
-  let currentUserKey = null;    // service number string (uppercase)
+  // ---- Login suggestion / remember-me helpers ----
+  function getLoginHistory() {
+    try { return JSON.parse(localStorage.getItem("ftc_login_history_v12") || "[]"); }
+    catch(e) { return []; }
+  }
+  function pushLoginHistory(svcNum) {
+    let hist = getLoginHistory();
+    hist = [svcNum, ...hist.filter(x => normalizeService(x) !== normalizeService(svcNum))].slice(0, 15);
+    try { localStorage.setItem("ftc_login_history_v12", JSON.stringify(hist)); } catch(e) {}
+  }
+  function getRemembered() {
+    try { return JSON.parse(localStorage.getItem("ftc_remembered_v12") || "{}"); }
+    catch(e) { return {}; }
+  }
+  function setRemembered(svcNum, pwd, remember) {
+    const rem = getRemembered();
+    const key = credKey(svcNum);
+    if (remember) rem[key] = pwd;
+    else delete rem[key];
+    try { localStorage.setItem("ftc_remembered_v12", JSON.stringify(rem)); } catch(e) {}
+  }
+
+  function populateLoginSuggestions() {
+    const dl = document.getElementById('serviceSuggestList');
+    if (!dl) return;
+    dl.innerHTML = '';
+    const history = getLoginHistory();
+    // history first, then remaining known service numbers
+    const ordered = [];
+    const seen = new Set();
+    history.forEach(s => {
+      const n = normalizeService(s);
+      if (!seen.has(n)) { seen.add(n); ordered.push(s); }
+    });
+    SERVICE_NUMBERS.forEach(s => {
+      const n = normalizeService(s.service);
+      if (!seen.has(n)) { seen.add(n); ordered.push(s.service); }
+    });
+    ordered.forEach(svcNum => {
+      const found = SERVICE_NUMBERS.find(x => normalizeService(x.service) === normalizeService(svcNum));
+      const opt = document.createElement('option');
+      opt.value = svcNum;
+      opt.label = found ? found.name : '';
+      dl.appendChild(opt);
+    });
+  }
+
+  function tryAutofillLogin() {
+    const userInput = document.getElementById('loginUser');
+    const passInput = document.getElementById('loginPass');
+    const remember = document.getElementById('rememberMe');
+    const history = getLoginHistory();
+    // Prefill last used service number if field empty
+    if (!userInput.value && history.length > 0) {
+      userInput.value = history[0];
+    }
+    const u = normalizeService(userInput.value);
+    if (!u) return;
+    const rem = getRemembered();
+    if (rem[u]) {
+      passInput.value = rem[u];
+      remember.checked = true;
+    }
+  }
+
+  let currentUser = null;
+  let currentUserKey = null;
 
   function attemptLogin() {
-    const u = document.getElementById('loginUser').value.trim().toUpperCase();
+    const uRaw = document.getElementById('loginUser').value.trim();
+    const u = normalizeService(uRaw);
     const p = document.getElementById('loginPass').value;
     const err = document.getElementById('loginError');
 
     if (!u) { err.innerText = '❌ Please enter your service number.'; playBeep(300,0.2,'square'); return; }
 
-    const svc = SERVICE_NUMBERS.find(s => s.service.toUpperCase() === u);
+    const svc = SERVICE_NUMBERS.find(s => normalizeService(s.service) === u);
     if (!svc) {
       err.innerText = '❌ Unknown service number. Check spelling.';
       playBeep(300,0.2,'square');
       return;
     }
 
-    const cred = CREDENTIALS[svc.service.toUpperCase()];
+    const key = credKey(svc.service);
+    const cred = CREDENTIALS[key];
     if (!cred || cred.password !== p) {
       err.innerText = '❌ Incorrect password.';
       playBeep(300,0.2,'square');
@@ -343,7 +448,13 @@
     }
 
     currentUser = svc;
-    currentUserKey = svc.service.toUpperCase();
+    currentUserKey = svc.service;   // keep canonical display form
+
+    // Save login history + remember-me preference
+    pushLoginHistory(svc.service);
+    setRemembered(svc.service, p, document.getElementById('rememberMe').checked);
+    populateLoginSuggestions();
+
     err.innerText = '';
     document.getElementById('loginOverlay').style.display = 'none';
     document.getElementById('mainDashboard').style.display = 'flex';
@@ -353,7 +464,6 @@
     showToast('✅ Welcome, ' + svc.name);
     playBeep(800,0.1);
 
-    // If first-time login (still default password), prompt to change
     if (!cred.changed) {
       setTimeout(() => {
         if (confirm("🔐 You are using the default password.\n\nWould you like to change it now?")) {
@@ -371,43 +481,45 @@
   // Restore session
   (function() {
     loadCredentials();
+    populateLoginSuggestions();
     const saved = sessionStorage.getItem('ftc_user_v12');
     if (saved) {
-      const svc = SERVICE_NUMBERS.find(s => s.service === saved);
+      const svc = SERVICE_NUMBERS.find(s => normalizeService(s.service) === normalizeService(saved));
       if (svc) {
         currentUser = svc;
-        currentUserKey = svc.service.toUpperCase();
+        currentUserKey = svc.service;
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('mainDashboard').style.display = 'flex';
         document.getElementById('currentUserDisplay').innerText = svc.name + ' (' + svc.service + ')';
       }
     }
+    tryAutofillLogin();
   })();
 
   // ===== PASSWORD RECOVERY =====
   function recoverPassword() {
-    const svc = document.getElementById('recoveryService').value.trim().toUpperCase();
+    const svcRaw = document.getElementById('recoveryService').value.trim();
     const secret = document.getElementById('recoverySecret').value.trim();
     const msg = document.getElementById('recoveryMsg');
     msg.className = 'login-error';
     msg.innerText = '';
 
-    if (!svc || !secret) { msg.innerText = '❌ Please fill both fields.'; return; }
+    if (!svcRaw || !secret) { msg.innerText = '❌ Please fill both fields.'; return; }
 
-    const found = SERVICE_NUMBERS.find(s => s.service.toUpperCase() === svc);
+    const found = SERVICE_NUMBERS.find(s => normalizeService(s.service) === normalizeService(svcRaw));
     if (!found) { msg.innerText = '❌ Service number not recognised.'; return; }
 
-    // Simple secret check: last 4 digits of NIC or phone — demo uses "1234" for any
-    // In production, replace with real check.
+    // Demo verification: "1234" for any account
     if (secret !== '1234') {
       msg.innerText = '❌ Verification failed. Use last 4 digits (demo: 1234).';
       return;
     }
 
-    const key = found.service.toUpperCase();
+    const key = credKey(found.service);
     CREDENTIALS[key].password = DEFAULT_PASSWORD;
     CREDENTIALS[key].changed = false;
     saveCredentials();
+    setRemembered(found.service, DEFAULT_PASSWORD, false);
 
     msg.style.color = '#22c55e';
     msg.innerText = '✅ Password reset to default: "password"';
@@ -441,7 +553,8 @@
     msg.className = 'pwd-msg';
 
     if (!currentUserKey) { msg.innerText = '❌ Not logged in.'; msg.classList.add('err'); return; }
-    const cred = CREDENTIALS[currentUserKey];
+    const key = credKey(currentUserKey);
+    const cred = CREDENTIALS[key];
     if (!cred) { msg.innerText = '❌ Account not found.'; msg.classList.add('err'); return; }
     if (cred.password !== oldP) { msg.innerText = '❌ Current password is incorrect.'; msg.classList.add('err'); playBeep(300,0.2,'square'); return; }
     if (newP.length < 4) { msg.innerText = '❌ New password must be at least 4 characters.'; msg.classList.add('err'); return; }
@@ -451,6 +564,8 @@
     cred.password = newP;
     cred.changed = true;
     saveCredentials();
+    // keep remember-me in sync if it was enabled
+    if (getRemembered()[key]) setRemembered(currentUserKey, newP, true);
     msg.innerText = '✅ Password changed successfully!';
     msg.classList.add('ok');
     playBeep(800,0.1);
@@ -489,7 +604,7 @@
     const today = new Date(); today.setHours(0,0,0,0);
     return Math.ceil((new Date(dateStr) - today) / 86400000);
   }
-  
+
   function getUrgencyInfo(course) {
     if(course.isCancelled) return { className:"", label:"❌ CANCELLED", daysLeft:null, urgencyLevel:null };
     let targetDate = course.paymentDate;
@@ -508,30 +623,27 @@
     if(days <= 14) return { className:"row-high", label:"🟠 HIGH", daysLeft:days, urgencyLevel:'high' };
     return { className:"", label:"🟢 NORMAL", daysLeft:days, urgencyLevel:'normal' };
   }
-  
-  function escapeHtml(s) { if(!s) return ""; return s.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+
+  function escapeHtml(s) { if(!s) return ""; return String(s).replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
 
   function getStatusHtml(status, blinkSent=false) {
     let cls="status-notsent", display="NOT";
-    if(status==="Not Sent"){ cls="status-notsent"; display="📤 NOT"; }
-    else if(status==="Sent"){ 
-      cls = blinkSent ? "status-blink-green" : "status-sent"; 
-      display = "✅ SENT";
-    }
-    else if(status==="Received"){ cls="status-received"; display="✅ REC"; }
-    else if(status==="Pending"){ cls="status-pending"; display="⏳ PEND"; }
+    if(status==="Not Sent"){ cls="status-notsent"; display="NOT"; }
+    else if(status==="Sent"){ cls = blinkSent ? "status-blink-green" : "status-sent"; display = "SENT"; }
+    else if(status==="Received"){ cls="status-received"; display="REC"; }
+    else if(status==="Pending"){ cls="status-pending"; display="PEND"; }
     return `<span class="status-badge ${cls}">${display}</span>`;
   }
-  
+
   function getWOStatusHtml(s, expDate, actDate) {
-    let cls="status-wo-notsent", display="NOT SENT";
+    let cls="status-wo-notsent", display="NOT";
     let extra='';
-    if(s==="SENT"){ 
-      cls="status-wo-sent"; display="✅ SENT";
-      if(actDate) extra=`<br><small>${actDate}</small>`; 
+    if(s==="SENT"){
+      cls="status-wo-sent"; display="SENT";
+      if(actDate) extra=`<br><small style="font-size:.6rem;">${actDate}</small>`;
     }
-    else if(s==="RECEIVED"){ cls="status-wo-received"; display="✅ REC"; if(actDate) extra=`<br><small>${actDate}</small>`; }
-    else { 
+    else if(s==="RECEIVED"){ cls="status-wo-received"; display="REC"; if(actDate) extra=`<br><small style="font-size:.6rem;">${actDate}</small>`; }
+    else {
       if(expDate) {
         const days = getDaysRemaining(expDate);
         let color = days<=3 ? 'background:#dc2626;color:white;' : days<=7 ? 'background:#f97316;color:white;' : 'background:#facc15;color:#0f172a;';
@@ -540,24 +652,25 @@
     }
     return `<span class="status-badge ${cls}">${display}</span>${extra}`;
   }
-  
+
   function getVisaStatusHtml(s) {
-    let cls="status-notsent", display="PENDING";
-    if(s==="VISA DOC PREP"){ cls="status-pending"; display="📄 DOC PREP"; }
-    else if(s==="VISA H/O TO EMBASSY"){ cls="status-sent"; display="✋ H/O"; }
-    else if(s==="VISA COLLECTED"){ cls="status-received"; display="✅ COLLECTED"; }
-    else if(s==="HOST COUNTRY HANDLING"){ cls="status-host"; display="🏛️ HOST"; }
+    let cls="status-notsent", display="PEND";
+    if(s==="VISA DOC PREP"){ cls="status-pending"; display="DOC"; }
+    else if(s==="VISA H/O TO EMBASSY"){ cls="status-sent"; display="H/O"; }
+    else if(s==="VISA COLLECTED"){ cls="status-received"; display="COLLECT"; }
+    else if(s==="HOST COUNTRY HANDLING"){ cls="status-host"; display="HOST"; }
+    else if(s==="VISA ON ARRIVAL"){ cls="status-offer"; display="ON ARR"; }
     return `<span class="status-badge ${cls}">${display}</span>`;
   }
-  
+
   function getTicketStatusHtml(s, dDate, oDate) {
-    let cls="status-notsent", display="PENDING";
+    let cls="status-notsent", display="PEND";
     let extra='';
-    if(s==="TICKET DEMAND RAISED"){ cls="status-pending"; display="📑 DEMAND"; if(dDate) extra=`<br><small>${dDate}</small>`; }
-    else if(s==="TICKET CONFIRMED"){ cls="status-sent"; display="🛫 CONFIRMED"; if(oDate) extra=`<br><small>${oDate}</small>`; }
-    else if(s==="TICKET OK"){ cls="status-received"; display="✅ OK"; if(oDate) extra=`<br><small>${oDate}</small>`; }
-    else if(s==="TICKET DEMAND BLINK"){ cls="status-blink-red"; display="🚨 DEMAND"; if(dDate) extra=`<br><small>${dDate}</small>`; }
-    else if(s==="OFFER"){ cls="status-offer"; display="💜 OFFER"; if(oDate) extra=`<br><small>${oDate}</small>`; }
+    if(s==="TICKET DEMAND RAISED"){ cls="status-pending"; display="DEMAND"; if(dDate) extra=`<br><small style="font-size:.6rem;">${dDate}</small>`; }
+    else if(s==="TICKET CONFIRMED"){ cls="status-sent"; display="CONF"; if(oDate) extra=`<br><small style="font-size:.6rem;">${oDate}</small>`; }
+    else if(s==="TICKET OK"){ cls="status-received"; display="OK"; if(oDate) extra=`<br><small style="font-size:.6rem;">${oDate}</small>`; }
+    else if(s==="TICKET DEMAND BLINK"){ cls="status-blink-red"; display="DEMAND"; if(dDate) extra=`<br><small style="font-size:.6rem;">${dDate}</small>`; }
+    else if(s==="OFFER"){ cls="status-offer"; display="OFFER"; if(oDate) extra=`<br><small style="font-size:.6rem;">${oDate}</small>`; }
     return `<span class="status-badge ${cls}">${display}</span>${extra}`;
   }
 
@@ -571,7 +684,7 @@
     { name: 'Ember', class: 'theme-ember' }
   ];
   let currentThemeIndex = 0;
-  
+
   function cycleTheme() {
     const themeClasses = themes.map(t => t.class);
     document.body.classList.remove(...themeClasses);
@@ -581,33 +694,33 @@
     showToast(`🎨 Theme: ${themes[currentThemeIndex].name}`);
     playBeep(800, 0.1, 'sine');
   }
-  
+
   function loadTheme() {
     const saved = localStorage.getItem('slaf_ftc_theme');
     const themeClasses = themes.map(t => t.class);
-    if (saved && themeClasses.includes(saved)) { 
-      document.body.classList.add(saved); 
+    if (saved && themeClasses.includes(saved)) {
+      document.body.classList.add(saved);
       currentThemeIndex = themeClasses.indexOf(saved);
-    } else { 
-      document.body.classList.add('theme-slaf'); 
+    } else {
+      document.body.classList.add('theme-slaf');
     }
   }
 
   function showToast(msg, isErr=false) {
-    const t = document.createElement("div"); 
-    t.className = "toast-msg" + (isErr ? " toast-error" : ""); 
+    const t = document.createElement("div");
+    t.className = "toast-msg" + (isErr ? " toast-error" : "");
     t.innerText = msg;
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 3000);
     if(isErr) playBeep(300, 0.2, "square");
     else playBeep(600, 0.08);
   }
-  
+
   function playBeep(freq=800, dur=0.12, type="sine") {
     if(!soundEnabled) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator(); 
+      const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
       osc.frequency.value = freq; osc.type = type;
@@ -626,31 +739,25 @@
     updateUndoButtons();
     autoSaveData();
   }
-  
-  function undo() { 
-    if(historyIndex > 0) { 
-      historyIndex--; 
-      coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); 
-      saveToLocal(); 
-      renderTable(); 
-      checkAlerts(); 
-      showToast("↩️ Undo"); 
-      playBeep(400,0.1); 
-    } 
+
+  function undo() {
+    if(historyIndex > 0) {
+      historyIndex--;
+      coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+      saveToLocal(); renderTable(); checkAlerts();
+      showToast("↩️ Undo"); playBeep(400,0.1);
+    }
   }
-  
-  function redo() { 
-    if(historyIndex < historyStack.length-1) { 
-      historyIndex++; 
-      coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex])); 
-      saveToLocal(); 
-      renderTable(); 
-      checkAlerts(); 
-      showToast("↪️ Redo"); 
-      playBeep(500,0.1); 
-    } 
+
+  function redo() {
+    if(historyIndex < historyStack.length-1) {
+      historyIndex++;
+      coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+      saveToLocal(); renderTable(); checkAlerts();
+      showToast("↪️ Redo"); playBeep(500,0.1);
+    }
   }
-  
+
   function updateUndoButtons() {
     document.getElementById("undoBtn").style.opacity = historyIndex>0 ? 1 : 0.4;
     document.getElementById("redoBtn").style.opacity = historyIndex<historyStack.length-1 ? 1 : 0.4;
@@ -658,10 +765,7 @@
 
   function autoSaveData() {
     if(autoSaveTimer) clearTimeout(autoSaveTimer);
-    autoSaveTimer = setTimeout(() => {
-      saveToLocal();
-      autoSaveTimer = null;
-    }, 500);
+    autoSaveTimer = setTimeout(() => { saveToLocal(); autoSaveTimer = null; }, 500);
   }
 
   function checkAlerts() {
@@ -694,14 +798,14 @@
     else selectedCourses.add(id);
     updateSelectionUI(); renderTable();
   }
-  
+
   function toggleAllSelection() {
     const checked = document.getElementById('selectAllCheckbox').checked;
     if(checked) coursesData.forEach(c => selectedCourses.add(c.id));
     else selectedCourses.clear();
     updateSelectionUI(); renderTable();
   }
-  
+
   function updateSelectionUI() {
     const count = selectedCourses.size;
     document.getElementById('selectionCount').textContent = count;
@@ -710,9 +814,9 @@
     const all = coursesData.length>0 && coursesData.every(c => selectedCourses.has(c.id));
     document.getElementById('selectAllCheckbox').checked = all;
   }
-  
+
   function clearSelection() { selectedCourses.clear(); updateSelectionUI(); renderTable(); }
-  
+
   function bulkUpdateStatus(field, status) {
     if(selectedCourses.size===0) { showToast('⚠️ Select courses', true); return; }
     if(!confirm(`Update ${selectedCourses.size} courses?`)) return;
@@ -724,7 +828,7 @@
     saveToHistory(); saveToLocal(); renderTable(); checkAlerts(); showToast(`✅ Updated ${updated}`); clearSelection();
     playBeep(700,0.1);
   }
-  
+
   function bulkDeleteSelected() {
     if(selectedCourses.size===0) { showToast('⚠️ Select courses', true); return; }
     if(!confirm(`Delete ${selectedCourses.size} courses?`)) return;
@@ -737,7 +841,7 @@
 
   function exportData() {
     const data = {
-      version: '12.1',
+      version: '12.2',
       exportedAt: new Date().toISOString(),
       exportedBy: currentUserKey || 'unknown',
       courses: coursesData,
@@ -769,12 +873,21 @@
     return `<span class="audit-tip">ⓘ<span class="audit-text">👤 Last updated by: <b>${by}</b><br>🕒 ${at}</span></span>`;
   }
 
+  // Update the PAYMENT column header based on the type filter — becomes "NOM DEADLINE" when Nominations are shown
+  function updateColumnHeaders() {
+    const typeVal = document.getElementById("typeFilter").value;
+    const payHeader = document.getElementById("paymentHeader");
+    if(payHeader) payHeader.innerText = (typeVal === 'Nomination') ? 'NOM DEADLINE' : 'PAYMENT';
+  }
+
   function renderTable() {
     const countryVal = document.getElementById("countryFilter").value;
     const typeVal = document.getElementById("typeFilter").value;
     const cmdrFilter = document.getElementById("approvalFilter").value;
     const modFilter = document.getElementById("modApprovalFilter").value;
     const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+    updateColumnHeaders();
 
     let filtered = coursesData.filter(c => {
       if(countryVal !== "all" && c.country !== countryVal) return false;
@@ -802,7 +915,7 @@
 
     updateStats();
     document.getElementById('rowCountDisplay').textContent = filtered.length;
-    
+
     const tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
     if(filtered.length === 0) {
@@ -826,6 +939,7 @@
       cb.onchange = () => toggleSelection(course.id);
       cbTd.appendChild(cb); tr.appendChild(cbTd);
 
+      // TYPE
       const typeCell = document.createElement("td"); typeCell.className = "col-type";
       if(isEditing) {
         const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-type-${course.id}`;
@@ -838,24 +952,28 @@
       }
       tr.appendChild(typeCell);
 
+      // COURSE NAME (left aligned)
       const courseCell = document.createElement("td"); courseCell.className = "col-course course-name-cell";
       if(isEditing) {
         const inp = document.createElement("input"); inp.className = "edit-input"; inp.id = `edit-name-${course.id}`;
-        inp.value = course.courseName; inp.setAttribute("list", "courseSuggestList"); inp.style.fontWeight="900"; inp.style.fontSize="1rem";
+        inp.value = course.courseName; inp.setAttribute("list", "courseSuggestList");
+        inp.style.fontWeight = "900"; inp.style.fontSize = "1rem"; inp.style.textAlign = "left";
+        // Auto-select all on focus so typing replaces the whole name
         inp.addEventListener('focus', function() { this.select(); });
+        inp.addEventListener('click', function() { this.select(); });
         courseCell.appendChild(inp);
       } else {
         let blinkClass = '';
         let extra = '';
         if(course.isNomination) {
           blinkClass = 'course-nom-blink';
-          extra = `<span class="type-badge type-nomination" style="font-size:0.6rem;padding:1px 8px;margin-left:6px;">NOM</span>`;
+          extra = `<span class="type-badge type-nomination" style="font-size:0.55rem;padding:1px 6px;margin-left:6px;">NOM</span>`;
         } else if(urgency.urgencyLevel === 'critical') {
           blinkClass = 'course-critical-blink';
-          extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:1px 8px;border-radius:40px;font-size:0.6rem;font-weight:900;margin-left:6px;animation:blinkRed 0.8s infinite;">CRIT</span>`;
+          extra = `<span style="display:inline-block;background:#dc2626;color:white;padding:1px 6px;border-radius:40px;font-size:0.55rem;font-weight:900;margin-left:6px;animation:blinkRed 0.8s infinite;">CRIT</span>`;
         } else if(urgency.urgencyLevel === 'high') {
           blinkClass = 'course-urgent-blink';
-          extra = `<span style="display:inline-block;background:#f97316;color:white;padding:1px 8px;border-radius:40px;font-size:0.6rem;font-weight:900;margin-left:6px;animation:blinkOrange 1.2s infinite;">HIGH</span>`;
+          extra = `<span style="display:inline-block;background:#f97316;color:white;padding:1px 6px;border-radius:40px;font-size:0.55rem;font-weight:900;margin-left:6px;animation:blinkOrange 1.2s infinite;">HIGH</span>`;
         } else if(urgency.urgencyLevel === 'nom') {
           blinkClass = 'course-nom-blink';
         }
@@ -863,6 +981,7 @@
       }
       tr.appendChild(courseCell);
 
+      // OFFICERS
       const oaCell = document.createElement("td"); oaCell.className = "col-officers";
       if(isEditing) {
         const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-officers-${course.id}`;
@@ -871,61 +990,70 @@
       } else { oaCell.innerText = course.officersAirmen; }
       tr.appendChild(oaCell);
 
+      // COUNTRY (auto-select on focus for quick replacement)
       const countryCell = document.createElement("td"); countryCell.className = "col-country";
       if(isEditing) {
         const inp = document.createElement("input"); inp.className = "edit-input"; inp.id = `edit-country-${course.id}`;
         inp.value = course.country; inp.setAttribute("list", `countryList-${course.id}`);
+        inp.addEventListener('focus', function() { this.select(); });
+        inp.addEventListener('click', function() { this.select(); });
         const dl = document.createElement("datalist"); dl.id = `countryList-${course.id}`;
         countryOptions.forEach(c => { const o=document.createElement("option"); o.value=c; dl.appendChild(o); });
         countryCell.appendChild(inp); countryCell.appendChild(dl);
       } else { countryCell.innerText = course.country; }
       tr.appendChild(countryCell);
 
+      // DEP
       const depCell = document.createElement("td"); depCell.className = "col-departure";
       if(isEditing) depCell.innerHTML = `<input type="date" class="edit-input" id="edit-dep-${course.id}" value="${course.depDate}" style="font-size:0.9rem;font-weight:900;">`;
       else depCell.innerHTML = `<span style="font-size:0.95rem;font-weight:900;">${course.depDate}</span>`;
       tr.appendChild(depCell);
 
+      // RET
       const retCell = document.createElement("td"); retCell.className = "col-return";
       if(isEditing) retCell.innerHTML = `<input type="date" class="edit-input" id="edit-ret-${course.id}" value="${course.returnDate}" style="font-size:0.9rem;font-weight:900;">`;
       else retCell.innerHTML = `<span style="font-size:0.95rem;font-weight:900;">${course.returnDate}</span>`;
       tr.appendChild(retCell);
 
+      // DAYS
       const daysCell = document.createElement("td"); daysCell.className = "col-days";
       let color = '';
       if(urgency.daysLeft !== null && urgency.daysLeft >= 0) {
-        if(urgency.daysLeft <= 2) color = 'color:#dc2626;font-weight:900;font-size:1.2rem;';
-        else if(urgency.daysLeft <= 7) color = 'color:#f97316;font-weight:900;font-size:1.1rem;';
-        else if(urgency.daysLeft <= 14) color = 'color:#eab308;font-weight:800;font-size:1rem;';
+        if(urgency.daysLeft <= 2) color = 'color:#dc2626;font-weight:900;font-size:1.1rem;';
+        else if(urgency.daysLeft <= 7) color = 'color:#f97316;font-weight:900;font-size:1rem;';
+        else if(urgency.daysLeft <= 14) color = 'color:#eab308;font-weight:800;font-size:.95rem;';
       }
       daysCell.innerHTML = `<span style="${color}">${daysLeft}</span>`;
       tr.appendChild(daysCell);
 
+      // PAYMENT / NOM DEADLINE
       const paymentCell = document.createElement("td"); paymentCell.className = "col-payment clerk-col";
       if(isEditing) {
-        paymentCell.innerHTML = `<input type="date" class="edit-input" id="edit-payment-${course.id}" value="${course.paymentDate||''}" style="font-weight:900;font-size:0.9rem;">`;
+        paymentCell.innerHTML = `<input type="date" class="edit-input" id="edit-payment-${course.id}" value="${course.isNomination ? (course.deadlineDate||'') : (course.paymentDate||'')}" style="font-weight:900;font-size:0.9rem;">`;
       } else {
-        let iconHtml = `<span class="subject-icon icon-payment"></span>`;
         if(course.isNomination) {
+          const iconHtml = `<span class="subject-icon icon-nom" style="color:#ec4899;"></span>`;
           if(course.deadlineDate) {
             const d = getDaysRemaining(course.deadlineDate);
-            if(d>=0 && d<=7) paymentCell.innerHTML = `${iconHtml}<span style="background:#dc2626;color:white;padding:4px 10px;border-radius:40px;font-weight:900;font-size:0.9rem;">${course.deadlineDate}</span>`;
-            else paymentCell.innerHTML = `${iconHtml}<span style="font-weight:900;font-size:0.9rem;">${course.deadlineDate}</span>`;
+            if(d>=0 && d<=7) paymentCell.innerHTML = `${iconHtml}<span style="background:#dc2626;color:white;padding:2px 8px;border-radius:40px;font-weight:900;font-size:.8rem;">${course.deadlineDate}</span>`;
+            else paymentCell.innerHTML = `${iconHtml}<span style="font-weight:900;font-size:.85rem;">${course.deadlineDate}</span>`;
           } else { paymentCell.innerHTML = `${iconHtml}—`; }
         } else {
+          const iconHtml = `<span class="subject-icon icon-payment"></span>`;
           if(course.paymentDate) {
             const d = getDaysRemaining(course.paymentDate);
-            let style = 'font-weight:900;font-size:0.9rem;';
-            if(d>=0 && d<=2) style += 'background:#dc2626;color:white;padding:3px 10px;border-radius:40px;';
-            else if(d>=0 && d<=7) style += 'background:#f97316;color:white;padding:3px 10px;border-radius:40px;';
-            else if(d>=0 && d<=14) style += 'background:#eab308;color:black;padding:3px 10px;border-radius:40px;';
-            else style += 'background:var(--bg-tertiary);padding:3px 10px;border-radius:40px;border:1px solid var(--border-color);';
+            let style = 'font-weight:900;font-size:.85rem;';
+            if(d>=0 && d<=2) style += 'background:#dc2626;color:white;padding:2px 8px;border-radius:40px;';
+            else if(d>=0 && d<=7) style += 'background:#f97316;color:white;padding:2px 8px;border-radius:40px;';
+            else if(d>=0 && d<=14) style += 'background:#eab308;color:black;padding:2px 8px;border-radius:40px;';
+            else style += 'background:var(--bg-tertiary);padding:2px 8px;border-radius:40px;border:1px solid var(--border-color);';
             paymentCell.innerHTML = `${iconHtml}<span style="${style}">${course.paymentDate}</span>`;
           } else { paymentCell.innerHTML = `${iconHtml}—`; }
         }
       }
       tr.appendChild(paymentCell);
 
+      // CMDR — triangle icon
       const cmdrTd = document.createElement("td"); cmdrTd.className = "col-cmdr clerk-col";
       if(isEditing) {
         const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-cmdr-${course.id}`;
@@ -933,10 +1061,11 @@
         cmdrTd.appendChild(sel);
       } else {
         const blinkSent = course.cmdrStatus === 'Sent';
-        cmdrTd.innerHTML = `<span class="subject-icon icon-cmdr" style="color:#3b82f6;"></span>` + getStatusHtml(course.cmdrStatus, blinkSent);
+        cmdrTd.innerHTML = `<span class="subject-icon icon-cmdr" title="CMDR"></span>` + getStatusHtml(course.cmdrStatus, blinkSent);
       }
       tr.appendChild(cmdrTd);
 
+      // MOD — hexagon icon
       const modTd = document.createElement("td"); modTd.className = "col-mod clerk-col";
       if(isEditing) {
         const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-mod-${course.id}`;
@@ -944,20 +1073,22 @@
         modTd.appendChild(sel);
       } else {
         const blinkSent = course.modStatus === 'Sent' || course.modStatus === 'Pending';
-        modTd.innerHTML = `<span class="subject-icon icon-mod" style="color:#8b5cf6;"></span>` + getStatusHtml(course.modStatus, blinkSent);
+        modTd.innerHTML = `<span class="subject-icon icon-mod" title="MOD"></span>` + getStatusHtml(course.modStatus, blinkSent);
       }
       tr.appendChild(modTd);
 
+      // VISA — diamond icon, with ON ARRIVAL option
       const visaTd = document.createElement("td"); visaTd.className = "col-visa clerk-col";
       if(isEditing) {
         const sel = document.createElement("select"); sel.className = "edit-select"; sel.id = `edit-visa-${course.id}`;
-        sel.innerHTML = `<option value="PENDING" ${course.visaStatus==="PENDING"?"selected":""}>⏳ PENDING</option><option value="VISA DOC PREP" ${course.visaStatus==="VISA DOC PREP"?"selected":""}>📄 DOC PREP</option><option value="VISA H/O TO EMBASSY" ${course.visaStatus==="VISA H/O TO EMBASSY"?"selected":""}>✋ H/O</option><option value="VISA COLLECTED" ${course.visaStatus==="VISA COLLECTED"?"selected":""}>✅ COLLECTED</option><option value="HOST COUNTRY HANDLING" ${course.visaStatus==="HOST COUNTRY HANDLING"?"selected":""}>🏛️ HOST</option>`;
+        sel.innerHTML = `<option value="PENDING" ${course.visaStatus==="PENDING"?"selected":""}>⏳ PENDING</option><option value="VISA DOC PREP" ${course.visaStatus==="VISA DOC PREP"?"selected":""}>📄 DOC PREP</option><option value="VISA H/O TO EMBASSY" ${course.visaStatus==="VISA H/O TO EMBASSY"?"selected":""}>✋ H/O</option><option value="VISA COLLECTED" ${course.visaStatus==="VISA COLLECTED"?"selected":""}>✅ COLLECTED</option><option value="VISA ON ARRIVAL" ${course.visaStatus==="VISA ON ARRIVAL"?"selected":""}>🛬 ON ARRIVAL</option><option value="HOST COUNTRY HANDLING" ${course.visaStatus==="HOST COUNTRY HANDLING"?"selected":""}>🏛️ HOST</option>`;
         visaTd.appendChild(sel);
-      } else { 
-        visaTd.innerHTML = `<span class="subject-icon icon-visa" style="color:#f59e0b;"></span>` + getVisaStatusHtml(course.visaStatus); 
+      } else {
+        visaTd.innerHTML = `<span class="subject-icon icon-visa" title="VISA"></span>` + getVisaStatusHtml(course.visaStatus);
       }
       tr.appendChild(visaTd);
 
+      // TICKET — star icon
       const ticketTd = document.createElement("td"); ticketTd.className = "col-ticket clerk-col";
       if(isEditing) {
         ticketTd.innerHTML = `
@@ -973,10 +1104,11 @@
           <input type="date" class="edit-input" id="edit-opendate-${course.id}" value="${course.ticketOpenDate||''}" style="font-size:0.8rem;margin-top:4px;">
         `;
       } else {
-        ticketTd.innerHTML = `<span class="subject-icon icon-ticket" style="color:#ef4444;"></span>` + getTicketStatusHtml(course.ticketStatus, course.ticketDemandDate, course.ticketOpenDate);
+        ticketTd.innerHTML = `<span class="subject-icon icon-ticket" title="TICKET"></span>` + getTicketStatusHtml(course.ticketStatus, course.ticketDemandDate, course.ticketOpenDate);
       }
       tr.appendChild(ticketTd);
 
+      // WARNING ORDER — plus icon
       const woCell = document.createElement("td"); woCell.className = "col-wo clerk-col";
       if(isEditing) {
         woCell.innerHTML = `
@@ -988,10 +1120,11 @@
           <input type="date" class="edit-input" id="edit-woactual-${course.id}" value="${course.woActualDate||''}" style="font-size:0.8rem;margin-top:4px;">
         `;
       } else {
-        woCell.innerHTML = `<span class="subject-icon icon-wo" style="color:#ec4899;"></span>` + getWOStatusHtml(course.woStatus, course.woExpectedDate, course.woActualDate);
+        woCell.innerHTML = `<span class="subject-icon icon-wo" title="WARNING ORDER"></span>` + getWOStatusHtml(course.woStatus, course.woExpectedDate, course.woActualDate);
       }
       tr.appendChild(woCell);
 
+      // ACTIONS
       const actionTd = document.createElement("td"); actionTd.className = "col-actions";
       if(isEditing) {
         const saveBtn = document.createElement("button"); saveBtn.innerText = "💾"; saveBtn.className = "inline-edit-btn"; saveBtn.onclick = () => saveEdit(course.id);
@@ -1043,11 +1176,8 @@
     if(ret) c.returnDate = ret;
     if(document.getElementById(`edit-payment-${id}`)) {
       const payDate = document.getElementById(`edit-payment-${id}`).value;
-      if(c.isNomination) {
-        c.deadlineDate = payDate;
-      } else {
-        c.paymentDate = payDate;
-      }
+      if(c.isNomination) c.deadlineDate = payDate;
+      else { c.paymentDate = payDate; c.deadlineDate = ""; }
     }
     if(document.getElementById(`edit-cmdr-${id}`)) c.cmdrStatus = document.getElementById(`edit-cmdr-${id}`).value;
     if(document.getElementById(`edit-mod-${id}`)) c.modStatus = document.getElementById(`edit-mod-${id}`).value;
@@ -1082,7 +1212,7 @@
     playBeep(700,0.1);
     setTimeout(() => { const inp = document.getElementById(`edit-name-${newId}`); if(inp){ inp.focus(); inp.select(); } }, 150);
   }
-  
+
   function addNomination() {
     const newId = Date.now();
     const today = new Date().toISOString().slice(0,10);
@@ -1147,7 +1277,7 @@
       localStorage.setItem("nominationCounter", nominationCounter);
     } catch(e) {}
   }
-  
+
   function loadFromLocal() {
     try {
       const stored = localStorage.getItem("slaf_ftc_tv");
@@ -1161,14 +1291,14 @@
     } catch(e) { coursesData = JSON.parse(JSON.stringify(defaultData)); }
     updateCourseDatalist(); populateCountryFilter(); renderTable(); saveToHistory(); checkAlerts();
   }
-  
+
   function populateCountryFilter() {
     const countries = [...new Set(coursesData.map(c => c.country))].sort();
     const sel = document.getElementById("countryFilter");
     sel.innerHTML = '<option value="all">🌍 ALL</option>';
     countries.forEach(c => { const o=document.createElement("option"); o.value=c; o.innerText=c; sel.appendChild(o); });
   }
-  
+
   function updateCourseDatalist() {
     const dl = document.getElementById("courseSuggestList");
     dl.innerHTML = "";
@@ -1199,28 +1329,28 @@
     document.getElementById("utcClock").innerText = now.toUTCString().slice(17,25);
   }
 
-  function toggleSound() { 
-    soundEnabled = !soundEnabled; 
-    document.getElementById("soundToggleBtn").innerText = soundEnabled ? "🔊" : "🔇"; 
-    showToast(soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF"); 
+  function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById("soundToggleBtn").innerText = soundEnabled ? "🔊" : "🔇";
+    showToast(soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF");
   }
-  
+
   function toggleAutoRefresh() {
-    if(autoRefreshInterval) { 
-      clearInterval(autoRefreshInterval); 
-      autoRefreshInterval = null; 
-      document.getElementById('autoRefreshStatus').textContent = 'OFF'; 
-      document.getElementById('autoRefreshBtn').textContent = '⏱️'; 
-      showToast('🔄 Auto OFF'); 
-    } else { 
-      autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000); 
-      document.getElementById('autoRefreshStatus').textContent = 'ON'; 
-      document.getElementById('autoRefreshBtn').textContent = '⏱️'; 
-      showToast('🔄 Auto ON (5 min)'); 
+    if(autoRefreshInterval) {
+      clearInterval(autoRefreshInterval);
+      autoRefreshInterval = null;
+      document.getElementById('autoRefreshStatus').textContent = 'OFF';
+      document.getElementById('autoRefreshBtn').textContent = '⏱️';
+      showToast('🔄 Auto OFF');
+    } else {
+      autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000);
+      document.getElementById('autoRefreshStatus').textContent = 'ON';
+      document.getElementById('autoRefreshBtn').textContent = '⏱️';
+      showToast('🔄 Auto ON (5 min)');
     }
     playBeep(500,0.1);
   }
-  
+
   function toggleFullscreen() {
     if(!document.fullscreenElement) {
       document.documentElement.requestFullscreen?.().catch(() => {});
@@ -1238,7 +1368,7 @@
       setTimeout(() => renderTable(), 250);
     }
   }
-  
+
   function toggleStats() {
     statsCollapsed = !statsCollapsed;
     document.getElementById('statsRow').classList.toggle('collapsed', statsCollapsed);
@@ -1313,15 +1443,10 @@
       if(e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
       if(e.ctrlKey && e.key === 'n') { e.preventDefault(); addNewCourse(); }
       if(e.ctrlKey && e.key === 'f') { e.preventDefault(); toggleFullscreen(); }
-      if(e.key === 'Escape') { 
-        if(editingRowId) { 
-          editingRowId = null; 
-          renderTable(); 
-        } else if(document.fullscreenElement) {
-          toggleFullscreen();
-        } else if(document.getElementById('pwdModal').classList.contains('show')) {
-          closePwdModal();
-        }
+      if(e.key === 'Escape') {
+        if(editingRowId) { editingRowId = null; renderTable(); }
+        else if(document.fullscreenElement) { toggleFullscreen(); }
+        else if(document.getElementById('pwdModal').classList.contains('show')) { closePwdModal(); }
       }
       if(e.ctrlKey && e.key === 'p') { e.preventDefault(); printReport(); }
     });
@@ -1334,24 +1459,24 @@
       }
     });
 
-    window.toggleSelection = toggleSelection; 
+    window.toggleSelection = toggleSelection;
     window.clearSelection = clearSelection;
-    window.bulkUpdateStatus = bulkUpdateStatus; 
+    window.bulkUpdateStatus = bulkUpdateStatus;
     window.bulkDeleteSelected = bulkDeleteSelected;
-    window.saveEdit = saveEdit; 
-    window.renderTable = renderTable; 
+    window.saveEdit = saveEdit;
+    window.renderTable = renderTable;
     window.checkAlerts = checkAlerts;
-    window.addNewCourse = addNewCourse; 
-    window.addNomination = addNomination; 
-    window.undo = undo; 
+    window.addNewCourse = addNewCourse;
+    window.addNomination = addNomination;
+    window.undo = undo;
     window.redo = redo;
-    window.resetDemo = resetDemo; 
-    window.toggleSound = toggleSound; 
+    window.resetDemo = resetDemo;
+    window.toggleSound = toggleSound;
     window.toggleFullscreen = toggleFullscreen;
-    window.toggleAutoRefresh = toggleAutoRefresh; 
-    window.cycleTheme = cycleTheme; 
+    window.toggleAutoRefresh = toggleAutoRefresh;
+    window.cycleTheme = cycleTheme;
     window.toggleStats = toggleStats;
-    window.playBeep = playBeep; 
+    window.playBeep = playBeep;
     window.showToast = showToast;
     window.exportData = exportData;
     window.printReport = printReport;
@@ -1364,6 +1489,18 @@
   document.getElementById('loginBtn').addEventListener('click', attemptLogin);
   document.getElementById('loginPass').addEventListener('keydown', (e) => { if(e.key === 'Enter') attemptLogin(); });
   document.getElementById('loginUser').addEventListener('keydown', (e) => { if(e.key === 'Enter') document.getElementById('loginPass').focus(); });
+
+  // Auto-fill password when the user types/pastes a service number that was previously remembered
+  document.getElementById('loginUser').addEventListener('input', function() {
+    const u = normalizeService(this.value);
+    const passInput = document.getElementById('loginPass');
+    const remember = document.getElementById('rememberMe');
+    const rem = getRemembered();
+    if(rem[u]) {
+      passInput.value = rem[u];
+      remember.checked = true;
+    }
+  });
 
   document.getElementById('recoveryToggle').addEventListener('click', () => {
     document.getElementById('recoveryBox').classList.toggle('show');
