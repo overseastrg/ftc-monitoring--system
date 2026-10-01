@@ -3,20 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-<title>SLAF FTC | TV Dashboard v14.0 — LG UA80 Edition</title>
+<title>SLAF FTC | TV Dashboard v14.1 — LG UA80 Edition</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
 
-  /* ============================================================
-     THEME TOKENS — redesigned for TV contrast & colour harmony
-     ============================================================ */
   :root{
     --radius-lg:28px; --radius-md:18px; --radius-sm:12px;
     --focus-ring:3px solid #fbbf24; --focus-offset:3px;
-    --tv-base:22px;   /* Bigger base font for 55" TV at ~3m */
+    --tv-base:22px;
+    --col-sep:#000;
   }
 
-  /* SLAF Midnight — deep aviation blue with electric cyan */
   body.theme-slaf{
     --bg-primary:#061224; --bg-secondary:#0b2038; --bg-tertiary:#02080f;
     --border-color:#22d3ee; --border-soft:#155e75;
@@ -25,8 +22,8 @@
     --card-bg:#0b2038; --hover-bg:#153a5c;
     --danger:#ef4444; --warn:#f97316; --nom:#ec4899; --ok:#22c55e;
     --shadow:0 0 60px rgba(34,211,238,.25);
+    --col-sep:#000;
   }
-  /* Ceremonial Gold — navy + refined gold */
   body.theme-gold{
     --bg-primary:#0a0d1f; --bg-secondary:#141838; --bg-tertiary:#050713;
     --border-color:#facc15; --border-soft:#a16207;
@@ -35,8 +32,8 @@
     --card-bg:#141838; --hover-bg:#1e2450;
     --danger:#ef4444; --warn:#f97316; --nom:#ec4899; --ok:#22c55e;
     --shadow:0 0 60px rgba(250,204,21,.25);
+    --col-sep:#000;
   }
-  /* Command Centre — graphite + electric blue */
   body.theme-command{
     --bg-primary:#0a0f18; --bg-secondary:#141c28; --bg-tertiary:#050810;
     --border-color:#60a5fa; --border-soft:#1e40af;
@@ -45,8 +42,8 @@
     --card-bg:#141c28; --hover-bg:#1e2a3d;
     --danger:#f87171; --warn:#fb923c; --nom:#f472b6; --ok:#4ade80;
     --shadow:0 0 50px rgba(96,165,250,.3);
+    --col-sep:#000;
   }
-  /* Arctic — crisp light */
   body.theme-arctic{
     --bg-primary:#eef4fb; --bg-secondary:#dbe7f5; --bg-tertiary:#f8fbff;
     --border-color:#0f4c81; --border-soft:#64748b;
@@ -55,8 +52,8 @@
     --card-bg:#ffffff; --hover-bg:#c9dbf0;
     --danger:#b91c1c; --warn:#c2410c; --nom:#9d174d; --ok:#166534;
     --shadow:0 8px 32px rgba(15,76,129,.18);
+    --col-sep:#000;
   }
-  /* Emerald Operations */
   body.theme-emerald{
     --bg-primary:#04160e; --bg-secondary:#0a2a1c; --bg-tertiary:#020a06;
     --border-color:#10b981; --border-soft:#065f46;
@@ -65,8 +62,8 @@
     --card-bg:#0a2a1c; --hover-bg:#154a35;
     --danger:#f87171; --warn:#fb923c; --nom:#f472b6; --ok:#34d399;
     --shadow:0 0 50px rgba(16,185,129,.28);
+    --col-sep:#000;
   }
-  /* Crimson Alert — high-stakes */
   body.theme-crimson{
     --bg-primary:#1a0505; --bg-secondary:#2e0d0d; --bg-tertiary:#0d0202;
     --border-color:#f43f5e; --border-soft:#9f1239;
@@ -75,8 +72,8 @@
     --card-bg:#2e0d0d; --hover-bg:#4c1d24;
     --danger:#fca5a5; --warn:#fdba74; --nom:#f9a8d4; --ok:#86efac;
     --shadow:0 0 50px rgba(244,63,94,.3);
+    --col-sep:#000;
   }
-  /* High-Contrast — accessibility */
   body.theme-hc{
     --bg-primary:#000; --bg-secondary:#000; --bg-tertiary:#000;
     --border-color:#ffff00; --border-soft:#ffff00;
@@ -85,8 +82,10 @@
     --card-bg:#000; --hover-bg:#1a1a00;
     --danger:#ff3030; --warn:#ff9900; --nom:#ff00ff; --ok:#00ff00;
     --shadow:0 0 0 3px #ffff00;
+    --col-sep:#ffff00;
   }
 
+  html,body{height:100%;}
   body{
     background:var(--bg-primary);
     color:var(--text-primary);
@@ -96,31 +95,16 @@
     -webkit-font-smoothing:antialiased;
   }
 
-  /* ============================================================
-     TV-FRIENDLY FOCUS — critical for D-pad remote control
-     ============================================================ */
+  /* ============ TV focus ============ */
   *:focus{outline:none;}
-  button:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible,
-  [tabindex]:focus-visible,
-  .stat-card:focus-visible,
-  .filter-preset-btn:focus-visible,
-  .action-icon:focus-visible{
-    outline:var(--focus-ring);
-    outline-offset:var(--focus-offset);
+  button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,
+  [tabindex]:focus-visible,.stat-card:focus-visible,.filter-preset-btn:focus-visible,.action-icon:focus-visible{
+    outline:var(--focus-ring); outline-offset:var(--focus-offset);
     box-shadow:0 0 0 6px rgba(251,191,36,.25);
     transition:box-shadow .15s ease;
   }
-  /* Remote D-pad focus (may not have :focus-visible, fallback) */
-  button:focus, input:focus, select:focus, [tabindex]:focus{
-    outline:var(--focus-ring);
-    outline-offset:var(--focus-offset);
-  }
-  .tv-cursor{ /* applied by JS to indicate D-pad cursor position */
-    position:relative;
-  }
+  button:focus,input:focus,select:focus,[tabindex]:focus{outline:var(--focus-ring);outline-offset:var(--focus-offset);}
+  .tv-cursor{position:relative;}
   .tv-cursor::after{
     content:''; position:absolute; inset:-4px; border:3px solid var(--accent-1);
     border-radius:14px; pointer-events:none;
@@ -131,9 +115,7 @@
     50%{opacity:.6; box-shadow:0 0 24px var(--accent-1);}
   }
 
-  /* ============================================================
-     DASHBOARD
-     ============================================================ */
+  /* ============ Dashboard ============ */
   .dashboard{
     max-width:100%; background:var(--bg-primary);
     border-radius:var(--radius-lg); border:2px solid var(--border-color);
@@ -142,7 +124,8 @@
     transition:all .35s ease;
   }
 
-  /* Fullscreen TV mode — strips chrome for wall display */
+  /* ============ FULLSCREEN 55" TV ============ */
+  body.fullscreen-mode{padding:0; overflow:hidden; height:100vh;}
   body.fullscreen-mode .header,
   body.fullscreen-mode .stats-row,
   body.fullscreen-mode #alertContainer,
@@ -152,16 +135,53 @@
   body.fullscreen-mode .stat-toggle,
   body.fullscreen-mode .toolbar-actions,
   body.fullscreen-mode .shortcuts-hint{display:none !important;}
-  body.fullscreen-mode .dashboard{padding:6px 10px;border-radius:14px;border-width:1px;}
-  body.fullscreen-mode .table-wrapper{max-height:94vh !important;border-radius:12px;margin:0;}
-  body.fullscreen-mode .editable-table{font-size:1.15rem;min-width:unset;}
-  body.fullscreen-mode .editable-table th{padding:10px 6px;font-size:.8rem;}
-  body.fullscreen-mode .editable-table td{padding:8px 6px;font-size:.95rem;}
-  body.fullscreen-mode .col-actions,body.fullscreen-mode .col-checkbox{display:none;}
 
-  /* ============================================================
-     HEADER
-     ============================================================ */
+  body.fullscreen-mode .dashboard{
+    padding:10px 14px;
+    height:100vh;
+    width:100vw;
+    max-width:100vw;
+    border-radius:0;
+    border-width:0;
+    display:flex;
+    flex-direction:column;
+    box-shadow:none;
+  }
+  body.fullscreen-mode .table-wrapper{
+    flex:1 1 auto;
+    min-height:0;
+    max-height:none !important;
+    height:auto;
+    margin:0;
+    border-radius:12px;
+    overflow:auto;
+  }
+  body.fullscreen-mode .editable-table{
+    font-size:clamp(.95rem, 1.35vh, 1.35rem);
+    width:100%;
+    min-width:0;
+    table-layout:auto;
+    height:auto;
+  }
+  body.fullscreen-mode .editable-table th{
+    padding:clamp(6px, .9vh, 14px) 6px;
+    font-size:clamp(.68rem, 1.05vh, .95rem);
+  }
+  body.fullscreen-mode .editable-table td{
+    padding:clamp(6px, .9vh, 13px) 6px;
+  }
+  body.fullscreen-mode .editable-table .course-name-cell{
+    font-size:clamp(.95rem, 1.35vh, 1.25rem);
+  }
+  body.fullscreen-mode .col-actions,
+  body.fullscreen-mode .col-checkbox{display:none;}
+  body.fullscreen-mode .shape-badge{
+    min-width:64px; min-height:26px;
+    font-size:clamp(.65rem, .95vh, .85rem);
+    padding:3px 10px;
+  }
+
+  /* ============ Header ============ */
   .header{
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
     background:var(--bg-secondary); border-bottom:3px solid var(--border-color);
@@ -191,12 +211,9 @@
     letter-spacing:1px;
   }
   .clock-divider{width:2px; background:var(--border-color); opacity:.5;}
-
   .toolbar-actions{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
 
-  /* ============================================================
-     BUTTONS — larger for TV remote
-     ============================================================ */
+  /* ============ Buttons ============ */
   .btn-outline,.btn-primary,.btn-nomination,.btn-danger,
   .theme-btn,.sound-btn,.print-btn,.export-btn,.filter-preset-btn{
     min-height:52px; padding:10px 22px; border-radius:50px;
@@ -210,22 +227,13 @@
     background:var(--border-color); color:var(--bg-primary); transform:translateY(-2px);
     box-shadow:0 6px 20px rgba(0,0,0,.4);
   }
-  .btn-primary{
-    background:var(--accent-gradient); border:none; color:#001018;
-    box-shadow:0 6px 22px rgba(34,211,238,.35);
-  }
-  .btn-primary:hover{transform:translateY(-2px) scale(1.03); box-shadow:0 10px 28px rgba(34,211,238,.5);}
-  .btn-nomination{
-    background:linear-gradient(135deg,#ec4899,#be185d); border:none; color:#fff;
-    box-shadow:0 6px 22px rgba(236,72,153,.4);
-  }
+  .btn-primary{background:var(--accent-gradient); border:none; color:#001018; box-shadow:0 6px 22px rgba(34,211,238,.35);}
+  .btn-primary:hover{transform:translateY(-2px) scale(1.03);}
+  .btn-nomination{background:linear-gradient(135deg,#ec4899,#be185d); border:none; color:#fff;}
   .btn-nomination:hover{transform:translateY(-2px) scale(1.03);}
   .btn-danger{background:var(--danger); border-color:var(--danger); color:#fff;}
-  .btn-danger:hover{transform:translateY(-2px); box-shadow:0 8px 22px rgba(239,68,68,.45);}
 
-  /* ============================================================
-     STAT CARDS
-     ============================================================ */
+  /* ============ Stat cards ============ */
   .stats-row{display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin:12px 0; transition:all .25s;}
   .stats-row.collapsed{max-height:0; opacity:0; margin:0; padding:0; overflow:hidden; pointer-events:none;}
   .stat-card{
@@ -235,7 +243,7 @@
     cursor:pointer; transition:transform .2s, box-shadow .2s, background .2s;
     box-shadow:0 6px 18px rgba(0,0,0,.35);
   }
-  .stat-card:hover{transform:translateY(-4px); background:var(--hover-bg); box-shadow:0 12px 28px rgba(0,0,0,.5);}
+  .stat-card:hover{transform:translateY(-4px); background:var(--hover-bg);}
   .stat-number{
     font-size:2.8rem; font-weight:900; line-height:1.1;
     background:var(--accent-gradient);
@@ -243,11 +251,11 @@
   }
   .stat-label{font-size:.85rem; color:var(--text-secondary); font-weight:800; letter-spacing:1.5px; margin-top:4px;}
   .stat-critical{border-left-color:var(--danger);}
-  .stat-critical .stat-number{background:linear-gradient(135deg,#ef4444,#f87171); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+  .stat-critical .stat-number{background:linear-gradient(135deg,#ef4444,#f87171);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   .stat-urgent{border-left-color:var(--warn);}
-  .stat-urgent .stat-number{background:linear-gradient(135deg,#f97316,#fb923c); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+  .stat-urgent .stat-number{background:linear-gradient(135deg,#f97316,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   .stat-nomination{border-left-color:var(--nom);}
-  .stat-nomination .stat-number{background:linear-gradient(135deg,#ec4899,#f472b6); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+  .stat-nomination .stat-number{background:linear-gradient(135deg,#ec4899,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 
   .stat-toggle{
     background:var(--bg-tertiary); border:2px solid var(--border-color);
@@ -255,9 +263,7 @@
     color:var(--text-primary); font-weight:900; letter-spacing:1px;
   }
 
-  /* ============================================================
-     FILTER BAR
-     ============================================================ */
+  /* ============ Filter ============ */
   .filter-bar{
     display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center;
     background:var(--bg-secondary); padding:12px 18px;
@@ -268,20 +274,14 @@
     background:var(--bg-tertiary); border:2px solid var(--border-color);
     padding:10px 20px; border-radius:50px; color:var(--text-primary);
     font-size:1rem; font-weight:800; height:52px; cursor:pointer;
-    transition:border-color .2s, box-shadow .2s;
   }
-  .filter-group select:focus,.filter-group input:focus{
-    border-color:var(--accent-1); box-shadow:0 0 0 4px rgba(34,211,238,.25);
-  }
+  .filter-group select:focus,.filter-group input:focus{border-color:var(--accent-1); box-shadow:0 0 0 4px rgba(34,211,238,.25);}
   .filter-preset-btn{padding:10px 20px; height:52px;}
   .filter-preset-btn:hover,.filter-preset-btn.active{
-    background:var(--accent-gradient); border-color:transparent; color:#001018;
-    transform:translateY(-2px);
+    background:var(--accent-gradient); border-color:transparent; color:#001018; transform:translateY(-2px);
   }
 
-  /* ============================================================
-     TABLE
-     ============================================================ */
+  /* ============ Table ============ */
   .table-wrapper{
     margin:10px 0; overflow:auto; max-height:56vh;
     border-radius:var(--radius-md); border:2px solid var(--border-color);
@@ -293,14 +293,18 @@
     font-weight:900; text-transform:uppercase; font-size:.85rem;
     letter-spacing:1.5px;
     border-bottom:3px solid var(--border-color);
+    border-right:2px solid var(--col-sep);
     position:sticky; top:0; z-index:10;
     color:var(--text-secondary); white-space:nowrap;
   }
+  .editable-table th:last-child{border-right:none;}
   .editable-table td{
     padding:10px 6px; text-align:center;
     border-bottom:1px solid var(--border-soft);
+    border-right:2px solid var(--col-sep);
     vertical-align:middle; font-weight:700;
   }
+  .editable-table td:last-child{border-right:none;}
   .editable-table tbody tr{transition:background .15s, transform .15s;}
   .editable-table tbody tr:hover{background:var(--hover-bg);}
   .editable-table tbody tr.tv-cursor{
@@ -313,19 +317,31 @@
   }
   .editable-table th.col-course{text-align:left; padding-left:18px;}
 
-  /* ============================================================
-     ROW STATE
-     ============================================================ */
-  .row-nomination td{background:linear-gradient(90deg, rgba(236,72,153,.18), transparent 60%); border-left:5px solid var(--nom);}
-  .row-critical td{background:linear-gradient(90deg, rgba(239,68,68,.18), transparent 60%); border-left:5px solid var(--danger);}
-  .row-high td{background:linear-gradient(90deg, rgba(249,115,22,.15), transparent 60%); border-left:5px solid var(--warn);}
+  /* ============ Row states ============ */
+  .row-nomination td{background:linear-gradient(90deg, rgba(236,72,153,.15), transparent 60%); border-left:5px solid var(--nom);}
+  .row-critical td{background:linear-gradient(90deg, rgba(239,68,68,.15), transparent 60%); border-left:5px solid var(--danger);}
+  .row-high td{background:linear-gradient(90deg, rgba(249,115,22,.12), transparent 60%); border-left:5px solid var(--warn);}
   .row-past td{opacity:.55;}
-  .row-selected td{background:linear-gradient(90deg, rgba(34,211,238,.28), transparent 70%) !important;}
 
-  /* ============================================================
-     ★★★ SHAPED STATUS BADGES — text INSIDE the icon shape ★★★
-     Each clerk gets a unique geometric shape + colour.
-     ============================================================ */
+  /* ★ READY — all admin steps done except final payment */
+  .row-ready td{
+    background:linear-gradient(90deg, rgba(16,185,129,.14), transparent 60%);
+    border-left:5px solid var(--ok);
+    animation:rowReadyPulse 3.2s ease-in-out infinite;
+  }
+  @keyframes rowReadyPulse{
+    0%,100%{box-shadow:inset 0 0 0 0 rgba(16,185,129,0);}
+    50%{box-shadow:inset 0 0 24px 0 rgba(16,185,129,.18);}
+  }
+
+  /* ★ Needs update — not touched in 7+ days */
+  tr.needs-update{animation:needsUpdateGlow 3s ease-in-out infinite;}
+  @keyframes needsUpdateGlow{
+    0%,100%{filter:brightness(1);}
+    50%{filter:brightness(1.08) drop-shadow(0 0 8px rgba(251,191,36,.35));}
+  }
+
+  /* ============ ★ SHAPED BADGES — text inside the shape ★ ============ */
   .shape-badge{
     display:inline-flex; align-items:center; justify-content:center;
     min-width:78px; min-height:30px; padding:4px 12px;
@@ -337,51 +353,33 @@
   }
   .shape-badge:hover{filter:drop-shadow(0 4px 10px rgba(0,0,0,.5)); transform:translateY(-1px);}
 
-  /* CMDR — Shield / pointed banner (blue) */
-  .shape-cmdr{
-    clip-path:polygon(0% 0%, 100% 0%, 100% 72%, 50% 100%, 0% 72%);
-    background:linear-gradient(135deg,#60a5fa,#1d4ed8);
-    padding:6px 14px 12px 14px;
-  }
+  /* CMDR */
+  .shape-cmdr{clip-path:polygon(0% 0%, 100% 0%, 100% 72%, 50% 100%, 0% 72%); background:linear-gradient(135deg,#60a5fa,#1d4ed8); padding:6px 14px 12px 14px;}
   .shape-cmdr.sent{background:linear-gradient(135deg,#93c5fd,#2563eb); animation:glowBlue 1.8s ease-in-out infinite;}
   .shape-cmdr.rec{background:linear-gradient(135deg,#34d399,#059669);}
   .shape-cmdr.not{background:linear-gradient(135deg,#94a3b8,#475569);}
   @keyframes glowBlue{0%,100%{filter:drop-shadow(0 0 6px #3b82f6);}50%{filter:drop-shadow(0 0 16px #60a5fa);}}
 
-  /* MOD — Hexagon (violet) */
-  .shape-mod{
-    clip-path:polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
-    background:linear-gradient(135deg,#c084fc,#7c3aed);
-    padding:6px 16px;
-  }
+  /* MOD */
+  .shape-mod{clip-path:polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%); background:linear-gradient(135deg,#c084fc,#7c3aed); padding:6px 16px;}
   .shape-mod.sent{background:linear-gradient(135deg,#d8b4fe,#8b5cf6); animation:glowViolet 1.8s ease-in-out infinite;}
   .shape-mod.pend{background:linear-gradient(135deg,#f0abfc,#c026d3); animation:glowViolet 1.4s ease-in-out infinite;}
   .shape-mod.rec{background:linear-gradient(135deg,#34d399,#059669);}
   .shape-mod.not{background:linear-gradient(135deg,#94a3b8,#475569);}
   @keyframes glowViolet{0%,100%{filter:drop-shadow(0 0 6px #a855f7);}50%{filter:drop-shadow(0 0 16px #c084fc);}}
 
-  /* VISA — Passport stamp / diamond-left tag (gold) */
-  .shape-visa{
-    clip-path:polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
-    background:linear-gradient(135deg,#fbbf24,#d97706);
-    padding:6px 18px 6px 12px;
-    color:#1a1400;
-    text-shadow:0 1px 0 rgba(255,255,255,.35);
-  }
+  /* VISA */
+  .shape-visa{clip-path:polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%); background:linear-gradient(135deg,#fbbf24,#d97706); padding:6px 18px 6px 12px; color:#1a1400; text-shadow:0 1px 0 rgba(255,255,255,.35);}
   .shape-visa.done{background:linear-gradient(135deg,#34d399,#059669); color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.4);}
   .shape-visa.host{background:linear-gradient(135deg,#818cf8,#4f46e5); color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.4);}
-  .shape-visa.onarr{background:linear-gradient(135deg,#f472b6,#db2777); color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.4); animation:glowPink 1.6s ease-in-out infinite;}
-  .shape-visa.handover{background:linear-gradient(135deg,#60a5fa,#2563eb); color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.4);}
+  .shape-visa.onarr{background:linear-gradient(135deg,#f472b6,#db2777); color:#fff; animation:glowPink 1.6s ease-in-out infinite;}
+  .shape-visa.handover{background:linear-gradient(135deg,#60a5fa,#2563eb); color:#fff;}
   .shape-visa.doc{background:linear-gradient(135deg,#fcd34d,#ea580c); color:#1a1400; animation:glowGold 1.8s ease-in-out infinite;}
   @keyframes glowGold{0%,100%{filter:drop-shadow(0 0 6px #fbbf24);}50%{filter:drop-shadow(0 0 16px #fde047);}}
   @keyframes glowPink{0%,100%{filter:drop-shadow(0 0 6px #ec4899);}50%{filter:drop-shadow(0 0 16px #f472b6);}}
 
-  /* TICKET — Ticket stub with notches (crimson) */
-  .shape-ticket{
-    clip-path:polygon(0 0, 100% 0, 100% 30%, 92% 50%, 100% 70%, 100% 100%, 0 100%, 0 70%, 8% 50%, 0 30%);
-    background:linear-gradient(135deg,#f87171,#dc2626);
-    padding:6px 18px;
-  }
+  /* TICKET */
+  .shape-ticket{clip-path:polygon(0 0, 100% 0, 100% 30%, 92% 50%, 100% 70%, 100% 100%, 0 100%, 0 70%, 8% 50%, 0 30%); background:linear-gradient(135deg,#f87171,#dc2626); padding:6px 18px;}
   .shape-ticket.demand{background:linear-gradient(135deg,#fb923c,#c2410c); animation:glowOrange 1.4s ease-in-out infinite;}
   .shape-ticket.conf{background:linear-gradient(135deg,#93c5fd,#1d4ed8);}
   .shape-ticket.ok{background:linear-gradient(135deg,#34d399,#059669);}
@@ -390,53 +388,81 @@
   @keyframes glowOrange{0%,100%{filter:drop-shadow(0 0 6px #f97316);}50%{filter:drop-shadow(0 0 16px #fb923c);}}
   @keyframes glowRed{0%,100%{filter:drop-shadow(0 0 6px #dc2626);}50%{filter:drop-shadow(0 0 18px #ef4444);}}
 
-  /* WARNING ORDER — Ribbon/flag with pointed right (hot pink) */
-  .shape-wo{
-    clip-path:polygon(0 0, 100% 0, 88% 50%, 100% 100%, 0 100%);
-    background:linear-gradient(135deg,#f472b6,#be185d);
-    padding:6px 22px 6px 12px;
-  }
+  /* WARNING ORDER */
+  .shape-wo{clip-path:polygon(0 0, 100% 0, 88% 50%, 100% 100%, 0 100%); background:linear-gradient(135deg,#f472b6,#be185d); padding:6px 22px 6px 12px;}
   .shape-wo.sent{background:linear-gradient(135deg,#34d399,#059669);}
   .shape-wo.not{background:linear-gradient(135deg,#94a3b8,#475569);}
   .shape-wo.exp{background:linear-gradient(135deg,#fbbf24,#d97706); color:#1a1400; text-shadow:0 1px 0 rgba(255,255,255,.35);}
 
-  /* PAYMENT — Dotted pill with $ marker (emerald) */
-  .shape-payment{
-    border-radius:50px;
-    background:linear-gradient(135deg,#34d399,#059669);
-    border:2px dashed rgba(255,255,255,.6);
-    padding:4px 16px;
-    color:#fff;
-  }
+  /* PAYMENT */
+  .shape-payment{border-radius:50px; background:linear-gradient(135deg,#34d399,#059669); border:2px dashed rgba(255,255,255,.6); padding:4px 16px; color:#fff;}
   .shape-payment.urgent{background:linear-gradient(135deg,#f87171,#b91c1c); animation:glowRed 1.2s ease-in-out infinite;}
   .shape-payment.warn{background:linear-gradient(135deg,#fb923c,#c2410c);}
-  .shape-payment.cool{background:linear-gradient(135deg,#fbbf24,#d97706); color:#1a1400; text-shadow:0 1px 0 rgba(255,255,255,.35);}
+  .shape-payment.cool{background:linear-gradient(135deg,#fbbf24,#d97706); color:#1a1400;}
 
-  /* NOM deadline — dashed ring, pink */
+  /* NOM deadline */
+  .shape-nom{border-radius:50px; background:linear-gradient(135deg,#f472b6,#be185d); border:2px dashed #fbcfe8; padding:4px 16px; color:#fff; animation:glowPink 1.6s ease-in-out infinite;}
+
+  /* ★★ ATTENTION PULSE — applies to pending/monitoring states ★★ */
+  @keyframes attentionPulse{
+    0%,100%{filter:drop-shadow(0 2px 4px rgba(0,0,0,.4)) brightness(1); transform:scale(1);}
+    50%{filter:drop-shadow(0 6px 14px rgba(251,146,60,.7)) brightness(1.18); transform:scale(1.035);}
+  }
+  .shape-cmdr.sent,
+  .shape-mod.sent,
+  .shape-mod.pend,
+  .shape-visa.doc,
+  .shape-visa.onarr,
+  .shape-ticket.demand,
+  .shape-ticket.blink,
+  .shape-ticket.offer,
+  .shape-wo.exp,
+  .shape-payment.urgent,
+  .shape-payment.warn,
   .shape-nom{
-    border-radius:50px;
-    background:linear-gradient(135deg,#f472b6,#be185d);
-    border:2px dashed #fbcfe8;
-    padding:4px 16px;
-    color:#fff;
-    animation:glowPink 1.6s ease-in-out infinite;
+    animation:attentionPulse 2.3s ease-in-out infinite;
+  }
+  /* Different phase offsets so the row isn't all in sync */
+  .shape-mod.pend{animation-delay:.3s;}
+  .shape-visa.doc{animation-delay:.6s;}
+  .shape-ticket.demand{animation-delay:.9s;}
+  .shape-wo.exp{animation-delay:1.2s;}
+
+  /* ★ READY badge in course name */
+  .ready-pill{
+    display:inline-block; margin-left:8px; padding:2px 10px;
+    background:linear-gradient(135deg,#34d399,#059669);
+    color:#001a10; border-radius:20px;
+    font-size:.62rem; font-weight:900; letter-spacing:1px;
+    box-shadow:0 0 12px rgba(52,211,153,.6);
+    animation:readyPillPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes readyPillPulse{
+    0%,100%{box-shadow:0 0 12px rgba(52,211,153,.5);}
+    50%{box-shadow:0 0 22px rgba(52,211,153,.9);}
   }
 
-  /* ============================================================
-     BADGE COMPATIBILITY (course type badges stay simple)
-     ============================================================ */
+  /* ★★ TYPE BADGE — plain text, minimal highlight ★★ */
   .type-badge{
-    display:inline-block; padding:4px 12px; border-radius:50px;
-    font-weight:900; font-size:.78rem; letter-spacing:1px;
-    white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,.3);
+    display:inline-flex; align-items:center; gap:6px;
+    padding:0; background:none; border:none; box-shadow:none;
+    font-weight:600; font-size:.78rem; letter-spacing:1.2px;
+    color:var(--text-secondary);
+    opacity:.7;
+    text-transform:uppercase;
+    white-space:nowrap;
+    animation:none;
   }
-  .type-course{background:linear-gradient(135deg,#60a5fa,#2563eb); color:#fff;}
-  .type-visit{background:linear-gradient(135deg,#a78bfa,#7c3aed); color:#fff;}
-  .type-nomination{background:linear-gradient(135deg,#f472b6,#be185d); color:#fff; animation:glowPink 1.8s ease-in-out infinite;}
+  .type-course,.type-visit,.type-nomination{
+    background:none !important;
+    animation:none !important;
+    color:var(--text-secondary) !important;
+    box-shadow:none !important;
+    text-shadow:none !important;
+  }
+  .type-badge .type-icon{opacity:.85; font-size:.9rem;}
 
-  /* ============================================================
-     EDIT INPUTS — big for TV remote
-     ============================================================ */
+  /* ============ Edit inputs ============ */
   .edit-input,.edit-select{
     background:var(--bg-tertiary);
     border:2px solid var(--accent-1);
@@ -448,16 +474,19 @@
     transition:border-color .2s, box-shadow .2s;
   }
   .edit-input:focus,.edit-select:focus{
-    outline:none;
+    outline:3px solid #fbbf24;
+    outline-offset:2px;
     border-color:var(--accent-2);
-    box-shadow:0 0 0 4px rgba(34,211,238,.3);
     background:var(--hover-bg);
+    animation:focusPulse 1.3s ease-in-out infinite;
+  }
+  @keyframes focusPulse{
+    0%,100%{box-shadow:0 0 0 4px rgba(251,191,36,.35);}
+    50%{box-shadow:0 0 0 10px rgba(251,191,36,.15);}
   }
   .edit-input::placeholder{color:var(--text-secondary); opacity:.7;}
 
-  /* ============================================================
-     ACTION BUTTONS in row
-     ============================================================ */
+  /* ============ Action buttons ============ */
   .action-icon{
     background:var(--bg-secondary);
     border:2px solid var(--border-color);
@@ -468,10 +497,7 @@
     min-height:44px; min-width:56px;
     transition:transform .15s, background .2s;
   }
-  .action-icon:hover,.action-icon:focus{
-    background:var(--accent-gradient); color:#001018;
-    transform:translateY(-2px);
-  }
+  .action-icon:hover,.action-icon:focus{background:var(--accent-gradient); color:#001018; transform:translateY(-2px);}
   .inline-edit-btn{
     background:linear-gradient(135deg,#34d399,#059669);
     border:none; border-radius:50px;
@@ -480,14 +506,8 @@
     transition:transform .15s, box-shadow .2s;
     box-shadow:0 4px 12px rgba(16,185,129,.4);
   }
-  .inline-edit-btn:hover,.inline-edit-btn:focus{
-    transform:translateY(-2px) scale(1.05);
-    box-shadow:0 8px 20px rgba(16,185,129,.55);
-  }
+  .inline-edit-btn:hover,.inline-edit-btn:focus{transform:translateY(-2px) scale(1.05);}
 
-  /* ============================================================
-     BULK ACTIONS
-     ============================================================ */
   #bulkActions{
     display:none; gap:10px; align-items:center; padding:10px 18px;
     background:var(--bg-secondary); border-radius:var(--radius-md);
@@ -495,9 +515,6 @@
   }
   #bulkActions.visible{display:flex; animation:slideIn .2s ease;}
 
-  /* ============================================================
-     ALERTS
-     ============================================================ */
   #alertContainer{
     padding:10px 18px; margin:8px 0; border-radius:var(--radius-md);
     background:var(--bg-secondary); border:2px solid var(--border-color);
@@ -515,9 +532,6 @@
     border:2px solid #fdba74; font-size:1rem;
   }
 
-  /* ============================================================
-     TOASTS
-     ============================================================ */
   .toast-msg{
     position:fixed; bottom:40px; left:50%; transform:translateX(-50%);
     background:var(--bg-secondary); color:var(--text-primary);
@@ -533,9 +547,6 @@
   @keyframes fadeOut{to{opacity:0; transform:translateX(-50%) translateY(-24px) scale(.95);}}
   @keyframes slideIn{from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);}}
 
-  /* ============================================================
-     FOOTER
-     ============================================================ */
   .footer-info{
     text-align:center; font-size:.95rem; padding:14px;
     color:var(--text-secondary); border-top:2px solid var(--border-color);
@@ -543,9 +554,6 @@
     flex-wrap:wrap; font-weight:700;
   }
 
-  /* ============================================================
-     SHORTCUTS HINT
-     ============================================================ */
   .shortcuts-hint{
     font-size:.82rem; color:var(--text-secondary); opacity:.75;
     display:flex; gap:16px; flex-wrap:wrap; padding:6px 14px; font-weight:700;
@@ -556,9 +564,7 @@
     color:var(--text-primary);
   }
 
-  /* ============================================================
-     LOGIN
-     ============================================================ */
+  /* Login */
   #loginOverlay{
     position:fixed; inset:0; background:rgba(2,8,16,.97);
     backdrop-filter:blur(12px); display:flex; align-items:center; justify-content:center;
@@ -572,190 +578,54 @@
     animation:loginIn .5s cubic-bezier(.2,.9,.4,1.2);
   }
   @keyframes loginIn{from{opacity:0; transform:scale(.92);} to{opacity:1; transform:scale(1);}}
-  .login-box h2{
-    font-size:2.1rem; font-weight:900; letter-spacing:3px;
-    background:var(--accent-gradient);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    margin-bottom:8px;
-  }
+  .login-box h2{font-size:2.1rem; font-weight:900; letter-spacing:3px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px;}
   .login-box p{color:var(--text-secondary); font-weight:800; margin-bottom:22px; font-size:.95rem; letter-spacing:2px;}
-
-  .login-tabs{
-    display:flex; gap:8px; margin-bottom:18px; background:var(--bg-tertiary);
-    padding:6px; border-radius:50px; border:2px solid var(--border-color);
-  }
-  .login-tab{
-    flex:1; padding:12px; border-radius:50px; font-weight:900; font-size:.95rem;
-    background:transparent; border:none; color:var(--text-secondary);
-    cursor:pointer; letter-spacing:.5px; transition:all .2s;
-  }
-  .login-tab.active{
-    background:var(--accent-gradient); color:#001018;
-    box-shadow:0 4px 12px rgba(34,211,238,.4);
-  }
+  .login-tabs{display:flex; gap:8px; margin-bottom:18px; background:var(--bg-tertiary); padding:6px; border-radius:50px; border:2px solid var(--border-color);}
+  .login-tab{flex:1; padding:12px; border-radius:50px; font-weight:900; font-size:.95rem; background:transparent; border:none; color:var(--text-secondary); cursor:pointer; letter-spacing:.5px; transition:all .2s;}
+  .login-tab.active{background:var(--accent-gradient); color:#001018;}
   .login-tab:hover:not(.active){color:var(--text-primary);}
-
-  .login-box input{
-    width:100%; padding:18px 22px; border-radius:60px;
-    border:2px solid var(--border-color); background:var(--bg-tertiary);
-    color:var(--text-primary); font-size:1.25rem; font-weight:800;
-    margin-bottom:14px; outline:none; font-family:inherit;
-    text-align:center; letter-spacing:2px;
-    transition:border-color .2s, box-shadow .2s;
-  }
-  .login-box input:focus{
-    border-color:var(--accent-1);
-    box-shadow:0 0 0 5px rgba(34,211,238,.3);
-    background:var(--hover-bg);
-  }
+  .login-box input{width:100%; padding:18px 22px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.25rem; font-weight:800; margin-bottom:14px; outline:none; font-family:inherit; text-align:center; letter-spacing:2px;}
+  .login-box input:focus{border-color:var(--accent-1); box-shadow:0 0 0 5px rgba(34,211,238,.3); background:var(--hover-bg);}
   .pin-input{font-size:2rem !important; letter-spacing:14px !important; font-family:'Courier New',monospace !important;}
-  .pin-input::placeholder{letter-spacing:8px; font-size:1rem;}
-
-  /* On-screen keypad for TV remote */
-  .pin-pad{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
-    margin:14px 0 6px; padding:0;
-  }
-  .pin-key{
-    padding:18px; font-size:1.5rem; font-weight:900;
-    background:var(--bg-tertiary); border:2px solid var(--border-color);
-    color:var(--text-primary); border-radius:20px; cursor:pointer;
-    transition:all .15s; min-height:66px;
-    letter-spacing:1px;
-  }
-  .pin-key:hover,.pin-key:focus{
-    background:var(--accent-gradient); color:#001018; transform:translateY(-2px);
-    box-shadow:0 8px 20px rgba(34,211,238,.4);
-  }
-  .pin-key:active{transform:scale(.95);}
-  .pin-key.clear{background:linear-gradient(135deg,#fb923c,#c2410c); color:#fff; border-color:#fb923c;}
-  .pin-key.del{background:linear-gradient(135deg,#f87171,#b91c1c); color:#fff; border-color:#f87171;}
-
-  .login-box .sign-in-btn{
-    width:100%; padding:18px; border-radius:60px; border:none;
-    background:var(--accent-gradient); color:#001018; font-weight:900;
-    font-size:1.3rem; cursor:pointer; margin-top:8px; letter-spacing:2px;
-    box-shadow:0 8px 24px rgba(34,211,238,.45);
-    transition:transform .15s, box-shadow .2s;
-  }
-  .login-box .sign-in-btn:hover{transform:translateY(-2px) scale(1.02); box-shadow:0 14px 32px rgba(34,211,238,.6);}
-
+  .pin-pad{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0 6px;}
+  .pin-key{padding:18px; font-size:1.5rem; font-weight:900; background:var(--bg-tertiary); border:2px solid var(--border-color); color:var(--text-primary); border-radius:20px; cursor:pointer; transition:all .15s; min-height:66px;}
+  .pin-key:hover,.pin-key:focus{background:var(--accent-gradient); color:#001018; transform:translateY(-2px);}
+  .pin-key.clear{background:linear-gradient(135deg,#fb923c,#c2410c); color:#fff;}
+  .pin-key.del{background:linear-gradient(135deg,#f87171,#b91c1c); color:#fff;}
+  .login-box .sign-in-btn{width:100%; padding:18px; border-radius:60px; border:none; background:var(--accent-gradient); color:#001018; font-weight:900; font-size:1.3rem; cursor:pointer; margin-top:8px; letter-spacing:2px;}
   .login-error{color:#fca5a5; font-weight:900; margin-top:12px; min-height:24px; font-size:1rem;}
-  .login-hint{
-    margin-top:20px; font-size:.78rem; color:var(--text-secondary);
-    line-height:1.7; text-align:left; background:var(--bg-tertiary);
-    padding:14px 18px; border-radius:16px; border:1px solid var(--border-color);
-    font-weight:700;
-  }
+  .login-hint{margin-top:20px; font-size:.78rem; color:var(--text-secondary); line-height:1.7; text-align:left; background:var(--bg-tertiary); padding:14px 18px; border-radius:16px; border:1px solid var(--border-color); font-weight:700;}
   .login-hint b{color:var(--accent-1);}
-  .remember-row{
-    display:flex; align-items:center; justify-content:center; gap:12px;
-    margin:8px 0 12px; font-size:.92rem; color:var(--text-secondary);
-    font-weight:800; cursor:pointer; user-select:none;
-  }
-  .remember-row input[type=checkbox]{width:24px; height:24px; accent-color:var(--accent-1);}
-
-  .user-badge{
-    font-size:.85rem; background:var(--bg-tertiary); border:2px solid var(--border-color);
-    padding:8px 18px; border-radius:50px; color:var(--text-secondary); font-weight:800;
-  }
+  .remember-row{display:flex; align-items:center; justify-content:center; gap:12px; margin:8px 0 12px; font-size:.92rem; color:var(--text-secondary); font-weight:800; cursor:pointer;}
+  .remember-row input[type=checkbox]{width:24px; height:24px;}
+  .user-badge{font-size:.85rem; background:var(--bg-tertiary); border:2px solid var(--border-color); padding:8px 18px; border-radius:50px; color:var(--text-secondary); font-weight:800;}
   .user-badge span{color:var(--accent-1); font-weight:900;}
-
-  .recovery-toggle{
-    font-size:.85rem; color:var(--accent-1); cursor:pointer; font-weight:900;
-    margin-top:12px; text-decoration:underline; letter-spacing:.5px;
-  }
-  .recovery-box{
-    display:none; margin-top:14px; padding:16px;
-    background:var(--bg-tertiary); border-radius:18px;
-    border:1px solid var(--border-color); text-align:left;
-  }
+  .recovery-toggle{font-size:.85rem; color:var(--accent-1); cursor:pointer; font-weight:900; margin-top:12px; text-decoration:underline;}
+  .recovery-box{display:none; margin-top:14px; padding:16px; background:var(--bg-tertiary); border-radius:18px; border:1px solid var(--border-color); text-align:left;}
   .recovery-box.show{display:block;}
   .recovery-box p{font-size:.82rem; color:var(--text-secondary); margin-bottom:10px; font-weight:700;}
   .recovery-box input{margin-bottom:10px; padding:12px 16px; font-size:1rem;}
 
-  /* ============================================================
-     MODALS
-     ============================================================ */
-  #pwdModal{
-    position:fixed; inset:0; background:rgba(2,8,16,.94); backdrop-filter:blur(10px);
-    display:none; align-items:center; justify-content:center;
-    z-index:11000; padding:24px;
-  }
+  #pwdModal{position:fixed; inset:0; background:rgba(2,8,16,.94); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; z-index:11000; padding:24px;}
   #pwdModal.show{display:flex;}
-  .pwd-box{
-    background:var(--bg-secondary); border:3px solid var(--border-color);
-    border-radius:32px; padding:36px 42px; max-width:500px; width:100%;
-    box-shadow:var(--shadow); text-align:center;
-    animation:loginIn .35s cubic-bezier(.2,.9,.4,1.2);
-  }
-  .pwd-box h3{
-    font-size:1.7rem; font-weight:900; letter-spacing:2px;
-    background:var(--accent-gradient);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    margin-bottom:20px;
-  }
-  .pwd-box input{
-    width:100%; padding:16px 20px; border-radius:60px;
-    border:2px solid var(--border-color); background:var(--bg-tertiary);
-    color:var(--text-primary); font-size:1.05rem; font-weight:800;
-    margin-bottom:12px; outline:none; font-family:inherit; text-align:center;
-  }
+  .pwd-box{background:var(--bg-secondary); border:3px solid var(--border-color); border-radius:32px; padding:36px 42px; max-width:500px; width:100%; box-shadow:var(--shadow); text-align:center;}
+  .pwd-box h3{font-size:1.7rem; font-weight:900; letter-spacing:2px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:20px;}
+  .pwd-box input{width:100%; padding:16px 20px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.05rem; font-weight:800; margin-bottom:12px; outline:none; text-align:center;}
   .pwd-box input:focus{border-color:var(--accent-1); box-shadow:0 0 0 5px rgba(34,211,238,.25);}
-  .pwd-box button{
-    width:100%; padding:16px; border-radius:60px; border:none;
-    background:var(--accent-gradient); color:#001018; font-weight:900;
-    font-size:1.1rem; cursor:pointer; margin-top:6px; letter-spacing:1px;
-    transition:transform .15s;
-  }
-  .pwd-box button:hover{transform:scale(1.02);}
+  .pwd-box button{width:100%; padding:16px; border-radius:60px; border:none; background:var(--accent-gradient); color:#001018; font-weight:900; font-size:1.1rem; cursor:pointer; margin-top:6px;}
   .pwd-box .btn-cancel{background:var(--bg-tertiary); border:2px solid var(--border-color); color:var(--text-primary);}
   .pwd-msg{min-height:22px; font-weight:900; margin-top:10px; font-size:.95rem;}
   .pwd-msg.ok{color:#34d399;}
   .pwd-msg.err{color:#fca5a5;}
 
-  /* ============================================================
-     COUNTRY SUGGESTION DROPDOWN
-     ============================================================ */
-  .country-suggest{
-    position:absolute; z-index:12000;
-    background:var(--bg-secondary); border:2px solid var(--accent-1);
-    border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.6);
-    max-height:280px; overflow-y:auto; min-width:220px;
-    padding:6px;
-  }
-  .country-suggest-item{
-    padding:12px 16px; border-radius:10px; cursor:pointer;
-    font-weight:800; font-size:1rem; color:var(--text-primary);
-    transition:background .12s;
-  }
-  .country-suggest-item:hover,.country-suggest-item.active{
-    background:var(--accent-gradient); color:#001018;
-  }
+  .country-suggest{position:absolute; z-index:12000; background:var(--bg-secondary); border:2px solid var(--accent-1); border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.6); max-height:280px; overflow-y:auto; min-width:220px; padding:6px;}
+  .country-suggest-item{padding:12px 16px; border-radius:10px; cursor:pointer; font-weight:800; font-size:1rem; color:var(--text-primary);}
+  .country-suggest-item:hover,.country-suggest-item.active{background:var(--accent-gradient); color:#001018;}
 
-  /* ============================================================
-     RESPONSIVE
-     ============================================================ */
-  @media (max-width:1500px){
-    :root{--tv-base:19px;}
-    .editable-table{font-size:.98rem;}
-  }
-  @media (max-width:1100px){
-    .stats-row{grid-template-columns:repeat(3,1fr);}
-    .editable-table{min-width:1100px;}
-  }
-  @media (max-width:768px){
-    :root{--tv-base:15px;}
-    body{padding:6px;}
-    .title-text h1{font-size:1.6rem;}
-    .clock-time{font-size:1.3rem;}
-    .stats-row{grid-template-columns:repeat(2,1fr);}
-    .login-box{padding:26px 22px;}
-  }
+  @media (max-width:1500px){:root{--tv-base:19px;}.editable-table{font-size:.98rem;}}
+  @media (max-width:1100px){.stats-row{grid-template-columns:repeat(3,1fr);}.editable-table{min-width:1100px;}}
+  @media (max-width:768px){:root{--tv-base:15px;}body{padding:6px;}.title-text h1{font-size:1.6rem;}.clock-time{font-size:1.3rem;}.stats-row{grid-template-columns:repeat(2,1fr);}.login-box{padding:26px 22px;}}
 
-  /* ============================================================
-     PRINT
-     ============================================================ */
   @media print{
     .filter-bar,.stats-row,.col-actions,.col-checkbox,.stat-toggle,
     .toolbar-actions,#alertContainer,#bulkActions,.shortcuts-hint,
@@ -763,44 +633,31 @@
     body{background:#fff; color:#000; padding:0;}
     .dashboard{border:1px solid #999; box-shadow:none; padding:8px;}
     .editable-table{font-size:9pt; min-width:0;}
-    .editable-table th{background:#e5e5e5; color:#000;}
-    .editable-table td{border-bottom:1px solid #ccc;}
+    .editable-table th{background:#e5e5e5; color:#000; border-right:1px solid #000 !important;}
+    .editable-table td{border-bottom:1px solid #ccc; border-right:1px solid #000 !important;}
     .shape-badge{border:1px solid #666; filter:none;}
   }
 
-  /* ============================================================
-     REDUCED MOTION
-     ============================================================ */
   @media (prefers-reduced-motion:reduce){
-    *,*::before,*::after{
-      animation-duration:.01ms !important;
-      animation-iteration-count:1 !important;
-      transition-duration:.01ms !important;
-    }
+    *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
   }
 </style>
 </head>
 <body class="theme-slaf">
 
-<!-- ================= LOGIN ================= -->
+<!-- ============ LOGIN ============ -->
 <div id="loginOverlay">
   <div class="login-box">
     <div style="font-size:3rem;margin-bottom:8px;" aria-hidden="true">✈️</div>
     <h2>FTC ACCESS</h2>
     <p>SLAF · AUTHORISED PERSONNEL ONLY</p>
-
     <div class="login-tabs" role="tablist">
-      <button class="login-tab active" data-mode="pin" role="tab" type="button">🔢 PIN MODE (fast)</button>
+      <button class="login-tab active" data-mode="pin" role="tab" type="button">🔢 PIN MODE</button>
       <button class="login-tab" data-mode="pwd" role="tab" type="button">🔐 PASSWORD</button>
     </div>
-
-    <input type="text" id="loginUser" placeholder="Service Number (e.g. 02802 or AW 4702)"
-           autocomplete="off" list="serviceSuggestList" aria-label="Service Number">
-
-    <!-- PIN mode UI -->
+    <input type="text" id="loginUser" placeholder="Service Number (e.g. 02802 or AW 4702)" autocomplete="off" list="serviceSuggestList" aria-label="Service Number">
     <div id="pinModeBox">
-      <input type="password" id="loginPin" class="pin-input" placeholder="····"
-             maxlength="4" inputmode="numeric" autocomplete="off" aria-label="4-digit PIN">
+      <input type="password" id="loginPin" class="pin-input" placeholder="····" maxlength="4" inputmode="numeric" autocomplete="off" aria-label="4-digit PIN">
       <div class="pin-pad" id="pinPad">
         <button class="pin-key" data-key="1" type="button">1</button>
         <button class="pin-key" data-key="2" type="button">2</button>
@@ -816,20 +673,14 @@
         <button class="pin-key del" data-key="del" type="button">⌫</button>
       </div>
     </div>
-
-    <!-- Password mode UI -->
     <div id="pwdModeBox" style="display:none;">
       <input type="password" id="loginPass" placeholder="Password" autocomplete="off" aria-label="Password">
     </div>
-
     <label class="remember-row" for="rememberMe">
       <input type="checkbox" id="rememberMe"> <span>Keep me signed in on this TV (30 days)</span>
     </label>
-
     <button id="loginBtn" class="sign-in-btn" type="button">🚪 SIGN IN</button>
-
     <div class="login-error" id="loginError" role="alert"></div>
-
     <div class="recovery-toggle" id="recoveryToggle">🔁 Forgot PIN / password?</div>
     <div class="recovery-box" id="recoveryBox">
       <p>Enter your service number and the last 4 digits of your NIC to reset your PIN to <b>1234</b>.</p>
@@ -838,19 +689,17 @@
       <button id="recoveryBtn" type="button" style="background:linear-gradient(135deg,#f97316,#c2410c);color:#fff;">🔄 Verify & reset PIN</button>
       <div class="login-error" id="recoveryMsg" style="min-height:20px;margin-top:8px;" role="alert"></div>
     </div>
-
     <div class="login-hint">
       <b>Default PIN:</b> 1234 · <b>Default password:</b> password<br>
       <b>Authorised Service Numbers:</b><br>
       02802 · 03650 · 29816 · 33557 · 41979 · 41336 · 38922 · AW 4208 · AW 4702<br>
       <span style="opacity:.75;">TIP: Use the on-screen keypad with your TV remote's D-pad. Press OK to select.</span>
     </div>
-
     <datalist id="serviceSuggestList"></datalist>
   </div>
 </div>
 
-<!-- PASSWORD CHANGE MODAL -->
+<!-- PWD MODAL -->
 <div id="pwdModal">
   <div class="pwd-box">
     <h3>🔑 CHANGE PIN / PASSWORD</h3>
@@ -863,24 +712,21 @@
   </div>
 </div>
 
-<!-- ================= MAIN DASHBOARD ================= -->
+<!-- DASHBOARD -->
 <div class="dashboard" id="mainDashboard" style="display:none;">
-
   <header class="header">
     <div class="title-section">
       <span class="title-logo" aria-hidden="true">✈️</span>
       <div class="title-text">
         <h1>FOREIGN TRAINING CELL</h1>
-        <div class="subtitle">SLAF · <span>FTC v14.0 TV</span></div>
+        <div class="subtitle">SLAF · <span>FTC v14.1 TV</span></div>
       </div>
     </div>
-
     <div class="clock-container" aria-live="off">
       <div class="clock"><div class="clock-label">🇱🇰 LST</div><div class="clock-time" id="lstClock">--:--:--</div></div>
       <div class="clock-divider"></div>
       <div class="clock"><div class="clock-label">🌍 UTC</div><div class="clock-time" id="utcClock">--:--:--</div></div>
     </div>
-
     <div class="toolbar-actions">
       <span class="user-badge">👤 <span id="currentUserDisplay">--</span></span>
       <button class="btn-outline" id="changePwdBtn" title="Change PIN/Password" style="font-size:.85rem;">🔑</button>
@@ -898,9 +744,9 @@
 
   <div class="shortcuts-hint">
     <span>🎮 <kbd>D-Pad</kbd> Move</span>
-    <span><kbd>OK</kbd> Select</span>
-    <span><kbd>←→</kbd> Columns</span>
+    <span><kbd>OK</kbd> Select / Next field</span>
     <span><kbd>↑↓</kbd> Rows</span>
+    <span><kbd>←→</kbd> Buttons</span>
     <span><kbd>BACK</kbd> Cancel</span>
   </div>
 
@@ -1003,9 +849,6 @@
 <script>
 'use strict';
 
-/* ============================================================
-   CONFIG
-   ============================================================ */
 const DEFAULT_PIN = '1234';
 const DEFAULT_PASSWORD = 'password';
 const PIN_LENGTH = 4;
@@ -1060,23 +903,15 @@ const getLoginMode = () => { try{return localStorage.getItem('ftc_login_mode_v14
 let currentUser = null;
 let currentUserKey = null;
 
-/* ============================================================
-   RICH SOUNDS — different tones per action
-   ============================================================ */
+/* ===== Sounds ===== */
 let soundEnabled = true;
 let audioCtx = null;
-const getCtx = () => {
-  if(!audioCtx){
-    try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
-  }
-  return audioCtx;
-};
+const getCtx = () => { if(!audioCtx){ try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} } return audioCtx; };
 function playBeep(freq=800, dur=0.12, type='sine', vol=0.15){
   if(!soundEnabled) return;
   const ctx = getCtx(); if(!ctx) return;
   try{
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
     osc.frequency.value = freq; osc.type = type;
     gain.gain.setValueAtTime(vol, ctx.currentTime);
@@ -1085,7 +920,6 @@ function playBeep(freq=800, dur=0.12, type='sine', vol=0.15){
     if(navigator.vibrate) navigator.vibrate(12);
   }catch(e){}
 }
-/* Named sound effects for consistent UX */
 const Sound = {
   click(){ playBeep(600, 0.06, 'sine', 0.10); },
   nav(){ playBeep(500, 0.05, 'triangle', 0.08); },
@@ -1095,7 +929,6 @@ const Sound = {
   warn(){ playBeep(440, 0.15, 'triangle', 0.14); setTimeout(()=>playBeep(330, 0.15), 100); },
   open(){ playBeep(520, 0.06); setTimeout(()=>playBeep(780, 0.08), 50); }
 };
-
 function showToast(msg, isErr=false){
   const t = document.createElement('div');
   t.className = 'toast-msg' + (isErr ? ' toast-error' : '');
@@ -1105,9 +938,7 @@ function showToast(msg, isErr=false){
   isErr ? Sound.error() : Sound.select();
 }
 
-/* ============================================================
-   THEMES — creative, high-contrast set
-   ============================================================ */
+/* ===== Themes ===== */
 const THEMES = [
   { name:'SLAF Midnight',       cls:'theme-slaf' },
   { name:'Ceremonial Gold',     cls:'theme-gold' },
@@ -1126,9 +957,7 @@ function loadTheme(){
   if(saved && THEME_CLASSES.includes(saved)){
     document.body.classList.add(saved);
     currentThemeIndex = THEME_CLASSES.indexOf(saved);
-  } else {
-    document.body.classList.add('theme-slaf');
-  }
+  } else { document.body.classList.add('theme-slaf'); }
 }
 function cycleTheme(){
   document.body.classList.remove(...THEME_CLASSES);
@@ -1139,107 +968,71 @@ function cycleTheme(){
   showToast(`🎨 ${THEMES[currentThemeIndex].name}`);
 }
 
-/* ============================================================
-   CREDENTIALS
-   ============================================================ */
+/* ===== Credentials ===== */
 let CREDENTIALS = {};
 function loadCredentials(){
   try{ CREDENTIALS = JSON.parse(localStorage.getItem('ftc_credentials_v14') || '{}'); }
   catch(e){ CREDENTIALS = {}; }
   SERVICE_NUMBERS.forEach(s => {
     const key = normalizeService(s.service);
-    if(!CREDENTIALS[key]){
-      CREDENTIALS[key] = { pin: DEFAULT_PIN, password: DEFAULT_PASSWORD, changed: false };
-    } else {
-      // migrate legacy
+    if(!CREDENTIALS[key]) CREDENTIALS[key] = { pin: DEFAULT_PIN, password: DEFAULT_PASSWORD, changed: false };
+    else {
       if(CREDENTIALS[key].pin === undefined) CREDENTIALS[key].pin = DEFAULT_PIN;
       if(CREDENTIALS[key].password === undefined) CREDENTIALS[key].password = DEFAULT_PASSWORD;
     }
   });
   saveCredentials();
 }
-function saveCredentials(){
-  try{ localStorage.setItem('ftc_credentials_v14', JSON.stringify(CREDENTIALS)); }catch(e){}
-}
+function saveCredentials(){ try{ localStorage.setItem('ftc_credentials_v14', JSON.stringify(CREDENTIALS)); }catch(e){} }
 
-/* ============================================================
-   LOGIN MODE TOGGLE
-   ============================================================ */
 let loginMode = 'pin';
 function setLoginMode(mode){
-  loginMode = mode;
-  saveLoginMode(mode);
+  loginMode = mode; saveLoginMode(mode);
   $$('.login-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
   $('#pinModeBox').style.display = mode === 'pin' ? 'block' : 'none';
   $('#pwdModeBox').style.display = mode === 'pwd' ? 'block' : 'none';
-  setTimeout(()=>{
-    if(mode === 'pin') $('#loginPin').focus();
-    else $('#loginPass').focus();
-  }, 100);
+  setTimeout(()=>{ if(mode === 'pin') $('#loginPin').focus(); else $('#loginPass').focus(); }, 100);
   Sound.click();
 }
 
-/* ============================================================
-   PIN PAD
-   ============================================================ */
 function bindPinPad(){
   const pinInput = $('#loginPin');
   $$('#pinPad .pin-key').forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.dataset.key;
-      if(key === 'del'){
-        pinInput.value = pinInput.value.slice(0, -1);
+      if(key === 'del'){ pinInput.value = pinInput.value.slice(0, -1); Sound.click(); }
+      else if(key === 'clear'){ pinInput.value = ''; Sound.click(); }
+      else {
+        if(pinInput.value.length < PIN_LENGTH) pinInput.value += key;
         Sound.click();
-      } else if(key === 'clear'){
-        pinInput.value = '';
-        Sound.click();
-      } else {
-        if(pinInput.value.length < PIN_LENGTH){
-          pinInput.value += key;
-          Sound.click();
-        }
-        if(pinInput.value.length === PIN_LENGTH){
-          Sound.select();
-          setTimeout(attemptLogin, 200);
-        }
+        if(pinInput.value.length === PIN_LENGTH){ Sound.select(); setTimeout(attemptLogin, 200); }
       }
     });
   });
-  // Typing numbers directly also works
   pinInput.addEventListener('input', () => {
     pinInput.value = pinInput.value.replace(/\D/g,'').slice(0, PIN_LENGTH);
-    if(pinInput.value.length === PIN_LENGTH){
-      Sound.select();
-      setTimeout(attemptLogin, 200);
-    }
+    if(pinInput.value.length === PIN_LENGTH){ Sound.select(); setTimeout(attemptLogin, 200); }
   });
 }
 
-/* ============================================================
-   LOGIN
-   ============================================================ */
 function populateLoginSuggestions(){
   const dl = $('#serviceSuggestList'); if(!dl) return;
   dl.innerHTML = '';
   const hist = getLoginHistory();
-  const seen = new Set();
-  const ordered = [];
+  const seen = new Set(); const ordered = [];
   hist.forEach(s=>{const n=normalizeService(s); if(!seen.has(n)){seen.add(n); ordered.push(s);}});
   SERVICE_NUMBERS.forEach(s=>{const n=normalizeService(s.service); if(!seen.has(n)){seen.add(n); ordered.push(s.service);}});
   ordered.forEach(svcNum => {
     const found = findService(normalizeService(svcNum));
     const opt = document.createElement('option');
-    opt.value = svcNum;
-    opt.label = found ? found.name : '';
+    opt.value = svcNum; opt.label = found ? found.name : '';
     dl.appendChild(opt);
   });
 }
-
 function tryAutofillLogin(){
   const userInput = $('#loginUser');
   const hist = getLoginHistory();
   if(!userInput.value && hist.length > 0) userInput.value = hist[0];
-  // Remember-me: only autofill PIN, and only if user granted "keep me signed in"
   const rem = getRemembered();
   const u = normalizeService(userInput.value);
   if(rem[u]){
@@ -1254,41 +1047,28 @@ function attemptLogin(){
   const u = normalizeService(uRaw);
   const err = $('#loginError');
   err.innerText = '';
-
   if(!u){ err.innerText = '❌ Enter your service number.'; Sound.error(); return; }
-
   const svc = findService(u);
   if(!svc){ err.innerText = '❌ Unknown service number.'; Sound.error(); return; }
-
   const cred = CREDENTIALS[u];
   if(!cred){ err.innerText = '❌ Account not found.'; Sound.error(); return; }
-
   let ok = false;
   if(loginMode === 'pin'){
     const pin = $('#loginPin').value;
     if(pin.length !== PIN_LENGTH){ err.innerText = `❌ Enter ${PIN_LENGTH}-digit PIN.`; Sound.error(); return; }
     ok = pin === cred.pin;
-  } else {
-    ok = $('#loginPass').value === cred.password;
-  }
-
+  } else ok = $('#loginPass').value === cred.password;
   if(!ok){ err.innerText = '❌ Incorrect ' + (loginMode==='pin'?'PIN':'password') + '.'; Sound.error(); return; }
 
-  currentUser = svc;
-  currentUserKey = svc.service;
-  pushLoginHistory(svc.service);
-  populateLoginSuggestions();
+  currentUser = svc; currentUserKey = svc.service;
+  pushLoginHistory(svc.service); populateLoginSuggestions();
 
-  // Remember-me
   const rem = $('#rememberMe').checked;
   if(rem){
     const payload = {};
-    if(loginMode === 'pin') payload.pin = cred.pin;
-    else payload.password = cred.password;
+    if(loginMode === 'pin') payload.pin = cred.pin; else payload.password = cred.password;
     setRemembered(svc.service, payload, true);
-  } else {
-    setRemembered(svc.service, null, false);
-  }
+  } else setRemembered(svc.service, null, false);
 
   $('#loginOverlay').style.display = 'none';
   $('#mainDashboard').style.display = 'flex';
@@ -1297,21 +1077,14 @@ function attemptLogin(){
   initDashboard();
   Sound.success();
   showToast('✅ Welcome, ' + svc.name);
-
   if(!cred.changed){
-    setTimeout(()=>{
-      if(confirm('🔐 You are using the default PIN/password.\n\nChange it now?')) openPwdModal();
-    }, 800);
+    setTimeout(()=>{ if(confirm('🔐 You are using the default PIN/password.\n\nChange it now?')) openPwdModal(); }, 800);
   }
 }
-
 function logout(){
   try{sessionStorage.removeItem('ftc_user_v14');}catch(e){}
-  Sound.click();
-  location.reload();
+  Sound.click(); location.reload();
 }
-
-/* Session restore */
 (function restoreSession(){
   loadCredentials();
   populateLoginSuggestions();
@@ -1321,8 +1094,7 @@ function logout(){
     if(saved){
       const svc = findService(normalizeService(saved));
       if(svc){
-        currentUser = svc;
-        currentUserKey = svc.service;
+        currentUser = svc; currentUserKey = svc.service;
         $('#loginOverlay').style.display = 'none';
         $('#mainDashboard').style.display = 'flex';
         $('#currentUserDisplay').innerText = svc.name + ' (' + svc.service + ')';
@@ -1332,61 +1104,35 @@ function logout(){
   }catch(e){}
 })();
 
-/* ============================================================
-   PASSWORD CHANGE
-   ============================================================ */
 function openPwdModal(){
-  $('#pwdOld').value = '';
-  $('#pwdNew').value = '';
-  $('#pwdConfirm').value = '';
-  $('#pwdMsg').innerText = '';
-  $('#pwdMsg').className = 'pwd-msg';
-  $('#pwdModal').classList.add('show');
-  Sound.open();
+  $('#pwdOld').value = ''; $('#pwdNew').value = ''; $('#pwdConfirm').value = '';
+  $('#pwdMsg').innerText = ''; $('#pwdMsg').className = 'pwd-msg';
+  $('#pwdModal').classList.add('show'); Sound.open();
   setTimeout(()=>$('#pwdOld').focus(), 100);
 }
 function closePwdModal(){ $('#pwdModal').classList.remove('show'); }
-
 function changePassword(){
-  const oldP = $('#pwdOld').value;
-  const newP = $('#pwdNew').value;
-  const confP = $('#pwdConfirm').value;
-  const msg = $('#pwdMsg');
-  msg.className = 'pwd-msg';
-
+  const oldP = $('#pwdOld').value, newP = $('#pwdNew').value, confP = $('#pwdConfirm').value;
+  const msg = $('#pwdMsg'); msg.className = 'pwd-msg';
   if(!currentUserKey){ msg.innerText='❌ Not signed in.'; msg.classList.add('err'); Sound.error(); return; }
   const cred = CREDENTIALS[normalizeService(currentUserKey)];
   if(!cred){ msg.innerText='❌ Account not found.'; msg.classList.add('err'); Sound.error(); return; }
-
   const ok = (oldP === cred.pin) || (oldP === cred.password);
   if(!ok){ msg.innerText='❌ Current PIN/password incorrect.'; msg.classList.add('err'); Sound.error(); return; }
-
   const isPin = /^\d{4}$/.test(newP);
   const isPwd = newP.length >= 6;
   if(!isPin && !isPwd){ msg.innerText='❌ New PIN must be 4 digits, or password ≥6 chars.'; msg.classList.add('err'); Sound.error(); return; }
   if(newP !== confP){ msg.innerText='❌ Confirmation does not match.'; msg.classList.add('err'); Sound.error(); return; }
-
   if(isPin){ cred.pin = newP; cred.password = DEFAULT_PASSWORD; }
   else { cred.password = newP; cred.pin = DEFAULT_PIN; }
-  cred.changed = true;
-  saveCredentials();
-
+  cred.changed = true; saveCredentials();
   const rem = getRemembered();
   const k = normalizeService(currentUserKey);
-  if(rem[k]){
-    rem[k] = isPin ? { pin: newP } : { password: newP };
-    try{ localStorage.setItem('ftc_remember_v14', JSON.stringify(rem)); }catch(e){}
-  }
-
+  if(rem[k]){ rem[k] = isPin ? { pin: newP } : { password: newP }; try{ localStorage.setItem('ftc_remember_v14', JSON.stringify(rem)); }catch(e){} }
   msg.innerText = '✅ Updated successfully.'; msg.classList.add('ok');
-  Sound.success();
-  showToast('🔑 Credentials updated');
+  Sound.success(); showToast('🔑 Credentials updated');
   setTimeout(closePwdModal, 1200);
 }
-
-/* ============================================================
-   RECOVERY
-   ============================================================ */
 function recoverPassword(){
   const svcRaw = $('#recoveryService').value.trim();
   const secret = $('#recoverySecret').value.trim();
@@ -1397,26 +1143,16 @@ function recoverPassword(){
   if(!found){ msg.innerText = '❌ Service number not recognised.'; Sound.error(); return; }
   const key = normalizeService(found.service);
   if(secret !== RECOVERY_SECRETS[key]){ msg.innerText = '❌ Verification failed.'; Sound.error(); return; }
-  CREDENTIALS[key].pin = DEFAULT_PIN;
-  CREDENTIALS[key].password = DEFAULT_PASSWORD;
-  CREDENTIALS[key].changed = false;
+  CREDENTIALS[key].pin = DEFAULT_PIN; CREDENTIALS[key].password = DEFAULT_PASSWORD; CREDENTIALS[key].changed = false;
   saveCredentials();
   setRemembered(found.service, null, false);
   msg.style.color = '#34d399';
   msg.innerText = `✅ PIN reset to ${DEFAULT_PIN}`;
-  Sound.success();
-  showToast('🔑 PIN reset');
-  setTimeout(()=>{
-    $('#recoveryBox').classList.remove('show');
-    $('#recoveryService').value = '';
-    $('#recoverySecret').value = '';
-    msg.innerText = '';
-  }, 2200);
+  Sound.success(); showToast('🔑 PIN reset');
+  setTimeout(()=>{ $('#recoveryBox').classList.remove('show'); $('#recoveryService').value = ''; $('#recoverySecret').value = ''; msg.innerText = ''; }, 2200);
 }
 
-/* ============================================================
-   DATA
-   ============================================================ */
+/* ===== Data ===== */
 let coursesData = [];
 let courseNameHistory = [];
 let historyStack = [], historyIndex = -1;
@@ -1439,65 +1175,82 @@ const defaultData = [
   { id:8, type:'Course', courseName:'Insarag Course', officersAirmen:'1 Officer', country:'India', depDate:'2026-03-23', returnDate:'2026-03-27', paymentDate:'2026-03-10', cmdrStatus:'Sent', modStatus:'Sent', visaStatus:'VISA H/O TO EMBASSY', ticketStatus:'TICKET CONFIRMED', ticketDemandDate:'2026-03-01', ticketOpenDate:'2026-03-05', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-03-10', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-03-01T16:20:00Z' }
 ];
 
+/* ===== ★ NEW: Admin-ready detection ===== */
+function isAdminReady(c){
+  if(c.isCancelled) return false;
+  if(c.isNomination) return false; // nominations keep their own flow
+  return c.cmdrStatus === 'Received'
+      && c.modStatus === 'Received'
+      && (c.visaStatus === 'VISA COLLECTED' || c.visaStatus === 'VISA ON ARRIVAL' || c.visaStatus === 'HOST COUNTRY HANDLING')
+      && (c.ticketStatus === 'TICKET OK' || c.ticketStatus === 'TICKET CONFIRMED')
+      && (c.woStatus === 'SENT');
+}
+
+/* ===== ★ NEW: Needs-update detection ===== */
+function needsUpdate(c){
+  const t = toDate(c.lastUpdatedAt);
+  if(!t) return true;
+  return (Date.now() - t.getTime()) > 7*86400000;
+}
+
+/* ===== ★ UPDATED: urgency now checks admin-ready first ===== */
 function getUrgencyInfo(c){
   if(c.isCancelled) return { className:'', daysLeft:null, urgencyLevel:null };
-  let target = c.isNomination ? (c.deadlineDate || c.depDate) : (c.paymentDate || c.depDate);
-  const d = getDaysRemaining(target);
+
+  // Nominations — keep their own rules
   if(c.isNomination){
-    if(d<0) return { className:'row-nomination', daysLeft:d, urgencyLevel:'nom' };
-    if(d<=2) return { className:'row-nomination', daysLeft:d, urgencyLevel:'nom-critical' };
-    if(d<=7) return { className:'row-nomination', daysLeft:d, urgencyLevel:'nom' };
+    const d = getDaysRemaining(c.deadlineDate || c.depDate);
+    if(d < 0) return { className:'row-nomination', daysLeft:d, urgencyLevel:'nom' };
+    if(d <= 2) return { className:'row-nomination', daysLeft:d, urgencyLevel:'nom-critical' };
     return { className:'row-nomination', daysLeft:d, urgencyLevel:'nom' };
   }
-  if(d<0) return { className:'row-past', daysLeft:d, urgencyLevel:'past' };
-  if(d<=2) return { className:'row-critical', daysLeft:d, urgencyLevel:'critical' };
-  if(d<=7) return { className:'row-critical', daysLeft:d, urgencyLevel:'critical' };
-  if(d<=14) return { className:'row-high', daysLeft:d, urgencyLevel:'high' };
+
+  const target = c.paymentDate || c.depDate;
+  const d = getDaysRemaining(target);
+
+  // ★ If all admin steps done and only final payment remains — show READY, not critical
+  if(isAdminReady(c)){
+    return { className:'row-ready', daysLeft:d, urgencyLevel:'ready' };
+  }
+
+  if(d < 0) return { className:'row-past', daysLeft:d, urgencyLevel:'past' };
+  if(d <= 2) return { className:'row-critical', daysLeft:d, urgencyLevel:'critical' };
+  if(d <= 7) return { className:'row-critical', daysLeft:d, urgencyLevel:'critical' };
+  if(d <= 14) return { className:'row-high', daysLeft:d, urgencyLevel:'high' };
   return { className:'', daysLeft:d, urgencyLevel:'normal' };
 }
 
-/* ============================================================
-   SHAPED BADGE RENDERERS — text inside the icon shape
-   ============================================================ */
+/* ===== Shaped badge renderers ===== */
 function cmdrBadge(status){
-  const map = {
-    'Not Sent':{ cls:'shape-cmdr not', txt:'NOT' },
-    'Sent':    { cls:'shape-cmdr sent', txt:'SENT' },
-    'Received':{ cls:'shape-cmdr rec', txt:'REC' }
-  };
+  const map = { 'Not Sent':{ cls:'shape-cmdr not', txt:'NOT' }, 'Sent':{ cls:'shape-cmdr sent', txt:'SENT' }, 'Received':{ cls:'shape-cmdr rec', txt:'REC' } };
   const m = map[status] || map['Not Sent'];
   return `<span class="shape-badge ${m.cls}" title="CMDR: ${status}">${m.txt}</span>`;
 }
 function modBadge(status){
-  const map = {
-    'Not Sent':{ cls:'shape-mod not', txt:'NOT' },
-    'Sent':    { cls:'shape-mod sent', txt:'SENT' },
-    'Received':{ cls:'shape-mod rec', txt:'REC' },
-    'Pending': { cls:'shape-mod pend', txt:'PEND' }
-  };
+  const map = { 'Not Sent':{ cls:'shape-mod not', txt:'NOT' }, 'Sent':{ cls:'shape-mod sent', txt:'SENT' }, 'Received':{ cls:'shape-mod rec', txt:'REC' }, 'Pending':{ cls:'shape-mod pend', txt:'PEND' } };
   const m = map[status] || map['Not Sent'];
   return `<span class="shape-badge ${m.cls}" title="MOD: ${status}">${m.txt}</span>`;
 }
 function visaBadge(s){
   const map = {
-    'PENDING':               { cls:'shape-visa',       txt:'PEND' },
-    'VISA DOC PREP':         { cls:'shape-visa doc',   txt:'DOC' },
+    'PENDING':               { cls:'shape-visa',          txt:'PEND' },
+    'VISA DOC PREP':         { cls:'shape-visa doc',      txt:'DOC' },
     'VISA H/O TO EMBASSY':   { cls:'shape-visa handover', txt:'H/O' },
-    'VISA COLLECTED':        { cls:'shape-visa done',  txt:'COLLECT' },
-    'VISA ON ARRIVAL':       { cls:'shape-visa onarr', txt:'ON ARR' },
-    'HOST COUNTRY HANDLING': { cls:'shape-visa host',  txt:'HOST' }
+    'VISA COLLECTED':        { cls:'shape-visa done',     txt:'COLLECT' },
+    'VISA ON ARRIVAL':       { cls:'shape-visa onarr',    txt:'ON ARR' },
+    'HOST COUNTRY HANDLING': { cls:'shape-visa host',     txt:'HOST' }
   };
   const m = map[s] || map['PENDING'];
   return `<span class="shape-badge ${m.cls}" title="Visa: ${s}">${m.txt}</span>`;
 }
 function ticketBadge(s, d, o){
   const map = {
-    'PENDING':              { cls:'shape-ticket',         txt:'PEND' },
-    'TICKET DEMAND RAISED': { cls:'shape-ticket demand',  txt:'DEMAND' },
-    'TICKET DEMAND BLINK':  { cls:'shape-ticket blink',   txt:'DEMAND!' },
-    'OFFER':                { cls:'shape-ticket offer',   txt:'OFFER' },
-    'TICKET CONFIRMED':     { cls:'shape-ticket conf',    txt:'CONF' },
-    'TICKET OK':            { cls:'shape-ticket ok',      txt:'OK' }
+    'PENDING':              { cls:'shape-ticket',        txt:'PEND' },
+    'TICKET DEMAND RAISED': { cls:'shape-ticket demand', txt:'DEMAND' },
+    'TICKET DEMAND BLINK':  { cls:'shape-ticket blink',  txt:'DEMAND!' },
+    'OFFER':                { cls:'shape-ticket offer',  txt:'OFFER' },
+    'TICKET CONFIRMED':     { cls:'shape-ticket conf',   txt:'CONF' },
+    'TICKET OK':            { cls:'shape-ticket ok',     txt:'OK' }
   };
   const m = map[s] || map['PENDING'];
   const date = (s === 'TICKET DEMAND RAISED' || s === 'TICKET DEMAND BLINK') ? d : o;
@@ -1509,8 +1262,6 @@ function woBadge(s, exp, act){
   if(s === 'SENT'){ cls = 'shape-wo sent'; txt = 'SENT'; }
   if(act) extra = `<br><small style="font-size:.62rem;opacity:.85;">${escapeHtml(act)}</small>`;
   if(s !== 'SENT' && exp){
-    const d = getDaysRemaining(exp);
-    const tone = d<=3 ? 'urgent' : d<=7 ? 'warn' : 'cool';
     cls = 'shape-wo exp';
     txt = `EXP ${exp.slice(5)}`;
     extra = '';
@@ -1530,11 +1281,8 @@ function paymentBadge(c){
   return `<span class="shape-badge shape-payment ${tone}" title="Payment: ${c.paymentDate}">💰 ${escapeHtml(c.paymentDate)}</span>`;
 }
 
-/* ============================================================
-   EDIT — clear-on-click for course/country
-   ============================================================ */
+/* ===== Edit helpers ===== */
 function attachClearOnFocus(inputEl, defaultValue){
-  // Clear the default "placeholder" style value on first focus
   const clearOnEnter = () => {
     if(inputEl.dataset.cleared === '1') return;
     const v = inputEl.value.trim();
@@ -1543,29 +1291,14 @@ function attachClearOnFocus(inputEl, defaultValue){
       inputEl.dataset.cleared = '1';
     }
   };
-  inputEl.addEventListener('focus', function(){
-    clearOnEnter();
-    setTimeout(()=>{ try{ this.select(); }catch(e){} }, 0);
-  });
-  inputEl.addEventListener('click', function(){
-    clearOnEnter();
-    try{ this.select(); }catch(e){}
-  });
-  inputEl.addEventListener('keydown', e => {
-    if(e.key === 'Escape'){ inputEl.blur(); }
-  });
+  inputEl.addEventListener('focus', function(){ clearOnEnter(); setTimeout(()=>{ try{ this.select(); }catch(e){} }, 0); });
+  inputEl.addEventListener('click', function(){ clearOnEnter(); try{ this.select(); }catch(e){} });
+  inputEl.addEventListener('keydown', e => { if(e.key === 'Escape') inputEl.blur(); });
 }
 
-/* ---- Country live suggestion dropdown ---- */
-let countrySuggestEl = null;
-let countrySuggestInput = null;
-let countrySuggestList = [];
-let countrySuggestIndex = 0;
-
-function closeCountrySuggest(){
-  if(countrySuggestEl){ countrySuggestEl.remove(); countrySuggestEl = null; }
-  countrySuggestInput = null;
-}
+/* ===== Country suggestion ===== */
+let countrySuggestEl = null, countrySuggestInput = null, countrySuggestList = [], countrySuggestIndex = 0;
+function closeCountrySuggest(){ if(countrySuggestEl){ countrySuggestEl.remove(); countrySuggestEl = null; } countrySuggestInput = null; }
 function openCountrySuggest(inputEl){
   closeCountrySuggest();
   countrySuggestInput = inputEl;
@@ -1583,24 +1316,14 @@ function openCountrySuggest(inputEl){
 function renderCountrySuggest(query){
   if(!countrySuggestEl) return;
   const q = query.toLowerCase().trim();
-  const matches = COUNTRY_OPTIONS.filter(c => c.toLowerCase().includes(q));
-  countrySuggestList = matches.slice(0, 12);
+  countrySuggestList = COUNTRY_OPTIONS.filter(c => c.toLowerCase().includes(q)).slice(0, 12);
   countrySuggestIndex = 0;
-  if(countrySuggestList.length === 0){
-    countrySuggestEl.innerHTML = '';
-    return;
-  }
-  countrySuggestEl.innerHTML = countrySuggestList.map((c, i) =>
-    `<div class="country-suggest-item ${i===0?'active':''}" data-idx="${i}">${escapeHtml(c)}</div>`
-  ).join('');
+  if(!countrySuggestList.length){ countrySuggestEl.innerHTML = ''; return; }
+  countrySuggestEl.innerHTML = countrySuggestList.map((c, i) => `<div class="country-suggest-item ${i===0?'active':''}" data-idx="${i}">${escapeHtml(c)}</div>`).join('');
   countrySuggestEl.querySelectorAll('.country-suggest-item').forEach(item => {
     item.addEventListener('click', () => {
-      if(countrySuggestInput){
-        countrySuggestInput.value = countrySuggestList[+item.dataset.idx];
-        countrySuggestInput.dataset.cleared = '1';
-      }
-      closeCountrySuggest();
-      Sound.select();
+      if(countrySuggestInput){ countrySuggestInput.value = countrySuggestList[+item.dataset.idx]; countrySuggestInput.dataset.cleared = '1'; }
+      closeCountrySuggest(); Sound.select();
     });
     item.addEventListener('mouseenter', () => {
       countrySuggestIndex = +item.dataset.idx;
@@ -1618,17 +1341,11 @@ function moveCountrySuggest(delta){
 }
 function commitCountrySuggest(){
   if(!countrySuggestEl || !countrySuggestInput) return;
-  if(countrySuggestList[countrySuggestIndex] && countrySuggestInput){
-    countrySuggestInput.value = countrySuggestList[countrySuggestIndex];
-    countrySuggestInput.dataset.cleared = '1';
-  }
-  closeCountrySuggest();
-  Sound.select();
+  if(countrySuggestList[countrySuggestIndex]){ countrySuggestInput.value = countrySuggestList[countrySuggestIndex]; countrySuggestInput.dataset.cleared = '1'; }
+  closeCountrySuggest(); Sound.select();
 }
 
-/* ============================================================
-   RENDER TABLE
-   ============================================================ */
+/* ===== Render table ===== */
 function renderTable(){
   const countryVal = $('#countryFilter').value;
   const typeVal    = $('#typeFilter').value;
@@ -1669,8 +1386,10 @@ function renderTable(){
     const u = getUrgencyInfo(course);
     const editing = editingRowId === course.id;
     const selected = selectedCourses.has(course.id);
+    const stale = needsUpdate(course);
+
     const tr = document.createElement('tr');
-    tr.className = `${course.isCancelled ? '' : u.className} ${selected ? 'row-selected' : ''}`;
+    tr.className = `${course.isCancelled ? '' : u.className} ${selected ? 'row-selected' : ''} ${stale ? 'needs-update' : ''}`;
     tr.dataset.id = course.id;
     tr.tabIndex = -1;
 
@@ -1680,18 +1399,18 @@ function renderTable(){
     cb.addEventListener('change', () => toggleSelection(course.id));
     cbTd.appendChild(cb); tr.appendChild(cbTd);
 
-    // TYPE
+    // TYPE — plain text
     const typeTd = document.createElement('td');
     if(editing){
       const sel = document.createElement('select'); sel.className='edit-select'; sel.id=`edit-type-${course.id}`;
-      sel.innerHTML = `<option value="Course" ${course.type==='Course'?'selected':''}>📘 COURSE</option>
-                       <option value="Visit" ${course.type==='Visit'?'selected':''}>📌 VISIT</option>
-                       <option value="Nomination" ${course.type==='Nomination'?'selected':''}>📨 NOM</option>`;
+      sel.innerHTML = `<option value="Course" ${course.type==='Course'?'selected':''}>COURSE</option>
+                       <option value="Visit" ${course.type==='Visit'?'selected':''}>VISIT</option>
+                       <option value="Nomination" ${course.type==='Nomination'?'selected':''}>NOMINATION</option>`;
       typeTd.appendChild(sel);
     } else {
-      const cls = course.type==='Course'?'type-course':course.type==='Visit'?'type-visit':'type-nomination';
       const icon = course.type==='Course'?'📘':course.type==='Visit'?'📌':'📨';
-      typeTd.innerHTML = `<span class="type-badge ${cls}">${icon} ${course.type==='Nomination'?'NOM':course.type.toUpperCase()}</span>`;
+      const label = course.type==='Nomination'?'NOM':course.type.toUpperCase();
+      typeTd.innerHTML = `<span class="type-badge"><span class="type-icon">${icon}</span>${label}</span>`;
     }
     tr.appendChild(typeTd);
 
@@ -1704,13 +1423,19 @@ function renderTable(){
       inp.style.textAlign = 'left';
       inp.placeholder = 'Type course name…';
       attachClearOnFocus(inp, course.courseName);
+      // Enter moves to next field
+      inp.addEventListener('keydown', e => {
+        if(e.key === 'Enter' && inp.value.trim()){ e.preventDefault(); focusNextInRow(inp, 1); }
+      });
       courseTd.appendChild(inp);
     } else {
       let marker = '';
-      if(course.isNomination) marker = '<span class="type-badge type-nomination" style="font-size:.62rem;padding:2px 8px;margin-left:8px;">NOM</span>';
+      if(u.urgencyLevel === 'ready') marker = '<span class="ready-pill">✓ READY</span>';
+      else if(course.isNomination) marker = '<span class="type-badge type-nomination" style="font-size:.62rem;padding:2px 8px;margin-left:8px;background:linear-gradient(135deg,#f472b6,#be185d);color:#fff;border-radius:20px;">NOM</span>';
       else if(u.urgencyLevel === 'critical') marker = '<span style="display:inline-block;background:var(--danger);color:#fff;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:900;margin-left:8px;">CRIT</span>';
       else if(u.urgencyLevel === 'high') marker = '<span style="display:inline-block;background:var(--warn);color:#fff;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:900;margin-left:8px;">HIGH</span>';
-      courseTd.innerHTML = `<span style="font-weight:900;">${escapeHtml(course.courseName)}</span>${marker}`;
+      const staleMark = stale ? ' <span style="font-size:.85rem; opacity:.7;" title="Not updated in 7+ days">🕐</span>' : '';
+      courseTd.innerHTML = `<span style="font-weight:900;">${escapeHtml(course.courseName)}</span>${marker}${staleMark}`;
     }
     tr.appendChild(courseTd);
 
@@ -1739,7 +1464,7 @@ function renderTable(){
       inp.addEventListener('keydown', e => {
         if(e.key === 'ArrowDown'){ e.preventDefault(); moveCountrySuggest(1); }
         else if(e.key === 'ArrowUp'){ e.preventDefault(); moveCountrySuggest(-1); }
-        else if(e.key === 'Enter'){ e.preventDefault(); commitCountrySuggest(); }
+        else if(e.key === 'Enter'){ e.preventDefault(); commitCountrySuggest(); setTimeout(()=>focusNextInRow(inp, 1), 60); }
         else if(e.key === 'Escape'){ closeCountrySuggest(); inp.blur(); }
       });
       inp.addEventListener('blur', () => setTimeout(closeCountrySuggest, 220));
@@ -1764,14 +1489,15 @@ function renderTable(){
     const dl = u.daysLeft === null ? '—' : u.daysLeft;
     let dc = '';
     if(u.daysLeft !== null && u.daysLeft >= 0){
-      if(u.daysLeft <= 2) dc = 'color:var(--danger);font-weight:900;font-size:1.2rem;';
+      if(u.urgencyLevel === 'ready') dc = 'color:var(--ok);font-weight:900;font-size:1.1rem;';
+      else if(u.daysLeft <= 2) dc = 'color:var(--danger);font-weight:900;font-size:1.2rem;';
       else if(u.daysLeft <= 7) dc = 'color:var(--warn);font-weight:900;font-size:1.1rem;';
       else if(u.daysLeft <= 14) dc = 'color:#eab308;font-weight:900;';
     }
     daysTd.innerHTML = `<span style="${dc}">${dl}</span>`;
     tr.appendChild(daysTd);
 
-    // PAYMENT / NOM DEADLINE
+    // PAYMENT
     const payTd = document.createElement('td');
     if(editing){
       const val = course.isNomination ? (course.deadlineDate||'') : (course.paymentDate||'');
@@ -1859,11 +1585,7 @@ function renderTable(){
         editingRowId = course.id;
         renderTable();
         Sound.open();
-        // Focus the first input for immediate typing
-        setTimeout(()=>{
-          const inp = $(`#edit-name-${course.id}`);
-          if(inp){ inp.focus(); inp.select(); }
-        }, 120);
+        setTimeout(()=>{ const inp = $(`#edit-name-${course.id}`); if(inp){ inp.focus(); inp.select(); } }, 120);
       });
       const delBtn = document.createElement('button'); delBtn.textContent='🗑️'; delBtn.className='action-icon';
       delBtn.addEventListener('click', () => {
@@ -1883,9 +1605,17 @@ function renderTable(){
   attachTableDpadNavigation();
 }
 
-/* ============================================================
-   SAVE EDIT
-   ============================================================ */
+/* ★ NEW: Move focus to the next field in the same row */
+function focusNextInRow(currentEl, dir = 1){
+  const row = currentEl.closest('tr');
+  if(!row) return;
+  const focusables = Array.from(row.querySelectorAll('input, select, button')).filter(el => el.offsetParent !== null);
+  const idx = focusables.indexOf(currentEl);
+  const next = focusables[idx + dir];
+  if(next){ next.focus(); Sound.nav(); }
+}
+
+/* ===== Save edit ===== */
 function saveEdit(id){
   const c = coursesData.find(x => x.id === id); if(!c) return;
   const dep = $(`#edit-dep-${id}`)?.value;
@@ -1925,9 +1655,7 @@ function saveEdit(id){
   Sound.success();
 }
 
-/* ============================================================
-   NEW COURSE / NOMINATION
-   ============================================================ */
+/* ===== Add course / nomination ===== */
 function addNewCourse(){
   const id = Date.now();
   coursesData.push({
@@ -1943,10 +1671,8 @@ function addNewCourse(){
   renderTable(); checkAlerts();
   showToast('➕ New course');
   Sound.open();
-  setTimeout(()=>{ const inp = $(`#edit-name-${id}`); if(inp){ inp.focus(); inp.select(); openCountrySuggestCountdown(inp); } }, 150);
+  setTimeout(()=>{ const inp = $(`#edit-name-${id}`); if(inp){ inp.focus(); inp.select(); } }, 150);
 }
-function openCountrySuggestCountdown(){ /* no-op placeholder for future */ }
-
 function addNomination(){
   const id = Date.now();
   nominationCounter++;
@@ -1967,9 +1693,7 @@ function addNomination(){
   setTimeout(()=>{ const inp = $(`#edit-name-${id}`); if(inp){ inp.focus(); inp.select(); } }, 150);
 }
 
-/* ============================================================
-   DELETE / BULK / SELECTION
-   ============================================================ */
+/* ===== Delete / select / bulk ===== */
 function deleteRecord(id){
   const c = coursesData.find(x => x.id === id); if(!c) return;
   if(!confirm(`Delete "${c.courseName}"?`)) return;
@@ -2013,9 +1737,7 @@ function bulkDeleteSelected(){
   showToast(`🗑️ Deleted ${ids.length}`); Sound.warn();
 }
 
-/* ============================================================
-   HISTORY (UNDO / REDO)
-   ============================================================ */
+/* ===== History ===== */
 function saveToHistory(){
   const copy = JSON.parse(JSON.stringify(coursesData));
   historyStack = historyStack.slice(0, historyIndex+1);
@@ -2049,9 +1771,7 @@ function autoSaveData(){
   autoSaveTimer = setTimeout(() => { saveToLocal(); autoSaveTimer = null; }, 500);
 }
 
-/* ============================================================
-   ALERTS
-   ============================================================ */
+/* ===== Alerts — ★ now respects admin-ready ===== */
 function checkAlerts(){
   const container = $('#alertContainer');
   const alerts = [];
@@ -2062,12 +1782,14 @@ function checkAlerts(){
       if(d>=0 && d<=2) alerts.push({type:'EXTREME', msg:`📨 NOM DEADLINE: ${c.courseName} in ${d}d`});
       else if(d>=0 && d<=7) alerts.push({type:'HIGH', msg:`📨 ${c.courseName} deadline in ${d}d`});
     }
+    // Skip payment EXTREME alert if the record is admin-ready
     const target = c.isNomination ? c.deadlineDate : c.paymentDate;
     if(target){
       const d = getDaysRemaining(target);
-      if(d>=0 && d<=2 && !c.isNomination) alerts.push({type:'EXTREME', msg:`💰 PAYMENT: ${c.courseName} in ${d}d`});
-      if(d>=0 && d<=7 && c.cmdrStatus !== 'Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} — CMDR pending`});
-      if(d>=0 && d<=7 && c.modStatus !== 'Received' && c.modStatus !== 'Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} — MOD pending`});
+      const ready = isAdminReady(c);
+      if(d>=0 && d<=2 && !c.isNomination && !ready) alerts.push({type:'EXTREME', msg:`💰 PAYMENT: ${c.courseName} in ${d}d`});
+      if(d>=0 && d<=7 && !ready && c.cmdrStatus !== 'Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} — CMDR pending`});
+      if(d>=0 && d<=7 && !ready && c.modStatus !== 'Received' && c.modStatus !== 'Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} — MOD pending`});
     }
   });
   if(!alerts.length){
@@ -2076,26 +1798,22 @@ function checkAlerts(){
   }
   const seen = new Set(); const unique = [];
   alerts.forEach(a => { if(!seen.has(a.msg)){ seen.add(a.msg); unique.push(a); }});
-  container.innerHTML = unique.slice(0,5).map(a =>
-    `<div class="alert-item-${a.type.toLowerCase()}">${escapeHtml(a.msg)}</div>`
-  ).join('');
-  if(alerts.some(a => a.type === 'EXTREME')){ Sound.warn(); }
+  container.innerHTML = unique.slice(0,5).map(a => `<div class="alert-item-${a.type.toLowerCase()}">${escapeHtml(a.msg)}</div>`).join('');
+  if(alerts.some(a => a.type === 'EXTREME')) Sound.warn();
 }
 
-/* ============================================================
-   STATS
-   ============================================================ */
+/* ===== Stats ===== */
 function updateStats(){
   const total = coursesData.length;
   const nom = coursesData.filter(c => c.isNomination).length;
   const u48 = coursesData.filter(c => {
-    if(c.isCancelled) return false;
+    if(c.isCancelled || isAdminReady(c)) return false;
     const t = c.isNomination ? c.deadlineDate : c.paymentDate;
     if(!t) return false;
     const d = getDaysRemaining(t); return d >= 0 && d <= 2;
   }).length;
   const crit = coursesData.filter(c => {
-    if(c.isCancelled) return false;
+    if(c.isCancelled || isAdminReady(c)) return false;
     const t = c.isNomination ? c.deadlineDate : c.paymentDate;
     if(!t) return false;
     const d = getDaysRemaining(t); return d >= 0 && d <= 7;
@@ -2111,9 +1829,7 @@ function updateStats(){
   $('#lastUpdated').innerText = new Date().toLocaleTimeString();
 }
 
-/* ============================================================
-   LOCAL STORAGE
-   ============================================================ */
+/* ===== Storage ===== */
 function saveToLocal(){
   try{
     localStorage.setItem('slaf_ftc_tv_v14', JSON.stringify(coursesData));
@@ -2144,37 +1860,22 @@ function updateCourseDatalist(){
   const dl = $('#courseSuggestList'); dl.innerHTML = '';
   courseNameHistory.forEach(n => { const o = document.createElement('option'); o.value = n; dl.appendChild(o); });
 }
-
-/* ============================================================
-   FILTERS / PRESETS
-   ============================================================ */
 function applyPreset(preset){
   $$('.filter-preset-btn').forEach(b => b.classList.remove('active'));
   $(`.filter-preset-btn[data-preset="${preset}"]`)?.classList.add('active');
-  $('#approvalFilter').value = 'all';
-  $('#modApprovalFilter').value = 'all';
-  $('#typeFilter').value = 'all';
-  $('#searchInput').value = '';
-  $('#countryFilter').value = 'all';
+  $('#approvalFilter').value = 'all'; $('#modApprovalFilter').value = 'all';
+  $('#typeFilter').value = 'all'; $('#searchInput').value = ''; $('#countryFilter').value = 'all';
   if(preset === 'nomination') $('#typeFilter').value = 'Nomination';
   else if(preset === 'cmdr') $('#approvalFilter').value = 'sent';
   else if(preset === 'mod') $('#modApprovalFilter').value = 'pending';
   renderTable(); Sound.click();
 }
-
-/* ============================================================
-   CLOCKS
-   ============================================================ */
 function updateClocks(){
   const now = new Date();
   const lst = new Date(now.getTime() + 5.5*3600*1000);
   $('#lstClock').innerText = lst.toISOString().slice(11,19);
   $('#utcClock').innerText = now.toUTCString().slice(17,25);
 }
-
-/* ============================================================
-   TOGGLES
-   ============================================================ */
 function toggleSound(){
   soundEnabled = !soundEnabled;
   $('#soundToggleBtn').innerText = soundEnabled ? '🔊' : '🔇';
@@ -2214,19 +1915,8 @@ function toggleStats(){
   $('#statsToggleBtn').innerText = statsCollapsed ? '▸ STATS' : '▾ STATS';
   Sound.click();
 }
-
-/* ============================================================
-   EXPORT / PRINT
-   ============================================================ */
 function exportData(){
-  const payload = {
-    version: '14.0',
-    exportedAt: new Date().toISOString(),
-    exportedBy: currentUserKey || 'unknown',
-    courses: coursesData,
-    courseHistory: courseNameHistory,
-    nominationCounter
-  };
+  const payload = { version: '14.1', exportedAt: new Date().toISOString(), exportedBy: currentUserKey || 'unknown', courses: coursesData, courseHistory: courseNameHistory, nominationCounter };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2234,49 +1924,46 @@ function exportData(){
   a.click(); URL.revokeObjectURL(url);
   showToast('💾 Exported'); Sound.success();
 }
-function printReport(){
-  showToast('🖨️ Preparing…'); Sound.click();
-  setTimeout(() => window.print(), 300);
-}
+function printReport(){ showToast('🖨️ Preparing…'); Sound.click(); setTimeout(() => window.print(), 300); }
 
-/* ============================================================
-   D-PAD NAVIGATION — arrow keys move focus in the table
-   ============================================================ */
+/* ===== D-Pad navigation ===== */
 function attachTableDpadNavigation(){
   const tbody = $('#tableBody');
   if(!tbody) return;
   const rows = Array.from(tbody.querySelectorAll('tr'));
   rows.forEach((row, ri) => {
-    row.querySelectorAll('button, input, select').forEach(el => {
+    const focusables = Array.from(row.querySelectorAll('button, input, select'));
+    focusables.forEach((el, ci) => {
       el.addEventListener('focus', () => {
         rows.forEach(r => r.classList.remove('tv-cursor'));
         row.classList.add('tv-cursor');
       });
       el.addEventListener('keydown', e => {
-        // Left/Right within a row: let native Tab handle within the same row
-        // Up/Down: move between rows (same column index)
+        // Up/Down: move to same column in adjacent row
         if(e.key === 'ArrowUp' || e.key === 'ArrowDown'){
-          const focusables = Array.from(row.querySelectorAll('button, input, select'));
-          const colIdx = focusables.indexOf(el);
           const targetRow = rows[ri + (e.key === 'ArrowDown' ? 1 : -1)];
           if(targetRow){
             const targetFocusables = Array.from(targetRow.querySelectorAll('button, input, select'));
-            const target = targetFocusables[Math.min(colIdx, targetFocusables.length-1)];
-            if(target){
-              e.preventDefault();
-              target.focus();
-              Sound.nav();
-            }
+            const target = targetFocusables[Math.min(ci, targetFocusables.length-1)];
+            if(target){ e.preventDefault(); target.focus(); Sound.nav(); }
           }
+        }
+        // Left/Right: move between buttons in same row (only for buttons — inputs use arrows for cursor)
+        if((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && el.tagName === 'BUTTON'){
+          const target = focusables[ci + (e.key === 'ArrowRight' ? 1 : -1)];
+          if(target){ e.preventDefault(); target.focus(); Sound.nav(); }
+        }
+        // Enter on input (not select/date) → commit and move to next field
+        if(e.key === 'Enter' && el.tagName === 'INPUT' && el.type !== 'date' && el.type !== 'checkbox'){
+          e.preventDefault();
+          focusNextInRow(el, 1);
         }
       });
     });
   });
 }
 
-/* ============================================================
-   INIT
-   ============================================================ */
+/* ===== Init ===== */
 function initDashboard(){
   loadTheme();
   loadFromLocal();
@@ -2284,7 +1971,6 @@ function initDashboard(){
   setInterval(updateClocks, 1000);
   autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000);
 
-  // Toolbar
   $('#addNewRowBtn').addEventListener('click', addNewCourse);
   $('#addNominationBtn').addEventListener('click', addNomination);
   $('#resetDemoBtn').addEventListener('click', () => {
@@ -2309,7 +1995,6 @@ function initDashboard(){
   $('#logoutBtn').addEventListener('click', logout);
   $('#changePwdBtn').addEventListener('click', openPwdModal);
 
-  // Filters
   $('#clearFiltersBtn').addEventListener('click', () => {
     ['countryFilter','typeFilter','approvalFilter','modApprovalFilter'].forEach(id => $('#'+id).value = 'all');
     $('#searchInput').value = '';
@@ -2323,7 +2008,6 @@ function initDashboard(){
   $('#searchInput').addEventListener('input', debounce(renderTable, 200));
   $$('.filter-preset-btn').forEach(btn => btn.addEventListener('click', () => applyPreset(btn.dataset.preset)));
 
-  // Stat cards
   $$('.stat-card').forEach(card => {
     const run = () => {
       const f = card.dataset.filter;
@@ -2343,7 +2027,6 @@ function initDashboard(){
 
   $('#selectAllCheckbox').addEventListener('change', toggleAllSelection);
 
-  // Keyboard shortcuts
   document.addEventListener('keydown', e => {
     if(e.ctrlKey && e.key.toLowerCase() === 'z'){ e.preventDefault(); undo(); }
     if(e.ctrlKey && e.key.toLowerCase() === 'y'){ e.preventDefault(); redo(); }
@@ -2365,22 +2048,15 @@ function initDashboard(){
     }
   });
 
-  // Close country suggestion when clicking elsewhere
   document.addEventListener('click', e => {
-    if(countrySuggestEl && !countrySuggestEl.contains(e.target) && e.target !== countrySuggestInput){
-      closeCountrySuggest();
-    }
+    if(countrySuggestEl && !countrySuggestEl.contains(e.target) && e.target !== countrySuggestInput) closeCountrySuggest();
   });
 }
 
-/* ============================================================
-   LOGIN / LOGIN BOOT BINDINGS
-   ============================================================ */
+/* ===== Login boot ===== */
 $('#loginBtn').addEventListener('click', () => { Sound.click(); attemptLogin(); });
 $('#loginPass').addEventListener('keydown', e => { if(e.key === 'Enter') attemptLogin(); });
-$('#loginUser').addEventListener('keydown', e => { if(e.key === 'Enter'){
-  if(loginMode === 'pin') $('#loginPin').focus(); else $('#loginPass').focus();
-}});
+$('#loginUser').addEventListener('keydown', e => { if(e.key === 'Enter'){ if(loginMode === 'pin') $('#loginPin').focus(); else $('#loginPass').focus(); }});
 $('#loginUser').addEventListener('input', () => {
   const u = normalizeService($('#loginUser').value);
   const rem = getRemembered();
@@ -2399,12 +2075,8 @@ $('#pwdSaveBtn').addEventListener('click', changePassword);
 $('#pwdCancelBtn').addEventListener('click', () => { closePwdModal(); Sound.click(); });
 $('#pwdConfirm').addEventListener('keydown', e => { if(e.key === 'Enter') changePassword(); });
 
-// Auto-init if session exists
-if(currentUser){
-  initDashboard();
-}
+if(currentUser) initDashboard();
 
-// Expose globals used by inline onclick handlers
 window.bulkUpdateStatus = bulkUpdateStatus;
 window.bulkDeleteSelected = bulkDeleteSelected;
 window.clearSelection = clearSelection;
