@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-<title>SLAF FTC | TV Dashboard v14.1 — LG UA80 Edition</title>
+<title>SLAF FTC | TV Dashboard v14.2 — LG UA80 Edition</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
 
   :root{
     --radius-lg:28px; --radius-md:18px; --radius-sm:12px;
     --focus-ring:3px solid #fbbf24; --focus-offset:3px;
-    --tv-base:22px;
+    --tv-base:24px;
     --col-sep:#000;
+    --separator-width:6px;
   }
 
   body.theme-slaf{
@@ -23,6 +24,7 @@
     --danger:#ef4444; --warn:#f97316; --nom:#ec4899; --ok:#22c55e;
     --shadow:0 0 60px rgba(34,211,238,.25);
     --col-sep:#000;
+    --separator-color:#fbbf24;
   }
   body.theme-gold{
     --bg-primary:#0a0d1f; --bg-secondary:#141838; --bg-tertiary:#050713;
@@ -33,6 +35,7 @@
     --danger:#ef4444; --warn:#f97316; --nom:#ec4899; --ok:#22c55e;
     --shadow:0 0 60px rgba(250,204,21,.25);
     --col-sep:#000;
+    --separator-color:#f97316;
   }
   body.theme-command{
     --bg-primary:#0a0f18; --bg-secondary:#141c28; --bg-tertiary:#050810;
@@ -43,6 +46,7 @@
     --danger:#f87171; --warn:#fb923c; --nom:#f472b6; --ok:#4ade80;
     --shadow:0 0 50px rgba(96,165,250,.3);
     --col-sep:#000;
+    --separator-color:#fbbf24;
   }
   body.theme-arctic{
     --bg-primary:#eef4fb; --bg-secondary:#dbe7f5; --bg-tertiary:#f8fbff;
@@ -53,6 +57,7 @@
     --danger:#b91c1c; --warn:#c2410c; --nom:#9d174d; --ok:#166534;
     --shadow:0 8px 32px rgba(15,76,129,.18);
     --col-sep:#000;
+    --separator-color:#b91c1c;
   }
   body.theme-emerald{
     --bg-primary:#04160e; --bg-secondary:#0a2a1c; --bg-tertiary:#020a06;
@@ -63,6 +68,7 @@
     --danger:#f87171; --warn:#fb923c; --nom:#f472b6; --ok:#34d399;
     --shadow:0 0 50px rgba(16,185,129,.28);
     --col-sep:#000;
+    --separator-color:#fbbf24;
   }
   body.theme-crimson{
     --bg-primary:#1a0505; --bg-secondary:#2e0d0d; --bg-tertiary:#0d0202;
@@ -73,6 +79,7 @@
     --danger:#fca5a5; --warn:#fdba74; --nom:#f9a8d4; --ok:#86efac;
     --shadow:0 0 50px rgba(244,63,94,.3);
     --col-sep:#000;
+    --separator-color:#fbbf24;
   }
   body.theme-hc{
     --bg-primary:#000; --bg-secondary:#000; --bg-tertiary:#000;
@@ -83,6 +90,7 @@
     --danger:#ff3030; --warn:#ff9900; --nom:#ff00ff; --ok:#00ff00;
     --shadow:0 0 0 3px #ffff00;
     --col-sep:#ffff00;
+    --separator-color:#ffff00;
   }
 
   html,body{height:100%;}
@@ -93,6 +101,7 @@
     min-height:100vh;
     transition:background .4s ease,color .4s ease;
     -webkit-font-smoothing:antialiased;
+    text-transform:uppercase;
   }
 
   /* ============ TV focus ============ */
@@ -157,28 +166,28 @@
     overflow:auto;
   }
   body.fullscreen-mode .editable-table{
-    font-size:clamp(.95rem, 1.35vh, 1.35rem);
+    font-size:clamp(1.05rem, 1.55vh, 1.55rem);
     width:100%;
     min-width:0;
     table-layout:auto;
     height:auto;
   }
   body.fullscreen-mode .editable-table th{
-    padding:clamp(6px, .9vh, 14px) 6px;
-    font-size:clamp(.68rem, 1.05vh, .95rem);
+    padding:clamp(8px, 1.1vh, 16px) 6px;
+    font-size:clamp(.75rem, 1.15vh, 1.05rem);
   }
   body.fullscreen-mode .editable-table td{
-    padding:clamp(6px, .9vh, 13px) 6px;
+    padding:clamp(8px, 1.1vh, 15px) 6px;
   }
   body.fullscreen-mode .editable-table .course-name-cell{
-    font-size:clamp(.95rem, 1.35vh, 1.25rem);
+    font-size:clamp(1.05rem, 1.55vh, 1.45rem);
   }
   body.fullscreen-mode .col-actions,
   body.fullscreen-mode .col-checkbox{display:none;}
   body.fullscreen-mode .shape-badge{
-    min-width:64px; min-height:26px;
-    font-size:clamp(.65rem, .95vh, .85rem);
-    padding:3px 10px;
+    min-width:72px; min-height:30px;
+    font-size:clamp(.72rem, 1.05vh, .95rem);
+    padding:4px 12px;
   }
 
   /* ============ Header ============ */
@@ -222,6 +231,7 @@
     border:2px solid var(--border-color);
     background:var(--bg-tertiary); color:var(--text-primary);
     letter-spacing:.5px;
+    text-transform:uppercase;
   }
   .btn-outline:hover,.theme-btn:hover,.sound-btn:hover,.print-btn:hover,.export-btn:hover{
     background:var(--border-color); color:var(--bg-primary); transform:translateY(-2px);
@@ -261,6 +271,7 @@
     background:var(--bg-tertiary); border:2px solid var(--border-color);
     border-radius:50px; padding:8px 24px; font-size:1.1rem; cursor:pointer;
     color:var(--text-primary); font-weight:900; letter-spacing:1px;
+    text-transform:uppercase;
   }
 
   /* ============ Filter ============ */
@@ -274,6 +285,7 @@
     background:var(--bg-tertiary); border:2px solid var(--border-color);
     padding:10px 20px; border-radius:50px; color:var(--text-primary);
     font-size:1rem; font-weight:800; height:52px; cursor:pointer;
+    text-transform:uppercase;
   }
   .filter-group select:focus,.filter-group input:focus{border-color:var(--accent-1); box-shadow:0 0 0 4px rgba(34,211,238,.25);}
   .filter-preset-btn{padding:10px 20px; height:52px;}
@@ -287,10 +299,10 @@
     border-radius:var(--radius-md); border:2px solid var(--border-color);
     background:var(--bg-primary);
   }
-  .editable-table{width:100%; border-collapse:collapse; font-size:1.05rem; min-width:1400px;}
+  .editable-table{width:100%; border-collapse:collapse; font-size:1.1rem; min-width:1400px;}
   .editable-table th{
     background:var(--bg-secondary); padding:14px 6px; text-align:center;
-    font-weight:900; text-transform:uppercase; font-size:.85rem;
+    font-weight:900; text-transform:uppercase; font-size:.9rem;
     letter-spacing:1.5px;
     border-bottom:3px solid var(--border-color);
     border-right:2px solid var(--col-sep);
@@ -312,10 +324,38 @@
     transform:translateX(2px);
   }
   .editable-table .course-name-cell{
-    font-weight:900; font-size:1.15rem; text-align:left;
+    font-weight:900; font-size:1.2rem; text-align:left;
     padding-left:18px; letter-spacing:.3px;
   }
   .editable-table th.col-course{text-align:left; padding-left:18px;}
+
+  /* ============ ★★★ SEPARATOR FOR ≤7 DAYS — clearly visible, contrasting ★★★ ============ */
+  .editable-table tbody tr.separator-row td {
+    padding: 0 !important;
+    border: none !important;
+    height: var(--separator-width);
+    background: var(--separator-color);
+    box-shadow: 0 0 16px var(--separator-color), 0 0 4px var(--separator-color);
+    position: relative;
+    z-index: 5;
+  }
+  .editable-table tbody tr.separator-row td::after {
+    content: '⏳ 7 DAYS OR LESS — IMMEDIATE ATTENTION ⏳';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--separator-color);
+    color: #000;
+    font-weight: 900;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    padding: 2px 24px;
+    border-radius: 60px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,.5);
+    border: 2px solid #000;
+  }
 
   /* ============ Row states ============ */
   .row-nomination td{background:linear-gradient(90deg, rgba(236,72,153,.15), transparent 60%); border-left:5px solid var(--nom);}
@@ -350,6 +390,7 @@
     border:none; white-space:nowrap;
     filter:drop-shadow(0 2px 4px rgba(0,0,0,.4));
     transition:filter .2s, transform .2s;
+    text-transform:uppercase;
   }
   .shape-badge:hover{filter:drop-shadow(0 4px 10px rgba(0,0,0,.5)); transform:translateY(-1px);}
 
@@ -436,6 +477,7 @@
     font-size:.62rem; font-weight:900; letter-spacing:1px;
     box-shadow:0 0 12px rgba(52,211,153,.6);
     animation:readyPillPulse 2.4s ease-in-out infinite;
+    text-transform:uppercase;
   }
   @keyframes readyPillPulse{
     0%,100%{box-shadow:0 0 12px rgba(52,211,153,.5);}
@@ -472,6 +514,7 @@
     width:100%; font-size:1rem; font-weight:800;
     font-family:inherit;
     transition:border-color .2s, box-shadow .2s;
+    text-transform:uppercase;
   }
   .edit-input:focus,.edit-select:focus{
     outline:3px solid #fbbf24;
@@ -496,6 +539,7 @@
     font-weight:900; font-size:1.05rem;
     min-height:44px; min-width:56px;
     transition:transform .15s, background .2s;
+    text-transform:uppercase;
   }
   .action-icon:hover,.action-icon:focus{background:var(--accent-gradient); color:#001018; transform:translateY(-2px);}
   .inline-edit-btn{
@@ -505,6 +549,7 @@
     cursor:pointer; font-size:1rem; min-height:48px;
     transition:transform .15s, box-shadow .2s;
     box-shadow:0 4px 12px rgba(16,185,129,.4);
+    text-transform:uppercase;
   }
   .inline-edit-btn:hover,.inline-edit-btn:focus{transform:translateY(-2px) scale(1.05);}
 
@@ -519,6 +564,7 @@
     padding:10px 18px; margin:8px 0; border-radius:var(--radius-md);
     background:var(--bg-secondary); border:2px solid var(--border-color);
     min-height:56px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+    text-transform:uppercase;
   }
   .alert-item-extreme{
     background:linear-gradient(135deg,#ef4444,#7f1d1d); color:#fff;
@@ -541,6 +587,7 @@
     font-weight:900; font-size:1.25rem; border:2px solid var(--accent-1);
     max-width:90%; letter-spacing:.5px;
     animation:slideUp .35s cubic-bezier(.2,.9,.4,1.2), fadeOut 3s 2.7s forwards;
+    text-transform:uppercase;
   }
   .toast-msg.toast-error{border-color:var(--danger); border-left-color:var(--danger);}
   @keyframes slideUp{from{opacity:0; transform:translateX(-50%) translateY(40px) scale(.9);} to{opacity:1; transform:translateX(-50%) translateY(0) scale(1);}}
@@ -552,11 +599,13 @@
     color:var(--text-secondary); border-top:2px solid var(--border-color);
     margin-top:10px; display:flex; justify-content:center; gap:28px;
     flex-wrap:wrap; font-weight:700;
+    text-transform:uppercase;
   }
 
   .shortcuts-hint{
     font-size:.82rem; color:var(--text-secondary); opacity:.75;
     display:flex; gap:16px; flex-wrap:wrap; padding:6px 14px; font-weight:700;
+    text-transform:uppercase;
   }
   .shortcuts-hint kbd{
     background:var(--bg-tertiary); padding:3px 10px; border-radius:6px;
@@ -581,50 +630,50 @@
   .login-box h2{font-size:2.1rem; font-weight:900; letter-spacing:3px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px;}
   .login-box p{color:var(--text-secondary); font-weight:800; margin-bottom:22px; font-size:.95rem; letter-spacing:2px;}
   .login-tabs{display:flex; gap:8px; margin-bottom:18px; background:var(--bg-tertiary); padding:6px; border-radius:50px; border:2px solid var(--border-color);}
-  .login-tab{flex:1; padding:12px; border-radius:50px; font-weight:900; font-size:.95rem; background:transparent; border:none; color:var(--text-secondary); cursor:pointer; letter-spacing:.5px; transition:all .2s;}
+  .login-tab{flex:1; padding:12px; border-radius:50px; font-weight:900; font-size:.95rem; background:transparent; border:none; color:var(--text-secondary); cursor:pointer; letter-spacing:.5px; transition:all .2s; text-transform:uppercase;}
   .login-tab.active{background:var(--accent-gradient); color:#001018;}
   .login-tab:hover:not(.active){color:var(--text-primary);}
-  .login-box input{width:100%; padding:18px 22px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.25rem; font-weight:800; margin-bottom:14px; outline:none; font-family:inherit; text-align:center; letter-spacing:2px;}
+  .login-box input{width:100%; padding:18px 22px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.25rem; font-weight:800; margin-bottom:14px; outline:none; font-family:inherit; text-align:center; letter-spacing:2px; text-transform:uppercase;}
   .login-box input:focus{border-color:var(--accent-1); box-shadow:0 0 0 5px rgba(34,211,238,.3); background:var(--hover-bg);}
   .pin-input{font-size:2rem !important; letter-spacing:14px !important; font-family:'Courier New',monospace !important;}
   .pin-pad{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0 6px;}
-  .pin-key{padding:18px; font-size:1.5rem; font-weight:900; background:var(--bg-tertiary); border:2px solid var(--border-color); color:var(--text-primary); border-radius:20px; cursor:pointer; transition:all .15s; min-height:66px;}
+  .pin-key{padding:18px; font-size:1.5rem; font-weight:900; background:var(--bg-tertiary); border:2px solid var(--border-color); color:var(--text-primary); border-radius:20px; cursor:pointer; transition:all .15s; min-height:66px; text-transform:uppercase;}
   .pin-key:hover,.pin-key:focus{background:var(--accent-gradient); color:#001018; transform:translateY(-2px);}
   .pin-key.clear{background:linear-gradient(135deg,#fb923c,#c2410c); color:#fff;}
   .pin-key.del{background:linear-gradient(135deg,#f87171,#b91c1c); color:#fff;}
-  .login-box .sign-in-btn{width:100%; padding:18px; border-radius:60px; border:none; background:var(--accent-gradient); color:#001018; font-weight:900; font-size:1.3rem; cursor:pointer; margin-top:8px; letter-spacing:2px;}
-  .login-error{color:#fca5a5; font-weight:900; margin-top:12px; min-height:24px; font-size:1rem;}
-  .login-hint{margin-top:20px; font-size:.78rem; color:var(--text-secondary); line-height:1.7; text-align:left; background:var(--bg-tertiary); padding:14px 18px; border-radius:16px; border:1px solid var(--border-color); font-weight:700;}
+  .login-box .sign-in-btn{width:100%; padding:18px; border-radius:60px; border:none; background:var(--accent-gradient); color:#001018; font-weight:900; font-size:1.3rem; cursor:pointer; margin-top:8px; letter-spacing:2px; text-transform:uppercase;}
+  .login-error{color:#fca5a5; font-weight:900; margin-top:12px; min-height:24px; font-size:1rem; text-transform:uppercase;}
+  .login-hint{margin-top:20px; font-size:.78rem; color:var(--text-secondary); line-height:1.7; text-align:left; background:var(--bg-tertiary); padding:14px 18px; border-radius:16px; border:1px solid var(--border-color); font-weight:700; text-transform:uppercase;}
   .login-hint b{color:var(--accent-1);}
-  .remember-row{display:flex; align-items:center; justify-content:center; gap:12px; margin:8px 0 12px; font-size:.92rem; color:var(--text-secondary); font-weight:800; cursor:pointer;}
+  .remember-row{display:flex; align-items:center; justify-content:center; gap:12px; margin:8px 0 12px; font-size:.92rem; color:var(--text-secondary); font-weight:800; cursor:pointer; text-transform:uppercase;}
   .remember-row input[type=checkbox]{width:24px; height:24px;}
-  .user-badge{font-size:.85rem; background:var(--bg-tertiary); border:2px solid var(--border-color); padding:8px 18px; border-radius:50px; color:var(--text-secondary); font-weight:800;}
+  .user-badge{font-size:.85rem; background:var(--bg-tertiary); border:2px solid var(--border-color); padding:8px 18px; border-radius:50px; color:var(--text-secondary); font-weight:800; text-transform:uppercase;}
   .user-badge span{color:var(--accent-1); font-weight:900;}
-  .recovery-toggle{font-size:.85rem; color:var(--accent-1); cursor:pointer; font-weight:900; margin-top:12px; text-decoration:underline;}
+  .recovery-toggle{font-size:.85rem; color:var(--accent-1); cursor:pointer; font-weight:900; margin-top:12px; text-decoration:underline; text-transform:uppercase;}
   .recovery-box{display:none; margin-top:14px; padding:16px; background:var(--bg-tertiary); border-radius:18px; border:1px solid var(--border-color); text-align:left;}
   .recovery-box.show{display:block;}
-  .recovery-box p{font-size:.82rem; color:var(--text-secondary); margin-bottom:10px; font-weight:700;}
+  .recovery-box p{font-size:.82rem; color:var(--text-secondary); margin-bottom:10px; font-weight:700; text-transform:uppercase;}
   .recovery-box input{margin-bottom:10px; padding:12px 16px; font-size:1rem;}
 
   #pwdModal{position:fixed; inset:0; background:rgba(2,8,16,.94); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; z-index:11000; padding:24px;}
   #pwdModal.show{display:flex;}
   .pwd-box{background:var(--bg-secondary); border:3px solid var(--border-color); border-radius:32px; padding:36px 42px; max-width:500px; width:100%; box-shadow:var(--shadow); text-align:center;}
-  .pwd-box h3{font-size:1.7rem; font-weight:900; letter-spacing:2px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:20px;}
-  .pwd-box input{width:100%; padding:16px 20px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.05rem; font-weight:800; margin-bottom:12px; outline:none; text-align:center;}
+  .pwd-box h3{font-size:1.7rem; font-weight:900; letter-spacing:2px; background:var(--accent-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:20px; text-transform:uppercase;}
+  .pwd-box input{width:100%; padding:16px 20px; border-radius:60px; border:2px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-primary); font-size:1.05rem; font-weight:800; margin-bottom:12px; outline:none; text-align:center; text-transform:uppercase;}
   .pwd-box input:focus{border-color:var(--accent-1); box-shadow:0 0 0 5px rgba(34,211,238,.25);}
-  .pwd-box button{width:100%; padding:16px; border-radius:60px; border:none; background:var(--accent-gradient); color:#001018; font-weight:900; font-size:1.1rem; cursor:pointer; margin-top:6px;}
+  .pwd-box button{width:100%; padding:16px; border-radius:60px; border:none; background:var(--accent-gradient); color:#001018; font-weight:900; font-size:1.1rem; cursor:pointer; margin-top:6px; text-transform:uppercase;}
   .pwd-box .btn-cancel{background:var(--bg-tertiary); border:2px solid var(--border-color); color:var(--text-primary);}
-  .pwd-msg{min-height:22px; font-weight:900; margin-top:10px; font-size:.95rem;}
+  .pwd-msg{min-height:22px; font-weight:900; margin-top:10px; font-size:.95rem; text-transform:uppercase;}
   .pwd-msg.ok{color:#34d399;}
   .pwd-msg.err{color:#fca5a5;}
 
   .country-suggest{position:absolute; z-index:12000; background:var(--bg-secondary); border:2px solid var(--accent-1); border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.6); max-height:280px; overflow-y:auto; min-width:220px; padding:6px;}
-  .country-suggest-item{padding:12px 16px; border-radius:10px; cursor:pointer; font-weight:800; font-size:1rem; color:var(--text-primary);}
+  .country-suggest-item{padding:12px 16px; border-radius:10px; cursor:pointer; font-weight:800; font-size:1rem; color:var(--text-primary); text-transform:uppercase;}
   .country-suggest-item:hover,.country-suggest-item.active{background:var(--accent-gradient); color:#001018;}
 
-  @media (max-width:1500px){:root{--tv-base:19px;}.editable-table{font-size:.98rem;}}
+  @media (max-width:1500px){:root{--tv-base:21px;}.editable-table{font-size:1.05rem;}}
   @media (max-width:1100px){.stats-row{grid-template-columns:repeat(3,1fr);}.editable-table{min-width:1100px;}}
-  @media (max-width:768px){:root{--tv-base:15px;}body{padding:6px;}.title-text h1{font-size:1.6rem;}.clock-time{font-size:1.3rem;}.stats-row{grid-template-columns:repeat(2,1fr);}.login-box{padding:26px 22px;}}
+  @media (max-width:768px){:root{--tv-base:17px;}body{padding:6px;}.title-text h1{font-size:1.6rem;}.clock-time{font-size:1.3rem;}.stats-row{grid-template-columns:repeat(2,1fr);}.login-box{padding:26px 22px;}}
 
   @media print{
     .filter-bar,.stats-row,.col-actions,.col-checkbox,.stat-toggle,
@@ -636,6 +685,8 @@
     .editable-table th{background:#e5e5e5; color:#000; border-right:1px solid #000 !important;}
     .editable-table td{border-bottom:1px solid #ccc; border-right:1px solid #000 !important;}
     .shape-badge{border:1px solid #666; filter:none;}
+    .separator-row td{background:#000 !important; box-shadow:none !important;}
+    .separator-row td::after{background:#000; color:#fff; border-color:#fff;}
   }
 
   @media (prefers-reduced-motion:reduce){
@@ -655,7 +706,7 @@
       <button class="login-tab active" data-mode="pin" role="tab" type="button">🔢 PIN MODE</button>
       <button class="login-tab" data-mode="pwd" role="tab" type="button">🔐 PASSWORD</button>
     </div>
-    <input type="text" id="loginUser" placeholder="Service Number (e.g. 02802 or AW 4702)" autocomplete="off" list="serviceSuggestList" aria-label="Service Number">
+    <input type="text" id="loginUser" placeholder="SERVICE NUMBER (E.G. 02802 OR AW 4702)" autocomplete="off" list="serviceSuggestList" aria-label="Service Number">
     <div id="pinModeBox">
       <input type="password" id="loginPin" class="pin-input" placeholder="····" maxlength="4" inputmode="numeric" autocomplete="off" aria-label="4-digit PIN">
       <div class="pin-pad" id="pinPad">
@@ -674,26 +725,26 @@
       </div>
     </div>
     <div id="pwdModeBox" style="display:none;">
-      <input type="password" id="loginPass" placeholder="Password" autocomplete="off" aria-label="Password">
+      <input type="password" id="loginPass" placeholder="PASSWORD" autocomplete="off" aria-label="Password">
     </div>
     <label class="remember-row" for="rememberMe">
-      <input type="checkbox" id="rememberMe"> <span>Keep me signed in on this TV (30 days)</span>
+      <input type="checkbox" id="rememberMe"> <span>KEEP ME SIGNED IN ON THIS TV (30 DAYS)</span>
     </label>
     <button id="loginBtn" class="sign-in-btn" type="button">🚪 SIGN IN</button>
     <div class="login-error" id="loginError" role="alert"></div>
-    <div class="recovery-toggle" id="recoveryToggle">🔁 Forgot PIN / password?</div>
+    <div class="recovery-toggle" id="recoveryToggle">🔁 FORGOT PIN / PASSWORD?</div>
     <div class="recovery-box" id="recoveryBox">
-      <p>Enter your service number and the last 4 digits of your NIC to reset your PIN to <b>1234</b>.</p>
-      <input type="text" id="recoveryService" placeholder="Service Number">
-      <input type="text" id="recoverySecret" placeholder="Last 4 digits of NIC" inputmode="numeric" maxlength="4">
-      <button id="recoveryBtn" type="button" style="background:linear-gradient(135deg,#f97316,#c2410c);color:#fff;">🔄 Verify & reset PIN</button>
+      <p>ENTER YOUR SERVICE NUMBER AND THE LAST 4 DIGITS OF YOUR NIC TO RESET YOUR PIN TO <b>1234</b>.</p>
+      <input type="text" id="recoveryService" placeholder="SERVICE NUMBER">
+      <input type="text" id="recoverySecret" placeholder="LAST 4 DIGITS OF NIC" inputmode="numeric" maxlength="4">
+      <button id="recoveryBtn" type="button" style="background:linear-gradient(135deg,#f97316,#c2410c);color:#fff;">🔄 VERIFY & RESET PIN</button>
       <div class="login-error" id="recoveryMsg" style="min-height:20px;margin-top:8px;" role="alert"></div>
     </div>
     <div class="login-hint">
-      <b>Default PIN:</b> 1234 · <b>Default password:</b> password<br>
-      <b>Authorised Service Numbers:</b><br>
+      <b>DEFAULT PIN:</b> 1234 · <b>DEFAULT PASSWORD:</b> PASSWORD<br>
+      <b>AUTHORISED SERVICE NUMBERS:</b><br>
       02802 · 03650 · 29816 · 33557 · 41979 · 41336 · 38922 · AW 4208 · AW 4702<br>
-      <span style="opacity:.75;">TIP: Use the on-screen keypad with your TV remote's D-pad. Press OK to select.</span>
+      <span style="opacity:.75;">TIP: USE THE ON-SCREEN KEYPAD WITH YOUR TV REMOTE'S D-PAD. PRESS OK TO SELECT.</span>
     </div>
     <datalist id="serviceSuggestList"></datalist>
   </div>
@@ -703,12 +754,12 @@
 <div id="pwdModal">
   <div class="pwd-box">
     <h3>🔑 CHANGE PIN / PASSWORD</h3>
-    <input type="password" id="pwdOld" placeholder="Current PIN or Password">
-    <input type="password" id="pwdNew" placeholder="New PIN (4 digits) or Password (min 6 chars)">
-    <input type="password" id="pwdConfirm" placeholder="Confirm New PIN / Password">
+    <input type="password" id="pwdOld" placeholder="CURRENT PIN OR PASSWORD">
+    <input type="password" id="pwdNew" placeholder="NEW PIN (4 DIGITS) OR PASSWORD (MIN 6 CHARS)">
+    <input type="password" id="pwdConfirm" placeholder="CONFIRM NEW PIN / PASSWORD">
     <div class="pwd-msg" id="pwdMsg"></div>
     <button id="pwdSaveBtn" type="button">💾 SAVE</button>
-    <button class="btn-cancel" id="pwdCancelBtn" type="button" style="margin-top:10px;">Cancel</button>
+    <button class="btn-cancel" id="pwdCancelBtn" type="button" style="margin-top:10px;">CANCEL</button>
   </div>
 </div>
 
@@ -719,7 +770,7 @@
       <span class="title-logo" aria-hidden="true">✈️</span>
       <div class="title-text">
         <h1>FOREIGN TRAINING CELL</h1>
-        <div class="subtitle">SLAF · <span>FTC v14.1 TV</span></div>
+        <div class="subtitle">SLAF · <span>FTC V14.2 TV</span></div>
       </div>
     </div>
     <div class="clock-container" aria-live="off">
@@ -743,15 +794,15 @@
   </header>
 
   <div class="shortcuts-hint">
-    <span>🎮 <kbd>D-Pad</kbd> Move</span>
-    <span><kbd>OK</kbd> Select / Next field</span>
-    <span><kbd>↑↓</kbd> Rows</span>
-    <span><kbd>←→</kbd> Buttons</span>
-    <span><kbd>BACK</kbd> Cancel</span>
+    <span>🎮 <kbd>D-PAD</kbd> MOVE</span>
+    <span><kbd>OK</kbd> SELECT / NEXT FIELD</span>
+    <span><kbd>↑↓</kbd> ROWS</span>
+    <span><kbd>←→</kbd> BUTTONS</span>
+    <span><kbd>BACK</kbd> CANCEL</span>
   </div>
 
   <div id="alertContainer" role="status" aria-live="polite">
-    <div style="padding:6px;color:var(--text-secondary);font-weight:900;">✅ All courses on track</div>
+    <div style="padding:6px;color:var(--text-secondary);font-weight:900;">✅ ALL COURSES ON TRACK</div>
   </div>
 
   <div style="display:flex; justify-content:flex-end; margin:6px 0;">
@@ -840,9 +891,9 @@
 
   <div class="footer-info">
     <span>🕒 <span id="lastUpdated">--</span></span>
-    <span>💡 Click stats to filter</span>
-    <span>🔄 Auto: <span id="autoRefreshStatus">ON</span></span>
-    <span>📊 <span id="rowCountDisplay">0</span> rows</span>
+    <span>💡 CLICK STATS TO FILTER</span>
+    <span>🔄 AUTO: <span id="autoRefreshStatus">ON</span></span>
+    <span>📊 <span id="rowCountDisplay">0</span> ROWS</span>
   </div>
 </div>
 
@@ -1047,18 +1098,18 @@ function attemptLogin(){
   const u = normalizeService(uRaw);
   const err = $('#loginError');
   err.innerText = '';
-  if(!u){ err.innerText = '❌ Enter your service number.'; Sound.error(); return; }
+  if(!u){ err.innerText = '❌ ENTER YOUR SERVICE NUMBER.'; Sound.error(); return; }
   const svc = findService(u);
-  if(!svc){ err.innerText = '❌ Unknown service number.'; Sound.error(); return; }
+  if(!svc){ err.innerText = '❌ UNKNOWN SERVICE NUMBER.'; Sound.error(); return; }
   const cred = CREDENTIALS[u];
-  if(!cred){ err.innerText = '❌ Account not found.'; Sound.error(); return; }
+  if(!cred){ err.innerText = '❌ ACCOUNT NOT FOUND.'; Sound.error(); return; }
   let ok = false;
   if(loginMode === 'pin'){
     const pin = $('#loginPin').value;
-    if(pin.length !== PIN_LENGTH){ err.innerText = `❌ Enter ${PIN_LENGTH}-digit PIN.`; Sound.error(); return; }
+    if(pin.length !== PIN_LENGTH){ err.innerText = `❌ ENTER ${PIN_LENGTH}-DIGIT PIN.`; Sound.error(); return; }
     ok = pin === cred.pin;
   } else ok = $('#loginPass').value === cred.password;
-  if(!ok){ err.innerText = '❌ Incorrect ' + (loginMode==='pin'?'PIN':'password') + '.'; Sound.error(); return; }
+  if(!ok){ err.innerText = '❌ INCORRECT ' + (loginMode==='pin'?'PIN':'PASSWORD') + '.'; Sound.error(); return; }
 
   currentUser = svc; currentUserKey = svc.service;
   pushLoginHistory(svc.service); populateLoginSuggestions();
@@ -1076,9 +1127,9 @@ function attemptLogin(){
   try{sessionStorage.setItem('ftc_user_v14', svc.service);}catch(e){}
   initDashboard();
   Sound.success();
-  showToast('✅ Welcome, ' + svc.name);
+  showToast('✅ WELCOME, ' + svc.name);
   if(!cred.changed){
-    setTimeout(()=>{ if(confirm('🔐 You are using the default PIN/password.\n\nChange it now?')) openPwdModal(); }, 800);
+    setTimeout(()=>{ if(confirm('🔐 YOU ARE USING THE DEFAULT PIN/PASSWORD.\n\nCHANGE IT NOW?')) openPwdModal(); }, 800);
   }
 }
 function logout(){
@@ -1114,23 +1165,23 @@ function closePwdModal(){ $('#pwdModal').classList.remove('show'); }
 function changePassword(){
   const oldP = $('#pwdOld').value, newP = $('#pwdNew').value, confP = $('#pwdConfirm').value;
   const msg = $('#pwdMsg'); msg.className = 'pwd-msg';
-  if(!currentUserKey){ msg.innerText='❌ Not signed in.'; msg.classList.add('err'); Sound.error(); return; }
+  if(!currentUserKey){ msg.innerText='❌ NOT SIGNED IN.'; msg.classList.add('err'); Sound.error(); return; }
   const cred = CREDENTIALS[normalizeService(currentUserKey)];
-  if(!cred){ msg.innerText='❌ Account not found.'; msg.classList.add('err'); Sound.error(); return; }
+  if(!cred){ msg.innerText='❌ ACCOUNT NOT FOUND.'; msg.classList.add('err'); Sound.error(); return; }
   const ok = (oldP === cred.pin) || (oldP === cred.password);
-  if(!ok){ msg.innerText='❌ Current PIN/password incorrect.'; msg.classList.add('err'); Sound.error(); return; }
+  if(!ok){ msg.innerText='❌ CURRENT PIN/PASSWORD INCORRECT.'; msg.classList.add('err'); Sound.error(); return; }
   const isPin = /^\d{4}$/.test(newP);
   const isPwd = newP.length >= 6;
-  if(!isPin && !isPwd){ msg.innerText='❌ New PIN must be 4 digits, or password ≥6 chars.'; msg.classList.add('err'); Sound.error(); return; }
-  if(newP !== confP){ msg.innerText='❌ Confirmation does not match.'; msg.classList.add('err'); Sound.error(); return; }
+  if(!isPin && !isPwd){ msg.innerText='❌ NEW PIN MUST BE 4 DIGITS, OR PASSWORD ≥6 CHARS.'; msg.classList.add('err'); Sound.error(); return; }
+  if(newP !== confP){ msg.innerText='❌ CONFIRMATION DOES NOT MATCH.'; msg.classList.add('err'); Sound.error(); return; }
   if(isPin){ cred.pin = newP; cred.password = DEFAULT_PASSWORD; }
   else { cred.password = newP; cred.pin = DEFAULT_PIN; }
   cred.changed = true; saveCredentials();
   const rem = getRemembered();
   const k = normalizeService(currentUserKey);
   if(rem[k]){ rem[k] = isPin ? { pin: newP } : { password: newP }; try{ localStorage.setItem('ftc_remember_v14', JSON.stringify(rem)); }catch(e){} }
-  msg.innerText = '✅ Updated successfully.'; msg.classList.add('ok');
-  Sound.success(); showToast('🔑 Credentials updated');
+  msg.innerText = '✅ UPDATED SUCCESSFULLY.'; msg.classList.add('ok');
+  Sound.success(); showToast('🔑 CREDENTIALS UPDATED');
   setTimeout(closePwdModal, 1200);
 }
 function recoverPassword(){
@@ -1138,17 +1189,17 @@ function recoverPassword(){
   const secret = $('#recoverySecret').value.trim();
   const msg = $('#recoveryMsg');
   msg.className = 'login-error'; msg.innerText = '';
-  if(!svcRaw || !secret){ msg.innerText = '❌ Fill both fields.'; Sound.error(); return; }
+  if(!svcRaw || !secret){ msg.innerText = '❌ FILL BOTH FIELDS.'; Sound.error(); return; }
   const found = findService(normalizeService(svcRaw));
-  if(!found){ msg.innerText = '❌ Service number not recognised.'; Sound.error(); return; }
+  if(!found){ msg.innerText = '❌ SERVICE NUMBER NOT RECOGNISED.'; Sound.error(); return; }
   const key = normalizeService(found.service);
-  if(secret !== RECOVERY_SECRETS[key]){ msg.innerText = '❌ Verification failed.'; Sound.error(); return; }
+  if(secret !== RECOVERY_SECRETS[key]){ msg.innerText = '❌ VERIFICATION FAILED.'; Sound.error(); return; }
   CREDENTIALS[key].pin = DEFAULT_PIN; CREDENTIALS[key].password = DEFAULT_PASSWORD; CREDENTIALS[key].changed = false;
   saveCredentials();
   setRemembered(found.service, null, false);
   msg.style.color = '#34d399';
-  msg.innerText = `✅ PIN reset to ${DEFAULT_PIN}`;
-  Sound.success(); showToast('🔑 PIN reset');
+  msg.innerText = `✅ PIN RESET TO ${DEFAULT_PIN}`;
+  Sound.success(); showToast('🔑 PIN RESET');
   setTimeout(()=>{ $('#recoveryBox').classList.remove('show'); $('#recoveryService').value = ''; $('#recoverySecret').value = ''; msg.innerText = ''; }, 2200);
 }
 
@@ -1175,10 +1226,10 @@ const defaultData = [
   { id:8, type:'Course', courseName:'Insarag Course', officersAirmen:'1 Officer', country:'India', depDate:'2026-03-23', returnDate:'2026-03-27', paymentDate:'2026-03-10', cmdrStatus:'Sent', modStatus:'Sent', visaStatus:'VISA H/O TO EMBASSY', ticketStatus:'TICKET CONFIRMED', ticketDemandDate:'2026-03-01', ticketOpenDate:'2026-03-05', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-03-10', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-03-01T16:20:00Z' }
 ];
 
-/* ===== ★ NEW: Admin-ready detection ===== */
+/* ===== Admin-ready detection ===== */
 function isAdminReady(c){
   if(c.isCancelled) return false;
-  if(c.isNomination) return false; // nominations keep their own flow
+  if(c.isNomination) return false;
   return c.cmdrStatus === 'Received'
       && c.modStatus === 'Received'
       && (c.visaStatus === 'VISA COLLECTED' || c.visaStatus === 'VISA ON ARRIVAL' || c.visaStatus === 'HOST COUNTRY HANDLING')
@@ -1186,18 +1237,17 @@ function isAdminReady(c){
       && (c.woStatus === 'SENT');
 }
 
-/* ===== ★ NEW: Needs-update detection ===== */
+/* ===== Needs-update detection ===== */
 function needsUpdate(c){
   const t = toDate(c.lastUpdatedAt);
   if(!t) return true;
   return (Date.now() - t.getTime()) > 7*86400000;
 }
 
-/* ===== ★ UPDATED: urgency now checks admin-ready first ===== */
+/* ===== Urgency info ===== */
 function getUrgencyInfo(c){
   if(c.isCancelled) return { className:'', daysLeft:null, urgencyLevel:null };
 
-  // Nominations — keep their own rules
   if(c.isNomination){
     const d = getDaysRemaining(c.deadlineDate || c.depDate);
     if(d < 0) return { className:'row-nomination', daysLeft:d, urgencyLevel:'nom' };
@@ -1208,7 +1258,6 @@ function getUrgencyInfo(c){
   const target = c.paymentDate || c.depDate;
   const d = getDaysRemaining(target);
 
-  // ★ If all admin steps done and only final payment remains — show READY, not critical
   if(isAdminReady(c)){
     return { className:'row-ready', daysLeft:d, urgencyLevel:'ready' };
   }
@@ -1345,7 +1394,7 @@ function commitCountrySuggest(){
   closeCountrySuggest(); Sound.select();
 }
 
-/* ===== Render table ===== */
+/* ===== Render table — ★ WITH SEPARATOR FOR ≤7 DAYS ★ ===== */
 function renderTable(){
   const countryVal = $('#countryFilter').value;
   const typeVal    = $('#typeFilter').value;
@@ -1367,10 +1416,19 @@ function renderTable(){
     return true;
   });
 
+  // Sort by departure date (ascending)
   rows.sort((a,b)=>{
     const da = a.depDate || '9999-12-31', db = b.depDate || '9999-12-31';
     return da < db ? -1 : da > db ? 1 : 0;
   });
+
+  // Determine if we need a separator — count rows with ≤7 days
+  const rowsWithDays = rows.map(c => {
+    const u = getUrgencyInfo(c);
+    return { course: c, urgency: u, daysLeft: u.daysLeft };
+  });
+
+  const has7DaySection = rowsWithDays.some(r => r.daysLeft !== null && r.daysLeft >= 0 && r.daysLeft <= 7 && r.urgency.urgencyLevel !== 'ready' && r.urgency.urgencyLevel !== 'nom' && r.urgency.urgencyLevel !== 'nom-critical');
 
   updateStats();
   $('#rowCountDisplay').textContent = rows.length;
@@ -1378,15 +1436,35 @@ function renderTable(){
   const tbody = $('#tableBody');
   tbody.innerHTML = '';
   if(!rows.length){
-    tbody.innerHTML = `<tr><td colspan="15" style="text-align:center;padding:32px;font-size:1.25rem;color:var(--text-secondary);font-weight:800;">📭 No records</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="15" style="text-align:center;padding:32px;font-size:1.25rem;color:var(--text-secondary);font-weight:800;">📭 NO RECORDS</td></tr>`;
     return;
   }
+
+  let separatorInserted = false;
 
   rows.forEach(course => {
     const u = getUrgencyInfo(course);
     const editing = editingRowId === course.id;
     const selected = selectedCourses.has(course.id);
     const stale = needsUpdate(course);
+
+    // ★ Insert separator BEFORE the first row that is ≤7 days (and not ready/nomination)
+    const isIn7DayZone = u.daysLeft !== null && u.daysLeft >= 0 && u.daysLeft <= 7
+                        && u.urgencyLevel !== 'ready'
+                        && u.urgencyLevel !== 'nom'
+                        && u.urgencyLevel !== 'nom-critical';
+
+    if(has7DaySection && !separatorInserted && isIn7DayZone){
+      separatorInserted = true;
+      const sepTr = document.createElement('tr');
+      sepTr.className = 'separator-row';
+      const sepTd = document.createElement('td');
+      sepTd.colSpan = 15;
+      sepTd.style.cssText = 'padding:0!important;height:6px;background:var(--separator-color);box-shadow:0 0 16px var(--separator-color),0 0 4px var(--separator-color);position:relative;';
+      sepTd.setAttribute('data-label', '⏳ 7 DAYS OR LESS — IMMEDIATE ATTENTION ⏳');
+      sepTr.appendChild(sepTd);
+      tbody.appendChild(sepTr);
+    }
 
     const tr = document.createElement('tr');
     tr.className = `${course.isCancelled ? '' : u.className} ${selected ? 'row-selected' : ''} ${stale ? 'needs-update' : ''}`;
@@ -1421,9 +1499,8 @@ function renderTable(){
       inp.value = course.courseName;
       inp.setAttribute('list','courseSuggestList');
       inp.style.textAlign = 'left';
-      inp.placeholder = 'Type course name…';
+      inp.placeholder = 'TYPE COURSE NAME…';
       attachClearOnFocus(inp, course.courseName);
-      // Enter moves to next field
       inp.addEventListener('keydown', e => {
         if(e.key === 'Enter' && inp.value.trim()){ e.preventDefault(); focusNextInRow(inp, 1); }
       });
@@ -1457,7 +1534,7 @@ function renderTable(){
     if(editing){
       const inp = document.createElement('input'); inp.className='edit-input'; inp.id=`edit-country-${course.id}`;
       inp.value = course.country;
-      inp.placeholder = 'Country…';
+      inp.placeholder = 'COUNTRY…';
       attachClearOnFocus(inp, course.country);
       inp.addEventListener('input', () => renderCountrySuggest(inp.value));
       inp.addEventListener('focus', () => openCountrySuggest(inp));
@@ -1589,10 +1666,10 @@ function renderTable(){
       });
       const delBtn = document.createElement('button'); delBtn.textContent='🗑️'; delBtn.className='action-icon';
       delBtn.addEventListener('click', () => {
-        if(confirm(`Delete "${course.courseName}"?`)){
+        if(confirm(`DELETE "${course.courseName}"?`)){
           coursesData = coursesData.filter(x => x.id !== course.id);
           saveToHistory(); saveToLocal(); renderTable(); checkAlerts();
-          showToast('🗑️ Deleted'); Sound.warn();
+          showToast('🗑️ DELETED'); Sound.warn();
         }
       });
       actTd.append(editBtn, delBtn);
@@ -1605,7 +1682,7 @@ function renderTable(){
   attachTableDpadNavigation();
 }
 
-/* ★ NEW: Move focus to the next field in the same row */
+/* ★ Move focus to the next field in the same row */
 function focusNextInRow(currentEl, dir = 1){
   const row = currentEl.closest('tr');
   if(!row) return;
@@ -1620,14 +1697,14 @@ function saveEdit(id){
   const c = coursesData.find(x => x.id === id); if(!c) return;
   const dep = $(`#edit-dep-${id}`)?.value;
   const ret = $(`#edit-ret-${id}`)?.value;
-  if(dep && ret && new Date(dep) > new Date(ret)){ showToast('❌ Departure after return', true); Sound.error(); return; }
+  if(dep && ret && new Date(dep) > new Date(ret)){ showToast('❌ DEPARTURE AFTER RETURN', true); Sound.error(); return; }
 
   const typeVal = $(`#edit-type-${id}`)?.value;
   if(typeVal){ c.type = typeVal; c.isNomination = (typeVal === 'Nomination'); }
   const name = $(`#edit-name-${id}`)?.value.trim();
   if(name){ c.courseName = name; if(!courseNameHistory.includes(name)){ courseNameHistory.push(name); updateCourseDatalist(); } }
   if($(`#edit-officers-${id}`)) c.officersAirmen = $(`#edit-officers-${id}`).value;
-  if($(`#edit-country-${id}`)) c.country = $(`#edit-country-${id}`).value.trim() || 'Country';
+  if($(`#edit-country-${id}`)) c.country = $(`#edit-country-${id}`).value.trim() || 'COUNTRY';
   if(dep) c.depDate = dep;
   if(ret) c.returnDate = ret;
   if($(`#edit-payment-${id}`)){
@@ -1651,7 +1728,7 @@ function saveEdit(id){
   saveToHistory(); saveToLocal();
   editingRowId = null;
   renderTable(); checkAlerts();
-  showToast('✅ Updated');
+  showToast('✅ UPDATED');
   Sound.success();
 }
 
@@ -1669,7 +1746,7 @@ function addNewCourse(){
   saveToHistory(); saveToLocal();
   editingRowId = id;
   renderTable(); checkAlerts();
-  showToast('➕ New course');
+  showToast('➕ NEW COURSE');
   Sound.open();
   setTimeout(()=>{ const inp = $(`#edit-name-${id}`); if(inp){ inp.focus(); inp.select(); } }, 150);
 }
@@ -1696,10 +1773,10 @@ function addNomination(){
 /* ===== Delete / select / bulk ===== */
 function deleteRecord(id){
   const c = coursesData.find(x => x.id === id); if(!c) return;
-  if(!confirm(`Delete "${c.courseName}"?`)) return;
+  if(!confirm(`DELETE "${c.courseName}"?`)) return;
   coursesData = coursesData.filter(x => x.id !== id);
   saveToHistory(); saveToLocal(); renderTable(); checkAlerts();
-  showToast('🗑️ Deleted'); Sound.warn();
+  showToast('🗑️ DELETED'); Sound.warn();
 }
 function toggleSelection(id){
   if(selectedCourses.has(id)) selectedCourses.delete(id); else selectedCourses.add(id);
@@ -1718,23 +1795,23 @@ function updateSelectionUI(){
 }
 function clearSelection(){ selectedCourses.clear(); updateSelectionUI(); renderTable(); Sound.click(); }
 function bulkUpdateStatus(field, status){
-  if(!selectedCourses.size){ showToast('⚠️ Select records', true); Sound.error(); return; }
-  if(!confirm(`Update ${selectedCourses.size} record(s)?`)) return;
+  if(!selectedCourses.size){ showToast('⚠️ SELECT RECORDS', true); Sound.error(); return; }
+  if(!confirm(`UPDATE ${selectedCourses.size} RECORD(S)?`)) return;
   selectedCourses.forEach(id => {
     const c = coursesData.find(x => x.id === id);
     if(c){ c[field] = status; c.lastUpdatedBy = currentUserKey || 'system'; c.lastUpdatedAt = new Date().toISOString(); }
   });
   saveToHistory(); saveToLocal(); renderTable(); checkAlerts();
-  showToast('✅ Bulk updated'); clearSelection(); Sound.success();
+  showToast('✅ BULK UPDATED'); clearSelection(); Sound.success();
 }
 function bulkDeleteSelected(){
-  if(!selectedCourses.size){ showToast('⚠️ Select records', true); Sound.error(); return; }
-  if(!confirm(`Delete ${selectedCourses.size} record(s)?`)) return;
+  if(!selectedCourses.size){ showToast('⚠️ SELECT RECORDS', true); Sound.error(); return; }
+  if(!confirm(`DELETE ${selectedCourses.size} RECORD(S)?`)) return;
   const ids = Array.from(selectedCourses);
   coursesData = coursesData.filter(c => !ids.includes(c.id));
   selectedCourses.clear();
   saveToHistory(); saveToLocal(); renderTable(); checkAlerts();
-  showToast(`🗑️ Deleted ${ids.length}`); Sound.warn();
+  showToast(`🗑️ DELETED ${ids.length}`); Sound.warn();
 }
 
 /* ===== History ===== */
@@ -1751,7 +1828,7 @@ function undo(){
     historyIndex--;
     coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex]));
     saveToLocal(); renderTable(); checkAlerts();
-    showToast('↩️ Undo'); Sound.click();
+    showToast('↩️ UNDO'); Sound.click();
   }
 }
 function redo(){
@@ -1759,7 +1836,7 @@ function redo(){
     historyIndex++;
     coursesData = JSON.parse(JSON.stringify(historyStack[historyIndex]));
     saveToLocal(); renderTable(); checkAlerts();
-    showToast('↪️ Redo'); Sound.click();
+    showToast('↪️ REDO'); Sound.click();
   }
 }
 function updateUndoButtons(){
@@ -1771,7 +1848,7 @@ function autoSaveData(){
   autoSaveTimer = setTimeout(() => { saveToLocal(); autoSaveTimer = null; }, 500);
 }
 
-/* ===== Alerts — ★ now respects admin-ready ===== */
+/* ===== Alerts ===== */
 function checkAlerts(){
   const container = $('#alertContainer');
   const alerts = [];
@@ -1779,21 +1856,20 @@ function checkAlerts(){
     if(c.isCancelled) return;
     if(c.isNomination && c.deadlineDate){
       const d = getDaysRemaining(c.deadlineDate);
-      if(d>=0 && d<=2) alerts.push({type:'EXTREME', msg:`📨 NOM DEADLINE: ${c.courseName} in ${d}d`});
-      else if(d>=0 && d<=7) alerts.push({type:'HIGH', msg:`📨 ${c.courseName} deadline in ${d}d`});
+      if(d>=0 && d<=2) alerts.push({type:'EXTREME', msg:`📨 NOM DEADLINE: ${c.courseName} IN ${d}D`});
+      else if(d>=0 && d<=7) alerts.push({type:'HIGH', msg:`📨 ${c.courseName} DEADLINE IN ${d}D`});
     }
-    // Skip payment EXTREME alert if the record is admin-ready
     const target = c.isNomination ? c.deadlineDate : c.paymentDate;
     if(target){
       const d = getDaysRemaining(target);
       const ready = isAdminReady(c);
-      if(d>=0 && d<=2 && !c.isNomination && !ready) alerts.push({type:'EXTREME', msg:`💰 PAYMENT: ${c.courseName} in ${d}d`});
-      if(d>=0 && d<=7 && !ready && c.cmdrStatus !== 'Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} — CMDR pending`});
-      if(d>=0 && d<=7 && !ready && c.modStatus !== 'Received' && c.modStatus !== 'Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} — MOD pending`});
+      if(d>=0 && d<=2 && !c.isNomination && !ready) alerts.push({type:'EXTREME', msg:`💰 PAYMENT: ${c.courseName} IN ${d}D`});
+      if(d>=0 && d<=7 && !ready && c.cmdrStatus !== 'Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} — CMDR PENDING`});
+      if(d>=0 && d<=7 && !ready && c.modStatus !== 'Received' && c.modStatus !== 'Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} — MOD PENDING`});
     }
   });
   if(!alerts.length){
-    container.innerHTML = '<div style="padding:6px;color:var(--text-secondary);font-weight:900;">✅ All courses on track</div>';
+    container.innerHTML = '<div style="padding:6px;color:var(--text-secondary);font-weight:900;">✅ ALL COURSES ON TRACK</div>';
     return;
   }
   const seen = new Set(); const unique = [];
@@ -1879,18 +1955,18 @@ function updateClocks(){
 function toggleSound(){
   soundEnabled = !soundEnabled;
   $('#soundToggleBtn').innerText = soundEnabled ? '🔊' : '🔇';
-  showToast(soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF');
+  showToast(soundEnabled ? '🔊 SOUND ON' : '🔇 SOUND OFF');
   if(soundEnabled) Sound.select();
 }
 function toggleAutoRefresh(){
   if(autoRefreshInterval){
     clearInterval(autoRefreshInterval); autoRefreshInterval = null;
     $('#autoRefreshStatus').textContent = 'OFF';
-    showToast('🔄 Auto OFF');
+    showToast('🔄 AUTO OFF');
   } else {
     autoRefreshInterval = setInterval(() => { renderTable(); checkAlerts(); updateClocks(); }, 300000);
     $('#autoRefreshStatus').textContent = 'ON';
-    showToast('🔄 Auto ON (5 min)');
+    showToast('🔄 AUTO ON (5 MIN)');
   }
   Sound.click();
 }
@@ -1899,13 +1975,13 @@ function toggleFullscreen(){
     document.documentElement.requestFullscreen?.().catch(()=>{});
     document.body.classList.add('fullscreen-mode');
     isFullscreen = true;
-    showToast('⛶ Fullscreen'); Sound.open();
+    showToast('⛶ FULLSCREEN'); Sound.open();
     setTimeout(renderTable, 250);
   } else {
     document.exitFullscreen?.().catch(()=>{});
     document.body.classList.remove('fullscreen-mode');
     isFullscreen = false;
-    showToast('⛶ Exited'); Sound.click();
+    showToast('⛶ EXITED'); Sound.click();
     setTimeout(renderTable, 250);
   }
 }
@@ -1916,15 +1992,15 @@ function toggleStats(){
   Sound.click();
 }
 function exportData(){
-  const payload = { version: '14.1', exportedAt: new Date().toISOString(), exportedBy: currentUserKey || 'unknown', courses: coursesData, courseHistory: courseNameHistory, nominationCounter };
+  const payload = { version: '14.2', exportedAt: new Date().toISOString(), exportedBy: currentUserKey || 'unknown', courses: coursesData, courseHistory: courseNameHistory, nominationCounter };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = `FTC_Export_${todayISO()}.json`;
   a.click(); URL.revokeObjectURL(url);
-  showToast('💾 Exported'); Sound.success();
+  showToast('💾 EXPORTED'); Sound.success();
 }
-function printReport(){ showToast('🖨️ Preparing…'); Sound.click(); setTimeout(() => window.print(), 300); }
+function printReport(){ showToast('🖨️ PREPARING…'); Sound.click(); setTimeout(() => window.print(), 300); }
 
 /* ===== D-Pad navigation ===== */
 function attachTableDpadNavigation(){
@@ -1939,7 +2015,6 @@ function attachTableDpadNavigation(){
         row.classList.add('tv-cursor');
       });
       el.addEventListener('keydown', e => {
-        // Up/Down: move to same column in adjacent row
         if(e.key === 'ArrowUp' || e.key === 'ArrowDown'){
           const targetRow = rows[ri + (e.key === 'ArrowDown' ? 1 : -1)];
           if(targetRow){
@@ -1948,12 +2023,10 @@ function attachTableDpadNavigation(){
             if(target){ e.preventDefault(); target.focus(); Sound.nav(); }
           }
         }
-        // Left/Right: move between buttons in same row (only for buttons — inputs use arrows for cursor)
         if((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && el.tagName === 'BUTTON'){
           const target = focusables[ci + (e.key === 'ArrowRight' ? 1 : -1)];
           if(target){ e.preventDefault(); target.focus(); Sound.nav(); }
         }
-        // Enter on input (not select/date) → commit and move to next field
         if(e.key === 'Enter' && el.tagName === 'INPUT' && el.type !== 'date' && el.type !== 'checkbox'){
           e.preventDefault();
           focusNextInRow(el, 1);
@@ -1974,12 +2047,12 @@ function initDashboard(){
   $('#addNewRowBtn').addEventListener('click', addNewCourse);
   $('#addNominationBtn').addEventListener('click', addNomination);
   $('#resetDemoBtn').addEventListener('click', () => {
-    if(confirm('Reset to demo data? This will replace current records.')){
+    if(confirm('RESET TO DEMO DATA? THIS WILL REPLACE CURRENT RECORDS.')){
       coursesData = JSON.parse(JSON.stringify(defaultData));
       courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
       selectedCourses.clear(); nominationCounter = 1;
       saveToHistory(); saveToLocal(); renderTable(); checkAlerts();
-      showToast('🔄 Reset'); Sound.warn();
+      showToast('🔄 RESET'); Sound.warn();
     }
   });
   $('#soundToggleBtn').addEventListener('click', toggleSound);
@@ -1989,7 +2062,7 @@ function initDashboard(){
   $('#redoBtn').addEventListener('click', redo);
   $('#printBtn').addEventListener('click', printReport);
   $('#exportBtn').addEventListener('click', exportData);
-  $('#refreshBtn').addEventListener('click', () => { renderTable(); checkAlerts(); showToast('🔄 Refreshed'); Sound.click(); });
+  $('#refreshBtn').addEventListener('click', () => { renderTable(); checkAlerts(); showToast('🔄 REFRESHED'); Sound.click(); });
   $('#autoRefreshBtn').addEventListener('click', toggleAutoRefresh);
   $('#statsToggleBtn').addEventListener('click', toggleStats);
   $('#logoutBtn').addEventListener('click', logout);
@@ -1999,7 +2072,7 @@ function initDashboard(){
     ['countryFilter','typeFilter','approvalFilter','modApprovalFilter'].forEach(id => $('#'+id).value = 'all');
     $('#searchInput').value = '';
     $$('.filter-preset-btn').forEach(b => b.classList.remove('active'));
-    renderTable(); showToast('✖️ Cleared'); Sound.click();
+    renderTable(); showToast('✖️ CLEARED'); Sound.click();
   });
   $('#countryFilter').addEventListener('change', renderTable);
   $('#typeFilter').addEventListener('change', renderTable);
