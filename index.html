@@ -340,7 +340,7 @@
     z-index: 5;
   }
   .editable-table tbody tr.separator-row td::after {
-    content: '⏳ 7 DAYS OR LESS — IMMEDIATE ATTENTION ⏳';
+    content: '⏳ PRIORITY — 7 DAYS OR LESS FOR PAYMENT ⏳';
     position: absolute;
     left: 50%;
     top: 50%;
@@ -1394,7 +1394,7 @@ function commitCountrySuggest(){
   closeCountrySuggest(); Sound.select();
 }
 
-/* ===== Render table — ★ WITH SEPARATOR FOR ≤7 DAYS ★ ===== */
+/* ===== Render table — ★ SEPARATOR AFTER LAST ≤7-DAY COURSE ★ ===== */
 function renderTable(){
   const countryVal = $('#countryFilter').value;
   const typeVal    = $('#typeFilter').value;
@@ -1416,19 +1416,12 @@ function renderTable(){
     return true;
   });
 
-  // Sort by departure date (ascending)
+  // ★ Sort by payment/deadline date ASCENDING — most urgent first
   rows.sort((a,b)=>{
-    const da = a.depDate || '9999-12-31', db = b.depDate || '9999-12-31';
-    return da < db ? -1 : da > db ? 1 : 0;
+    const ta = a.isNomination ? (a.deadlineDate || '9999-12-31') : (a.paymentDate || a.depDate || '9999-12-31');
+    const tb = b.isNomination ? (b.deadlineDate || '9999-12-31') : (b.paymentDate || b.depDate || '9999-12-31');
+    return ta < tb ? -1 : ta > tb ? 1 : 0;
   });
-
-  // Determine if we need a separator — count rows with ≤7 days
-  const rowsWithDays = rows.map(c => {
-    const u = getUrgencyInfo(c);
-    return { course: c, urgency: u, daysLeft: u.daysLeft };
-  });
-
-  const has7DaySection = rowsWithDays.some(r => r.daysLeft !== null && r.daysLeft >= 0 && r.daysLeft <= 7 && r.urgency.urgencyLevel !== 'ready' && r.urgency.urgencyLevel !== 'nom' && r.urgency.urgencyLevel !== 'nom-critical');
 
   updateStats();
   $('#rowCountDisplay').textContent = rows.length;
@@ -1440,31 +1433,25 @@ function renderTable(){
     return;
   }
 
-  let separatorInserted = false;
+  // ★ Find the index of the LAST row that has ≤7 days remaining for payment/deadline
+  let last7DayIndex = -1;
+  rows.forEach((course, idx) => {
+    const u = getUrgencyInfo(course);
+    const target = course.isNomination ? course.deadlineDate : (course.paymentDate || course.depDate);
+    if(!target) return;
+    const d = getDaysRemaining(target);
+    // Only count rows in the priority zone (≤7 days, not ready, not past)
+    if(d >= 0 && d <= 7 && u.urgencyLevel !== 'ready' && u.urgencyLevel !== 'past'){
+      last7DayIndex = idx;
+    }
+  });
 
-  rows.forEach(course => {
+  // Render each row
+  rows.forEach((course, idx) => {
     const u = getUrgencyInfo(course);
     const editing = editingRowId === course.id;
     const selected = selectedCourses.has(course.id);
     const stale = needsUpdate(course);
-
-    // ★ Insert separator BEFORE the first row that is ≤7 days (and not ready/nomination)
-    const isIn7DayZone = u.daysLeft !== null && u.daysLeft >= 0 && u.daysLeft <= 7
-                        && u.urgencyLevel !== 'ready'
-                        && u.urgencyLevel !== 'nom'
-                        && u.urgencyLevel !== 'nom-critical';
-
-    if(has7DaySection && !separatorInserted && isIn7DayZone){
-      separatorInserted = true;
-      const sepTr = document.createElement('tr');
-      sepTr.className = 'separator-row';
-      const sepTd = document.createElement('td');
-      sepTd.colSpan = 15;
-      sepTd.style.cssText = 'padding:0!important;height:6px;background:var(--separator-color);box-shadow:0 0 16px var(--separator-color),0 0 4px var(--separator-color);position:relative;';
-      sepTd.setAttribute('data-label', '⏳ 7 DAYS OR LESS — IMMEDIATE ATTENTION ⏳');
-      sepTr.appendChild(sepTd);
-      tbody.appendChild(sepTr);
-    }
 
     const tr = document.createElement('tr');
     tr.className = `${course.isCancelled ? '' : u.className} ${selected ? 'row-selected' : ''} ${stale ? 'needs-update' : ''}`;
@@ -1677,6 +1664,17 @@ function renderTable(){
     tr.appendChild(actTd);
 
     tbody.appendChild(tr);
+
+    // ★★★ INSERT SEPARATOR AFTER the last ≤7-day course ★★★
+    if(last7DayIndex !== -1 && idx === last7DayIndex){
+      const sepTr = document.createElement('tr');
+      sepTr.className = 'separator-row';
+      const sepTd = document.createElement('td');
+      sepTd.colSpan = 15;
+      sepTd.style.cssText = 'padding:0!important;height:6px;background:var(--separator-color);box-shadow:0 0 16px var(--separator-color),0 0 4px var(--separator-color);position:relative;';
+      sepTr.appendChild(sepTd);
+      tbody.appendChild(sepTr);
+    }
   });
 
   attachTableDpadNavigation();
