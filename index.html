@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-<title>SLAF FTC | TV Dashboard v14.2 — LG UA80 Edition</title>
+<title>SLAF FTC | TV Dashboard v14.3 — LG UA80 Edition</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
 
@@ -374,6 +374,29 @@
     50%{box-shadow:inset 0 0 24px 0 rgba(16,185,129,.18);}
   }
 
+  /* ★★ PAYMENT-PENDING ROW — all admin steps done, payment still not made ★★ */
+  tr.row-payment-pending td{
+    background:linear-gradient(90deg, rgba(239,68,68,.18), transparent 60%);
+    border-left:5px solid #ef4444;
+    animation:rowPaymentPendingPulse 2.6s ease-in-out infinite;
+  }
+  @keyframes rowPaymentPendingPulse{
+    0%,100%{box-shadow:inset 0 0 0 0 rgba(239,68,68,0);}
+    50%{box-shadow:inset 0 0 28px 0 rgba(239,68,68,.22);}
+  }
+
+  /* ★ PAYMENT HANDED OVER ROW — amber */
+  tr.row-payment-handed td{
+    background:linear-gradient(90deg, rgba(251,146,60,.15), transparent 60%);
+    border-left:5px solid #f97316;
+  }
+
+  /* ★ PAYMENT PAID ROW — calm green */
+  tr.row-payment-paid td{
+    background:linear-gradient(90deg, rgba(34,197,94,.10), transparent 60%);
+    border-left:5px solid #22c55e;
+  }
+
   /* ★ Needs update — not touched in 7+ days */
   tr.needs-update{animation:needsUpdateGlow 3s ease-in-out infinite;}
   @keyframes needsUpdateGlow{
@@ -440,6 +463,48 @@
   .shape-payment.urgent{background:linear-gradient(135deg,#f87171,#b91c1c); animation:glowRed 1.2s ease-in-out infinite;}
   .shape-payment.warn{background:linear-gradient(135deg,#fb923c,#c2410c);}
   .shape-payment.cool{background:linear-gradient(135deg,#fbbf24,#d97706); color:#1a1400;}
+
+  /* ★ PAYMENT STATE BADGES ★ */
+  .shape-payment-pending-urgent{
+    border-radius:50px;
+    background:linear-gradient(135deg,#ef4444,#7f1d1d);
+    border:2px dashed #fca5a5;
+    padding:4px 16px;
+    color:#fff;
+    font-weight:900;
+    animation:paymentUrgentBlink 1s ease-in-out infinite;
+    flex-direction:column; line-height:1.15;
+  }
+  @keyframes paymentUrgentBlink{
+    0%,100%{filter:drop-shadow(0 0 4px #dc2626) brightness(1); transform:scale(1);}
+    50%{filter:drop-shadow(0 0 18px #ef4444) brightness(1.25); transform:scale(1.06);}
+  }
+
+  .shape-payment-handed{
+    border-radius:50px;
+    background:linear-gradient(135deg,#fb923c,#c2410c);
+    border:2px dashed #fdba74;
+    padding:4px 16px;
+    color:#fff;
+    font-weight:900;
+    animation:paymentHandedPulse 2.4s ease-in-out infinite;
+    flex-direction:column; line-height:1.15;
+  }
+  @keyframes paymentHandedPulse{
+    0%,100%{filter:drop-shadow(0 0 6px #f97316);}
+    50%{filter:drop-shadow(0 0 14px #fb923c);}
+  }
+
+  .shape-payment-paid{
+    border-radius:50px;
+    background:linear-gradient(135deg,#22c55e,#15803d);
+    border:2px solid #86efac;
+    padding:4px 16px;
+    color:#fff;
+    font-weight:900;
+    box-shadow:0 0 14px rgba(34,197,94,.55);
+    flex-direction:column; line-height:1.15;
+  }
 
   /* NOM deadline */
   .shape-nom{border-radius:50px; background:linear-gradient(135deg,#f472b6,#be185d); border:2px dashed #fbcfe8; padding:4px 16px; color:#fff; animation:glowPink 1.6s ease-in-out infinite;}
@@ -770,7 +835,7 @@
       <span class="title-logo" aria-hidden="true">✈️</span>
       <div class="title-text">
         <h1>FOREIGN TRAINING CELL</h1>
-        <div class="subtitle">SLAF · <span>FTC V14.2 TV</span></div>
+        <div class="subtitle">SLAF · <span>FTC V14.3 TV</span></div>
       </div>
     </div>
     <div class="clock-container" aria-live="off">
@@ -1216,14 +1281,14 @@ let isFullscreen = false;
 let autoSaveTimer = null;
 
 const defaultData = [
-  { id:1, type:'Course', courseName:'Instructor Pilot Program', officersAirmen:'1 Officer', country:'China', depDate:'2026-01-01', returnDate:'2026-12-31', paymentDate:'2025-12-20', cmdrStatus:'Received', modStatus:'Received', visaStatus:'VISA COLLECTED', ticketStatus:'TICKET OK', ticketDemandDate:'', ticketOpenDate:'2025-12-01', woStatus:'SENT', woExpectedDate:'', woActualDate:'2025-12-15', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-01-01T08:00:00Z' },
-  { id:2, type:'Course', courseName:'Pre Flying Training', officersAirmen:'1 Officer', country:'India', depDate:'2026-01-01', returnDate:'2026-06-23', paymentDate:'2025-12-18', cmdrStatus:'Received', modStatus:'Received', visaStatus:'VISA COLLECTED', ticketStatus:'TICKET OK', ticketDemandDate:'', ticketOpenDate:'2025-12-10', woStatus:'SENT', woExpectedDate:'', woActualDate:'2025-12-20', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-01-01T08:00:00Z' },
-  { id:3, type:'Course', courseName:'Flight Safety Officers', officersAirmen:'1 Officer', country:'Bangladesh', depDate:'2026-01-18', returnDate:'2026-04-09', paymentDate:'2026-01-02', cmdrStatus:'Sent', modStatus:'Pending', visaStatus:'VISA DOC PREP', ticketStatus:'TICKET DEMAND RAISED', ticketDemandDate:'2026-01-02', ticketOpenDate:'', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-01-05', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'SO TRG I', lastUpdatedAt:'2026-01-02T10:15:00Z' },
-  { id:4, type:'Visit', courseName:'Singapore Air Show', officersAirmen:'3 Officers', country:'Singapore', depDate:'2026-02-02', returnDate:'2026-02-08', paymentDate:'2026-01-25', cmdrStatus:'Received', modStatus:'Received', visaStatus:'VISA COLLECTED', ticketStatus:'TICKET OK', ticketDemandDate:'', ticketOpenDate:'2026-01-15', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-01-20', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-01-01T08:00:00Z' },
-  { id:5, type:'Nomination', courseName:'NOM-001 - UK Defence Attaché', officersAirmen:'2 Officers', country:'UK', depDate:'2026-02-10', returnDate:'2026-02-14', paymentDate:'', cmdrStatus:'Sent', modStatus:'Pending', visaStatus:'HOST COUNTRY HANDLING', ticketStatus:'TICKET DEMAND RAISED', ticketDemandDate:'2026-01-20', ticketOpenDate:'', woStatus:'SENT', woExpectedDate:'', woActualDate:'', isCancelled:false, isNomination:true, deadlineDate:'2026-02-01', lastUpdatedBy:'ASO TRG I', lastUpdatedAt:'2026-01-20T14:30:00Z' },
-  { id:6, type:'Nomination', courseName:'NOM-002 - India High Commission', officersAirmen:'1 Officer', country:'India', depDate:'2026-02-20', returnDate:'2026-02-22', paymentDate:'', cmdrStatus:'Not Sent', modStatus:'Not Sent', visaStatus:'PENDING', ticketStatus:'PENDING', ticketDemandDate:'', ticketOpenDate:'', woStatus:'NOT SENT', woExpectedDate:'2026-02-05', woActualDate:'', isCancelled:false, isNomination:true, deadlineDate:'2026-02-05', lastUpdatedBy:'System', lastUpdatedAt:'2026-01-25T09:00:00Z' },
-  { id:7, type:'Course', courseName:'Comm System Course', officersAirmen:'1 Officer', country:'Bangladesh', depDate:'2026-02-22', returnDate:'2026-03-12', paymentDate:'2026-02-05', cmdrStatus:'Sent', modStatus:'Pending', visaStatus:'VISA DOC PREP', ticketStatus:'TICKET DEMAND RAISED', ticketDemandDate:'2026-02-01', ticketOpenDate:'', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-02-10', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-02-01T11:45:00Z' },
-  { id:8, type:'Course', courseName:'Insarag Course', officersAirmen:'1 Officer', country:'India', depDate:'2026-03-23', returnDate:'2026-03-27', paymentDate:'2026-03-10', cmdrStatus:'Sent', modStatus:'Sent', visaStatus:'VISA H/O TO EMBASSY', ticketStatus:'TICKET CONFIRMED', ticketDemandDate:'2026-03-01', ticketOpenDate:'2026-03-05', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-03-10', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-03-01T16:20:00Z' }
+  { id:1, type:'Course', courseName:'Instructor Pilot Program', officersAirmen:'1 Officer', country:'China', depDate:'2026-01-01', returnDate:'2026-12-31', paymentDate:'2025-12-20', paymentState:'PAID', paymentHandedDate:'2025-12-15', paymentPaidDate:'2025-12-18', cmdrStatus:'Received', modStatus:'Received', visaStatus:'VISA COLLECTED', ticketStatus:'TICKET OK', ticketDemandDate:'', ticketOpenDate:'2025-12-01', woStatus:'SENT', woExpectedDate:'', woActualDate:'2025-12-15', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-01-01T08:00:00Z' },
+  { id:2, type:'Course', courseName:'Pre Flying Training', officersAirmen:'1 Officer', country:'India', depDate:'2026-01-01', returnDate:'2026-06-23', paymentDate:'2025-12-18', paymentState:'HANDED OVER', paymentHandedDate:'2025-12-12', paymentPaidDate:'', cmdrStatus:'Received', modStatus:'Received', visaStatus:'VISA COLLECTED', ticketStatus:'TICKET OK', ticketDemandDate:'', ticketOpenDate:'2025-12-10', woStatus:'SENT', woExpectedDate:'', woActualDate:'2025-12-20', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-01-01T08:00:00Z' },
+  { id:3, type:'Course', courseName:'Flight Safety Officers', officersAirmen:'1 Officer', country:'Bangladesh', depDate:'2026-01-18', returnDate:'2026-04-09', paymentDate:'2026-01-02', paymentState:'PENDING', paymentHandedDate:'', paymentPaidDate:'', cmdrStatus:'Sent', modStatus:'Pending', visaStatus:'VISA DOC PREP', ticketStatus:'TICKET DEMAND RAISED', ticketDemandDate:'2026-01-02', ticketOpenDate:'', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-01-05', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'SO TRG I', lastUpdatedAt:'2026-01-02T10:15:00Z' },
+  { id:4, type:'Visit', courseName:'Singapore Air Show', officersAirmen:'3 Officers', country:'Singapore', depDate:'2026-02-02', returnDate:'2026-02-08', paymentDate:'2026-01-25', paymentState:'PENDING', paymentHandedDate:'', paymentPaidDate:'', cmdrStatus:'Received', modStatus:'Received', visaStatus:'VISA COLLECTED', ticketStatus:'TICKET OK', ticketDemandDate:'', ticketOpenDate:'2026-01-15', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-01-20', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-01-01T08:00:00Z' },
+  { id:5, type:'Nomination', courseName:'NOM-001 - UK Defence Attaché', officersAirmen:'2 Officers', country:'UK', depDate:'2026-02-10', returnDate:'2026-02-14', paymentDate:'', paymentState:'PENDING', paymentHandedDate:'', paymentPaidDate:'', cmdrStatus:'Sent', modStatus:'Pending', visaStatus:'HOST COUNTRY HANDLING', ticketStatus:'TICKET DEMAND RAISED', ticketDemandDate:'2026-01-20', ticketOpenDate:'', woStatus:'SENT', woExpectedDate:'', woActualDate:'', isCancelled:false, isNomination:true, deadlineDate:'2026-02-01', lastUpdatedBy:'ASO TRG I', lastUpdatedAt:'2026-01-20T14:30:00Z' },
+  { id:6, type:'Nomination', courseName:'NOM-002 - India High Commission', officersAirmen:'1 Officer', country:'India', depDate:'2026-02-20', returnDate:'2026-02-22', paymentDate:'', paymentState:'PENDING', paymentHandedDate:'', paymentPaidDate:'', cmdrStatus:'Not Sent', modStatus:'Not Sent', visaStatus:'PENDING', ticketStatus:'PENDING', ticketDemandDate:'', ticketOpenDate:'', woStatus:'NOT SENT', woExpectedDate:'2026-02-05', woActualDate:'', isCancelled:false, isNomination:true, deadlineDate:'2026-02-05', lastUpdatedBy:'System', lastUpdatedAt:'2026-01-25T09:00:00Z' },
+  { id:7, type:'Course', courseName:'Comm System Course', officersAirmen:'1 Officer', country:'Bangladesh', depDate:'2026-02-22', returnDate:'2026-03-12', paymentDate:'2026-02-05', paymentState:'PENDING', paymentHandedDate:'', paymentPaidDate:'', cmdrStatus:'Sent', modStatus:'Pending', visaStatus:'VISA DOC PREP', ticketStatus:'TICKET DEMAND RAISED', ticketDemandDate:'2026-02-01', ticketOpenDate:'', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-02-10', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-02-01T11:45:00Z' },
+  { id:8, type:'Course', courseName:'Insarag Course', officersAirmen:'1 Officer', country:'India', depDate:'2026-03-23', returnDate:'2026-03-27', paymentDate:'2026-03-10', paymentState:'PENDING', paymentHandedDate:'', paymentPaidDate:'', cmdrStatus:'Sent', modStatus:'Sent', visaStatus:'VISA H/O TO EMBASSY', ticketStatus:'TICKET CONFIRMED', ticketDemandDate:'2026-03-01', ticketOpenDate:'2026-03-05', woStatus:'SENT', woExpectedDate:'', woActualDate:'2026-03-10', isCancelled:false, isNomination:false, deadlineDate:'', lastUpdatedBy:'System', lastUpdatedAt:'2026-03-01T16:20:00Z' }
 ];
 
 /* ===== Admin-ready detection ===== */
@@ -1235,6 +1300,20 @@ function isAdminReady(c){
       && (c.visaStatus === 'VISA COLLECTED' || c.visaStatus === 'VISA ON ARRIVAL' || c.visaStatus === 'HOST COUNTRY HANDLING')
       && (c.ticketStatus === 'TICKET OK' || c.ticketStatus === 'TICKET CONFIRMED')
       && (c.woStatus === 'SENT');
+}
+
+/* ★ NEW: payment state helpers */
+function getPaymentState(c){
+  return c.paymentState || 'PENDING';
+}
+function isPaymentPendingReady(c){
+  return isAdminReady(c) && getPaymentState(c) !== 'PAID';
+}
+function isPaymentHandedOver(c){
+  return isAdminReady(c) && getPaymentState(c) === 'HANDED OVER';
+}
+function isPaymentPaid(c){
+  return isAdminReady(c) && getPaymentState(c) === 'PAID';
 }
 
 /* ===== Needs-update detection ===== */
@@ -1258,12 +1337,14 @@ function getUrgencyInfo(c){
   const target = c.paymentDate || c.depDate;
   const d = getDaysRemaining(target);
 
+  // ★ Payment-specific row states (only when all admin steps done)
   if(isAdminReady(c)){
-    return { className:'row-ready', daysLeft:d, urgencyLevel:'ready' };
+    if(isPaymentPaid(c))       return { className:'row-payment-paid',    daysLeft:d, urgencyLevel:'ready' };
+    if(isPaymentHandedOver(c)) return { className:'row-payment-handed',  daysLeft:d, urgencyLevel:'ready' };
+    return { className:'row-payment-pending', daysLeft:d, urgencyLevel:'ready' };
   }
 
   if(d < 0) return { className:'row-past', daysLeft:d, urgencyLevel:'past' };
-  if(d <= 2) return { className:'row-critical', daysLeft:d, urgencyLevel:'critical' };
   if(d <= 7) return { className:'row-critical', daysLeft:d, urgencyLevel:'critical' };
   if(d <= 14) return { className:'row-high', daysLeft:d, urgencyLevel:'high' };
   return { className:'', daysLeft:d, urgencyLevel:'normal' };
@@ -1325,9 +1406,24 @@ function paymentBadge(c){
     return `<span class="shape-badge shape-nom" style="${urgent?'background:linear-gradient(135deg,#ef4444,#7f1d1d);border-color:#fca5a5;':''}" title="Nomination deadline: ${c.deadlineDate}">📨 ${escapeHtml(c.deadlineDate)}</span>`;
   }
   if(!c.paymentDate) return `<span class="shape-badge shape-payment" style="opacity:.5;">—</span>`;
+
+  const state = getPaymentState(c);
+  const paidDate = c.paymentPaidDate || '';
+  const handedDate = c.paymentHandedDate || '';
+
+  if(state === 'PAID'){
+    return `<span class="shape-badge shape-payment-paid" title="Paid on ${paidDate}">✅ PAID<br><small style="font-size:.62rem;opacity:.9;">${escapeHtml(paidDate)}</small></span>`;
+  }
+  if(state === 'HANDED OVER'){
+    return `<span class="shape-badge shape-payment-handed" title="Docs handed to overseas payment on ${handedDate}">📤 HANDED<br><small style="font-size:.62rem;opacity:.9;">${escapeHtml(handedDate)}</small></span>`;
+  }
+  // PENDING — if all admin steps done, red + blinking urgent
+  if(isAdminReady(c)){
+    return `<span class="shape-badge shape-payment-pending-urgent" title="All docs ready — payment pending!">⚠️ PAY<br><small style="font-size:.62rem;opacity:.9;">${escapeHtml(c.paymentDate)}</small></span>`;
+  }
   const d = getDaysRemaining(c.paymentDate);
   const tone = d<=2 ? 'urgent' : d<=7 ? 'warn' : d<=14 ? 'cool' : '';
-  return `<span class="shape-badge shape-payment ${tone}" title="Payment: ${c.paymentDate}">💰 ${escapeHtml(c.paymentDate)}</span>`;
+  return `<span class="shape-badge shape-payment ${tone}" title="Payment due: ${c.paymentDate}">💰 ${escapeHtml(c.paymentDate)}</span>`;
 }
 
 /* ===== Edit helpers ===== */
@@ -1440,7 +1536,6 @@ function renderTable(){
     const target = course.isNomination ? course.deadlineDate : (course.paymentDate || course.depDate);
     if(!target) return;
     const d = getDaysRemaining(target);
-    // Only count rows in the priority zone (≤7 days, not ready, not past)
     if(d >= 0 && d <= 7 && u.urgencyLevel !== 'ready' && u.urgencyLevel !== 'past'){
       last7DayIndex = idx;
     }
@@ -1494,10 +1589,19 @@ function renderTable(){
       courseTd.appendChild(inp);
     } else {
       let marker = '';
-      if(u.urgencyLevel === 'ready') marker = '<span class="ready-pill">✓ READY</span>';
-      else if(course.isNomination) marker = '<span class="type-badge type-nomination" style="font-size:.62rem;padding:2px 8px;margin-left:8px;background:linear-gradient(135deg,#f472b6,#be185d);color:#fff;border-radius:20px;">NOM</span>';
-      else if(u.urgencyLevel === 'critical') marker = '<span style="display:inline-block;background:var(--danger);color:#fff;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:900;margin-left:8px;">CRIT</span>';
-      else if(u.urgencyLevel === 'high') marker = '<span style="display:inline-block;background:var(--warn);color:#fff;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:900;margin-left:8px;">HIGH</span>';
+      if(u.urgencyLevel === 'ready' && isPaymentPaid(course)){
+        marker = '<span class="ready-pill">✓ READY</span>';
+      } else if(u.urgencyLevel === 'ready' && isPaymentHandedOver(course)){
+        marker = '<span class="ready-pill" style="background:linear-gradient(135deg,#fb923c,#c2410c);color:#fff;box-shadow:0 0 12px rgba(251,146,60,.6);">📤 PAID HANDED</span>';
+      } else if(u.urgencyLevel === 'ready' && isPaymentPendingReady(course)){
+        marker = '<span class="ready-pill" style="background:linear-gradient(135deg,#ef4444,#7f1d1d);color:#fff;box-shadow:0 0 16px rgba(239,68,68,.8);animation:readyPillPulse 1.2s ease-in-out infinite;">⚠️ PAY PENDING</span>';
+      } else if(course.isNomination){
+        marker = '<span class="type-badge type-nomination" style="font-size:.62rem;padding:2px 8px;margin-left:8px;background:linear-gradient(135deg,#f472b6,#be185d);color:#fff;border-radius:20px;">NOM</span>';
+      } else if(u.urgencyLevel === 'critical'){
+        marker = '<span style="display:inline-block;background:var(--danger);color:#fff;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:900;margin-left:8px;">CRIT</span>';
+      } else if(u.urgencyLevel === 'high'){
+        marker = '<span style="display:inline-block;background:var(--warn);color:#fff;padding:2px 8px;border-radius:20px;font-size:.62rem;font-weight:900;margin-left:8px;">HIGH</span>';
+      }
       const staleMark = stale ? ' <span style="font-size:.85rem; opacity:.7;" title="Not updated in 7+ days">🕐</span>' : '';
       courseTd.innerHTML = `<span style="font-weight:900;">${escapeHtml(course.courseName)}</span>${marker}${staleMark}`;
     }
@@ -1561,11 +1665,27 @@ function renderTable(){
     daysTd.innerHTML = `<span style="${dc}">${dl}</span>`;
     tr.appendChild(daysTd);
 
-    // PAYMENT
+    // PAYMENT — ★ NEW: payment date + state + handed date + paid date
     const payTd = document.createElement('td');
     if(editing){
       const val = course.isNomination ? (course.deadlineDate||'') : (course.paymentDate||'');
-      payTd.innerHTML = `<input type="date" class="edit-input" id="edit-payment-${course.id}" value="${val}">`;
+      if(course.isNomination){
+        payTd.innerHTML = `<input type="date" class="edit-input" id="edit-payment-${course.id}" value="${val}">`;
+      } else {
+        const pState = getPaymentState(course);
+        const pHanded = course.paymentHandedDate || '';
+        const pPaid = course.paymentPaidDate || '';
+        payTd.innerHTML = `
+          <input type="date" class="edit-input" id="edit-payment-${course.id}" value="${val}" style="margin-bottom:6px;" title="Payment due date">
+          <select class="edit-select" id="edit-paystate-${course.id}" style="margin-bottom:6px;">
+            <option value="PENDING" ${pState==='PENDING'?'selected':''}>⚠️ PENDING</option>
+            <option value="HANDED OVER" ${pState==='HANDED OVER'?'selected':''}>📤 HANDED OVER</option>
+            <option value="PAID" ${pState==='PAID'?'selected':''}>✅ PAID</option>
+          </select>
+          <input type="date" class="edit-input" id="edit-payhanded-${course.id}" value="${pHanded}" placeholder="Handed over date" style="margin-bottom:6px;" title="Docs handed to overseas payment">
+          <input type="date" class="edit-input" id="edit-paypaid-${course.id}" value="${pPaid}" placeholder="Paid date" title="Payment completed date">
+        `;
+      }
     } else payTd.innerHTML = paymentBadge(course);
     tr.appendChild(payTd);
 
@@ -1720,6 +1840,29 @@ function saveEdit(id){
   if($(`#edit-woexpected-${id}`)) c.woExpectedDate = $(`#edit-woexpected-${id}`).value;
   if($(`#edit-woactual-${id}`)) c.woActualDate = $(`#edit-woactual-${id}`).value;
 
+  // ★ Payment state fields
+  if($(`#edit-paystate-${id}`)) c.paymentState = $(`#edit-paystate-${id}`).value;
+  if($(`#edit-payhanded-${id}`)) c.paymentHandedDate = $(`#edit-payhanded-${id}`).value;
+  if($(`#edit-paypaid-${id}`)) c.paymentPaidDate = $(`#edit-paypaid-${id}`).value;
+
+  // Validate: PAID requires paid date; HANDED OVER requires handed date
+  if(!c.isNomination){
+    if(c.paymentState === 'PAID' && !c.paymentPaidDate){
+      showToast('❌ PAID STATE REQUIRES PAID DATE', true); Sound.error(); return;
+    }
+    if(c.paymentState === 'HANDED OVER' && !c.paymentHandedDate){
+      showToast('❌ HANDED OVER STATE REQUIRES HANDED DATE', true); Sound.error(); return;
+    }
+    // Auto-fill: if paid date set but state not PAID, infer PAID
+    if(c.paymentPaidDate && c.paymentState !== 'PAID'){
+      c.paymentState = 'PAID';
+    }
+    // If handed date set but state is PENDING and no paid date, infer HANDED OVER
+    if(c.paymentHandedDate && !c.paymentPaidDate && c.paymentState === 'PENDING'){
+      c.paymentState = 'HANDED OVER';
+    }
+  }
+
   c.lastUpdatedBy = currentUserKey || 'system';
   c.lastUpdatedAt = new Date().toISOString();
 
@@ -1736,6 +1879,7 @@ function addNewCourse(){
   coursesData.push({
     id, type:'Course', courseName:'', officersAirmen:'1 Officer', country:'',
     depDate: todayISO(), returnDate: addDaysISO(7), paymentDate: addDaysISO(7),
+    paymentState:'PENDING', paymentHandedDate:'', paymentPaidDate:'',
     cmdrStatus:'Not Sent', modStatus:'Not Sent', visaStatus:'PENDING', ticketStatus:'PENDING',
     ticketDemandDate:'', ticketOpenDate:'', woStatus:'NOT SENT', woExpectedDate:'', woActualDate:'',
     isCancelled:false, isNomination:false, deadlineDate:'',
@@ -1755,6 +1899,7 @@ function addNomination(){
   coursesData.push({
     id, type:'Nomination', courseName:nomName, officersAirmen:'1 Officer', country:'',
     depDate: todayISO(), returnDate: addDaysISO(7), paymentDate:'', deadlineDate: addDaysISO(7),
+    paymentState:'PENDING', paymentHandedDate:'', paymentPaidDate:'',
     cmdrStatus:'Not Sent', modStatus:'Not Sent', visaStatus:'PENDING', ticketStatus:'PENDING',
     ticketDemandDate:'', ticketOpenDate:'', woStatus:'NOT SENT', woExpectedDate:'', woActualDate:'',
     isCancelled:false, isNomination:true,
@@ -1865,6 +2010,10 @@ function checkAlerts(){
       if(d>=0 && d<=7 && !ready && c.cmdrStatus !== 'Received' && !c.isNomination) alerts.push({type:'HIGH', msg:`⚠️ ${c.courseName} — CMDR PENDING`});
       if(d>=0 && d<=7 && !ready && c.modStatus !== 'Received' && c.modStatus !== 'Not Sent' && !c.isNomination) alerts.push({type:'HIGH', msg:`🛡️ ${c.courseName} — MOD PENDING`});
     }
+    // ★ Payment pending but everything else is ready
+    if(isPaymentPendingReady(c)){
+      alerts.push({type:'EXTREME', msg:`💰 PAYMENT PENDING (ALL DOCS READY): ${c.courseName}`});
+    }
   });
   if(!alerts.length){
     container.innerHTML = '<div style="padding:6px;color:var(--text-secondary);font-weight:900;">✅ ALL COURSES ON TRACK</div>';
@@ -1881,13 +2030,17 @@ function updateStats(){
   const total = coursesData.length;
   const nom = coursesData.filter(c => c.isNomination).length;
   const u48 = coursesData.filter(c => {
-    if(c.isCancelled || isAdminReady(c)) return false;
+    if(c.isCancelled) return false;
+    if(isPaymentPaid(c)) return false;
     const t = c.isNomination ? c.deadlineDate : c.paymentDate;
     if(!t) return false;
     const d = getDaysRemaining(t); return d >= 0 && d <= 2;
   }).length;
   const crit = coursesData.filter(c => {
-    if(c.isCancelled || isAdminReady(c)) return false;
+    if(c.isCancelled) return false;
+    // Payment-pending-ready rows always count as critical
+    if(isPaymentPendingReady(c)) return true;
+    if(isPaymentPaid(c) || isPaymentHandedOver(c)) return false;
     const t = c.isNomination ? c.deadlineDate : c.paymentDate;
     if(!t) return false;
     const d = getDaysRemaining(t); return d >= 0 && d <= 7;
@@ -1904,6 +2057,13 @@ function updateStats(){
 }
 
 /* ===== Storage ===== */
+function migratePaymentFields(){
+  coursesData.forEach(c => {
+    if(c.paymentState === undefined) c.paymentState = 'PENDING';
+    if(c.paymentHandedDate === undefined) c.paymentHandedDate = '';
+    if(c.paymentPaidDate === undefined) c.paymentPaidDate = '';
+  });
+}
 function saveToLocal(){
   try{
     localStorage.setItem('slaf_ftc_tv_v14', JSON.stringify(coursesData));
@@ -1916,12 +2076,13 @@ function loadFromLocal(){
     const stored = localStorage.getItem('slaf_ftc_tv_v14') || localStorage.getItem('slaf_ftc_tv');
     if(stored) coursesData = JSON.parse(stored);
     else coursesData = JSON.parse(JSON.stringify(defaultData));
+    migratePaymentFields();
     const hist = localStorage.getItem('courseHistory_v14') || localStorage.getItem('courseHistory_tv');
     if(hist) courseNameHistory = JSON.parse(hist);
     else courseNameHistory = [...new Set(defaultData.map(c => c.courseName))];
     const ct = localStorage.getItem('nominationCounter_v14') || localStorage.getItem('nominationCounter');
     if(ct) nominationCounter = parseInt(ct);
-  }catch(e){ coursesData = JSON.parse(JSON.stringify(defaultData)); }
+  }catch(e){ coursesData = JSON.parse(JSON.stringify(defaultData)); migratePaymentFields(); }
   updateCourseDatalist(); populateCountryFilter(); renderTable(); saveToHistory(); checkAlerts();
 }
 function populateCountryFilter(){
@@ -1990,7 +2151,7 @@ function toggleStats(){
   Sound.click();
 }
 function exportData(){
-  const payload = { version: '14.2', exportedAt: new Date().toISOString(), exportedBy: currentUserKey || 'unknown', courses: coursesData, courseHistory: courseNameHistory, nominationCounter };
+  const payload = { version: '14.3', exportedAt: new Date().toISOString(), exportedBy: currentUserKey || 'unknown', courses: coursesData, courseHistory: courseNameHistory, nominationCounter };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
